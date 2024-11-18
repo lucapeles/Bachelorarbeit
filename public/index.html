@@ -3,41 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Lobby App</title>
-  <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h1>Willkommen, erstellen sie hier eine neue Lobby:</h1>
   
   <!-- Schaltfläche zum Erstellen einer Lobby -->
-  <button onclick="createLobby()">Neue Lobby Erstellen</button>
+  <input type="text" id="userInput" placeholder="Benutzername eingeben">
+  <button onclick="createNewLobby()">Neue Lobby Erstellen</button>
   
   <!-- Eingabefeld zum Beitreten einer bestehenden Lobby -->
   <h2>Oder treten sie einer bestehenden Lobby bei</h2>
   <input type="text" id="lobbyCodeInput" placeholder="Lobby Code eingeben">
-  <button onclick="joinLobby()">Beitreten</button>
+  <input type="text" id="userInputExisting" placeholder="Benutzername eingeben">
+  <button onclick="joinExistingLobby()">Beitreten</button>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
 
     // Lobby erstellen
-    function createLobby() {
-      console.log("Erstelle Lobby...");
-      socket.emit("createLobby");
+    function createNewLobby() {
+      const userName = document.getElementById("userInput").value;  // Benutzernamen vom Eingabefeld holen
+      if (userName) {
+        socket.emit("createLobby", userName);  // Benutzernamen beim Erstellen der Lobby senden
+      } else {
+        alert("Bitte geben Sie einen Benutzernamen ein.");
+      }
     }
 
     // Lobby beitreten
-    function joinLobby() {
+    function joinExistingLobby() {
+      const userName = document.getElementById("userInputExisting").value;  // Benutzernamen vom Eingabefeld holen
       const lobbyCode = document.getElementById("lobbyCodeInput").value;
-      if (lobbyCode) {
-        window.location.href = `/lobby.html?code=${lobbyCode}`;
+      if (userName && lobbyCode) {
+        socket.emit("joinLobby", lobbyCode, userName);  // Benutzernamen beim Beitreten der Lobby senden
       } else {
-        alert("Bitte einen gültigen Lobby-Code eingeben.");
+        alert("Bitte geben Sie einen Benutzernamen und einen gültigen Lobby-Code ein.");
       }
     }
 
     // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
     socket.on("lobbyCreated", (lobbyCode) => {
-      console.log("Lobby erstellt mit Code:", lobbyCode);
       window.location.href = `/lobby.html?code=${lobbyCode}`;
     });
 

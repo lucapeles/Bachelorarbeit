@@ -8,42 +8,57 @@ const io = socketIO(server);
 
 app.use(express.static("public"));
 
-const lobbies = {}; // Um alle Lobbies zu speichern
+const UserManager = require("./users/userManager");
+const userManager = new UserManager();
+
+let lobbies = {}; // Um alle Lobbies zu speichern
 
 function generateLobbyCode() {
   return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
 io.on("connection", (socket) => {
-  console.log("check");
 
   // Event zum Erstellen einer neuen Lobby
-  socket.on("createLobby", () => {
-    const lobbyCode = generateLobbyCode();
-    lobbies[lobbyCode] = []; // Neue Lobby erstellen
-    socket.emit("lobbyCreated", lobbyCode); // Lobby-Code an den Client zurücksenden
+  socket.on("createLobby", (name) => {
+    currentUser = userManager.addUser(name);  // Benutzer erstellen
+    const lobbyCode = generateLobbyCode();    // Neuer Lobbycode
+    lobbies[lobbyCode] = [currentUser];       // Neue Lobby mit dem Benutzer erstellen
+    currentUser.joinLobby(lobbyCode);        // Lobby dem Benutzer zuweisen
+    console.log("Name: ", name, " und Lobby: ", lobbyCode)
+    socket.emit("lobbyCreated", lobbyCode);   // Lobby-Code an den Client zurücksenden
   });
 
   // Event zum Beitreten einer bestehenden Lobby
-  socket.on("joinLobby", (lobbyCode) => {
+  socket.on("joinLobby", (lobbyCode, name) => {
     if (lobbies[lobbyCode]) {
-      lobbies[lobbyCode].push(socket.id); // Benutzer zu Lobby hinzufügen
-      socket.join(lobbyCode); // Den Client dem Raum hinzufügen
-      console.log(`Benutzer ${socket.id} zu Lobby ${lobbyCode} hinzugefügt.`);
-      io.to(lobbyCode).emit("updateParticipants", lobbies[lobbyCode]); // Teilnehmer aktualisieren
+      console.log(lobbyCode, " trtt hinzu: ", name)
+      currentUser = userManager.addUser(name);  // Benutzer erstellen
+      currentUser.joinLobby(lobbyCode);         // Lobby dem Benutzer zuweisen
+      lobbies[lobbyCode].push(currentUser);     // Benutzer zur Lobby hinzufügen
+      socket.join(lobbyCode);                   // Benutzer zur Lobby-Session hinzufügen
+      socket.emit("lobbyCreated", lobbyCode);   // Lobby-Code an den Client zurücksenden
+      io.to(lobbyCode).emit("updateParticipants", lobbies[lobbyCode].map(user => user.name)); // Benutzernamen der Teilnehmer senden
     } else {
       socket.emit("errorMessage", "Lobby nicht gefunden");
     }
   });
 
-  // Event zum Senden einer Nachricht
-  socket.on("sendMessage", (lobbyCode, message) => {
-    console.log("Nachricht empfangen:", message, lobbyCode); // Debugging
-    io.to(lobbyCode).emit("newMessage", message); // Nachricht an alle in der Lobby senden
+  // Event zum Abrufen der Teilnehmer in einer Lobby (wird an die Clients gesendet)
+  socket.on("getParticipants", (lobbyCode) => {
+    if (lobbies[lobbyCode]) {
+    }
   });
 
-  // Event für Benutzer-Abmeldung
-  socket.on("disconnect", () => {
+
+  //TODO: remove USER???????????????????????????????????????????????????
+
+
+
+  // Event für Benutzer-Abmeldung, aber bei disconnect wird immer aufgerufen sobald seite anders
+  /*socket.on("disc", () => {
+    console.log("geht in disconnect")
+
     for (const [code, participants] of Object.entries(lobbies)) {
       const index = participants.indexOf(socket.id);
       if (index !== -1) {
@@ -52,7 +67,7 @@ io.on("connection", (socket) => {
       }
     }
     console.log("Benutzer getrennt");
-  });
+  });*/
 });
 
 server.listen(3000, () => {
