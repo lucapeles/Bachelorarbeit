@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Lobby</title>
+</head>
+<body>
+  <h1>Herzlich Willkommen!</h1>
+  <p>Ihr Lobby-Code lautet: <span id="lobbyCode"></span></p>
+
+  <h2>Geben Sie einen Text ein:</h2>
+  <input type="text" id="userInput" placeholder="Geben Sie etwas ein">
+  <button onclick="addText()">Bestätigen</button>
+  
+  <h3>Ihr Text:</h3>
+  <div id="textDisplay"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io(); // Verbindung zum Server
+
+    // Lobby-Code aus der URL lesen und anzeigen
+    const urlParams = new URLSearchParams(window.location.search);
+    const lobbyCode = urlParams.get('code');
+    document.getElementById("lobbyCode").textContent = lobbyCode;
+
+    // Funktion, um den Text zu senden und anzuzeigen
+    function addText() {
+      const userInput = document.getElementById("userInput").value;
+      if (userInput) {
+        // Sende den Text an den Server
+        socket.emit("sendMessage", lobbyCode, userInput);
+
+        // Text im eigenen Browser anzeigen
+        const textDisplay = document.getElementById("textDisplay");
+        const newParagraph = document.createElement("p");
+        newParagraph.textContent = userInput;
+        textDisplay.appendChild(newParagraph);
+
+        // Eingabefeld leeren
+        document.getElementById("userInput").value = "";
+      } else {
+        alert("Bitte geben Sie etwas ein.");
+      }
+    }
+    console.log("hier passts noch") //da geht er nicht rein
+    // Event, das den Text von anderen Teilnehmern anzeigt
+    socket.on("newMessage", (message) => {
+      console.log("neue Nachricht empfangen")
+      const textDisplay = document.getElementById("textDisplay");
+      const newParagraph = document.createElement("p");
+      newParagraph.textContent = message;
+      textDisplay.appendChild(newParagraph);
+    });
+
+    socket.on("updateParticipants", (participants) => {
+      const participantList = document.getElementById("participantList");
+      participantList.innerHTML = ""; // Liste leeren
+      participants.forEach(id => {
+        const participantItem = document.createElement("li");
+        participantItem.textContent = id; // Oder eine benutzerfreundlichere Darstellung
+        participantList.appendChild(participantItem);
+      });
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Lobby App</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Willkommen, erstellen sie hier eine neue Lobby:</h1>
+  
+  <!-- Schaltfläche zum Erstellen einer Lobby -->
+  <button onclick="createLobby()">Neue Lobby Erstellen</button>
+  
+  <!-- Eingabefeld zum Beitreten einer bestehenden Lobby -->
+  <h2>Oder treten sie einer bestehenden Lobby bei</h2>
+  <input type="text" id="lobbyCodeInput" placeholder="Lobby Code eingeben">
+  <button onclick="joinLobby()">Beitreten</button>
+
+  <script>
+    const socket = io();
+
+    // Lobby erstellen
+    function createLobby() {
+      console.log("Erstelle Lobby...");
+      socket.emit("createLobby");
+    }
+
+    // Lobby beitreten
+    function joinLobby() {
+      const lobbyCode = document.getElementById("lobbyCodeInput").value;
+      if (lobbyCode) {
+        window.location.href = `/lobby.html?code=${lobbyCode}`;
+      } else {
+        alert("Bitte einen gültigen Lobby-Code eingeben.");
+      }
+    }
+
+    // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
+    socket.on("lobbyCreated", (lobbyCode) => {
+      console.log("Lobby erstellt mit Code:", lobbyCode);
+      window.location.href = `/lobby.html?code=${lobbyCode}`;
+    });
+
+    // Fehler anzeigen, falls die Lobby nicht gefunden wurde
+    socket.on("errorMessage", (message) => {
+      alert(message);
+    });
+  </script>
+</body>
+</html>
