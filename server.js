@@ -38,7 +38,6 @@ io.on("connection", (socket) => {
       lobbies[lobbyCode].push(currentUser);     // Benutzer zur Lobby hinzufügen
       socket.join(lobbyCode);                   // Benutzer zur Lobby-Session hinzufügen
       socket.emit("lobbyCreated", lobbyCode);   // Lobby-Code an den Client zurücksenden
-      io.to(lobbyCode).emit("updateParticipants", lobbies[lobbyCode].map(user => user.name)); // Benutzernamen der Teilnehmer senden
     } else {
       socket.emit("errorMessage", "Lobby nicht gefunden");
     }
@@ -46,9 +45,11 @@ io.on("connection", (socket) => {
 
   // Event zum Abrufen der Teilnehmer in einer Lobby (wird an die Clients gesendet)
   socket.on("getParticipants", (lobbyCode) => {
-    if (lobbies[lobbyCode]) {
-    }
+    const participants = lobbies[lobbyCode]?.map(user => user.name) || [];
+    console.log(participants)
+    socket.emit("updateParticipants", participants);
   });
+  
 
 
   //TODO: remove USER???????????????????????????????????????????????????

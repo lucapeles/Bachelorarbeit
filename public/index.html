@@ -45,6 +45,7 @@
     // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
     socket.on("lobbyCreated", (lobbyCode) => {
       window.location.href = `/lobby.html?code=${lobbyCode}`;
+      //socket.emit("getParticipants", lobbyCode)
     });
 
     // Fehler anzeigen, falls die Lobby nicht gefunden wurde
