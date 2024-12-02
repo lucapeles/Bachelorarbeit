@@ -1,9 +1,8 @@
 class User {
-  constructor(name) {
-    this.userID = Math.floor(10000000 + Math.random() * 90000000);
+  constructor(name, userID) {
+    this.userID = userID; // ID wird von außen übergeben
     this.name = name;
   }
-
 
   // Getter für userID
   get getUserID() {

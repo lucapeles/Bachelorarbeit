@@ -6,37 +6,10 @@
 </head>
 <body>
   <h1>Master</h1>
-  <!-- Button zum Anzeigen der Teilnehmer -->
-  <button id="showParticipantsBtn">Teilnehmer anzeigen</button>
-  
-  <h2>Teilnehmer:</h2>
-  <ul id="participantList"></ul> <!-- Teilnehmerliste -->
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io(); // Verbindung zum Server
-
-    // Lobby-Code aus der URL lesen und anzeigen
-    const urlParams = new URLSearchParams(window.location.search);
-    const lobbyCode = urlParams.get('code');
-    document.getElementById("lobbyCode").textContent = lobbyCode;
-
-    // Button-Click-Handler zum Abrufen der Teilnehmer
-    document.getElementById("showParticipantsBtn").addEventListener("click", () => {
-      socket.emit("getParticipants", lobbyCode); // Teilnehmerdaten anfordern
-    });
-
-    // Teilnehmer in der Lobby anzeigen
-    socket.on("updateParticipants", (participants) => {
-      const participantList = document.getElementById("participantList");
-      participantList.innerHTML = ""; // Liste leeren
-      participants.forEach(name => {  // Benutzernamen anzeigen
-        const participantItem = document.createElement("li");
-        participantItem.textContent = name;
-        participantList.appendChild(participantItem);
-      });
-
-    });
   </script>
 </body>
 </html>

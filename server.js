@@ -11,15 +11,13 @@ app.use(express.static("public"));
 const UserManager = require("./users/userManager");
 const userManager = new UserManager();
 
-let lobbies = {}; // Um alle Lobbies zu speichern
-
 io.on("connection", (socket) => {
 
   // Event zum Beitreten einer bestehenden Lobby
   socket.on("joinLobby", (name) => {
       console.log(name, " tritt hinzu")
-      currentUser = userManager.addUser(name);  // Benutzer erstellen
-      socket.emit("lobbyCreated", name);   // Lobby-Code an den Client zurücksenden
+      currentUserID = userManager.addUser(name);  // Benutzer erstellen
+      socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
   });
 
   // Event zum Abrufen der Teilnehmer in einer Lobby (wird an die Clients gesendet)

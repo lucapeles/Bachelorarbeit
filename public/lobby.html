@@ -5,12 +5,24 @@
   <title>Lobby</title>
 </head>
 <body>
-  <h1>Herzlich Willkommen!</h1>
+  <h1 id="welcomeMessage">Herzlich Willkommen!</h1>
+  <h2>Deine Daten:</h2>
+  <p>Name: <span id="userName"></span></p>
+  <p>ID: <span id="userId"></span></p>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io(); // Verbindung zum Server
 
+    // URL-Parameter auslesen
+    const urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('name'); // Name des Benutzers aus der URL holen
+    const userId = urlParams.get('userId'); // ID des Benutzers aus der URL holen
+
+    // Begrüßung und Benutzerinformationen anzeigen
+    document.getElementById("welcomeMessage").textContent = `Herzlich Willkommen, ${userName}!`;
+    document.getElementById("userName").textContent = userName;
+    document.getElementById("userId").textContent = userId;
   </script>
 </body>
 </html>

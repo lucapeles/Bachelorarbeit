@@ -41,13 +41,8 @@
     }
 
     // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
-    socket.on("lobbyCreated", (name) => {
-      window.location.href = `/lobby.html`;
-    });
-
-    // Fehler anzeigen, falls die Lobby nicht gefunden wurde
-    socket.on("errorMessage", (message) => {
-      alert(message);
+    socket.on("lobbyCreated", (userId, name) => {
+      window.location.href = `/lobby.html?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`;
     });
   </script>
 </body>
