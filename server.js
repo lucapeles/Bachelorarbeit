@@ -13,34 +13,13 @@ const userManager = new UserManager();
 
 let lobbies = {}; // Um alle Lobbies zu speichern
 
-function generateLobbyCode() {
-  return Math.floor(1000 + Math.random() * 9000).toString();
-}
-
 io.on("connection", (socket) => {
 
-  // Event zum Erstellen einer neuen Lobby
-  socket.on("createLobby", (name) => {
-    currentUser = userManager.addUser(name);  // Benutzer erstellen
-    const lobbyCode = generateLobbyCode();    // Neuer Lobbycode
-    lobbies[lobbyCode] = [currentUser];       // Neue Lobby mit dem Benutzer erstellen
-    currentUser.joinLobby(lobbyCode);        // Lobby dem Benutzer zuweisen
-    console.log("Name: ", name, " und Lobby: ", lobbyCode)
-    socket.emit("lobbyCreated", lobbyCode);   // Lobby-Code an den Client zurücksenden
-  });
-
   // Event zum Beitreten einer bestehenden Lobby
-  socket.on("joinLobby", (lobbyCode, name) => {
-    if (lobbies[lobbyCode]) {
-      console.log(lobbyCode, " trtt hinzu: ", name)
+  socket.on("joinLobby", (name) => {
+      console.log(name, " tritt hinzu")
       currentUser = userManager.addUser(name);  // Benutzer erstellen
-      currentUser.joinLobby(lobbyCode);         // Lobby dem Benutzer zuweisen
-      lobbies[lobbyCode].push(currentUser);     // Benutzer zur Lobby hinzufügen
-      socket.join(lobbyCode);                   // Benutzer zur Lobby-Session hinzufügen
-      socket.emit("lobbyCreated", lobbyCode);   // Lobby-Code an den Client zurücksenden
-    } else {
-      socket.emit("errorMessage", "Lobby nicht gefunden");
-    }
+      socket.emit("lobbyCreated", name);   // Lobby-Code an den Client zurücksenden
   });
 
   // Event zum Abrufen der Teilnehmer in einer Lobby (wird an die Clients gesendet)

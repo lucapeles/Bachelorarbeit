@@ -16,7 +16,7 @@ class UserManager {
     return this.users.find(user => user.name === name); // Benutzer anhand des Namens suchen
   }
 
-  getAllUser() {
+  getAllUsers() {
     return this.users;
   }
 
