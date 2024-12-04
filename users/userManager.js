@@ -6,7 +6,7 @@ class UserManager {
     this.nextUserID = 1000; // Start-ID
   }
 
-  // Einen neuen Benutzer hinzufügen
+  // Einen neuen Benutzer hinzufügen & dessen ID zurückgeben
   addUser(name) {
     const user = new User(name, this.nextUserID); // Benutzer mit ID erstellen
     this.users.push(user);

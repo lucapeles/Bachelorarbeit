@@ -31,21 +31,6 @@ io.on("connection", (socket) => {
 
   //TODO: remove USER???????????????????????????????????????????????????
 
-
-
-  // Event für Benutzer-Abmeldung, aber bei disconnect wird immer aufgerufen sobald seite anders
-  /*socket.on("disc", () => {
-    console.log("geht in disconnect")
-
-    for (const [code, participants] of Object.entries(lobbies)) {
-      const index = participants.indexOf(socket.id);
-      if (index !== -1) {
-        participants.splice(index, 1);
-        io.to(code).emit("updateParticipants", participants);
-      }
-    }
-    console.log("Benutzer getrennt");
-  });*/
 });
 
 server.listen(3000, () => {
