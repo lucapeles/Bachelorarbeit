@@ -17,18 +17,16 @@ io.on("connection", (socket) => {
   socket.on("joinLobby", (name) => {
     currentUserID = userManager.addUser(name);  // Benutzer erstellen
     socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
-    listOfUsers = userManager.getAllUsers().map(user => user.getName);
-    socket.emit("updateUserList", listOfUsers);
-    console.log(name, " tritt hinzu bei: ", listOfUsers)
+    io.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
+    console.log(name, " tritt hinzu")
   });
 
   // Benutzer beim Trennen der Verbindung entfernen
   socket.on("disconnectUser", (userID) => {
     if (userID) {
       userManager.removeUserByID(userID);
-      listOfUsers = userManager.getAllUsers().map(user => user.getName);
-      socket.emit("updateUserList", listOfUsers);
-      console.log(`Benutzer mit ID ${userID} wurde entfernt.`, listOfUsers);
+      io.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
+      console.log(`Benutzer mit ID ${userID} wurde entfernt.`);
     }
   });
 
