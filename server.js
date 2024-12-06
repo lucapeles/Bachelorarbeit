@@ -15,22 +15,26 @@ io.on("connection", (socket) => {
 
   // Event zum Beitreten einer bestehenden Lobby
   socket.on("joinLobby", (name) => {
-      console.log(name, " tritt hinzu")
-      currentUserID = userManager.addUser(name);  // Benutzer erstellen
-      socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
+    currentUserID = userManager.addUser(name);  // Benutzer erstellen
+    socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
+    listOfUsers = userManager.getAllUsers().map(user => user.getName);
+    socket.emit("updateUserList", listOfUsers);
+    console.log(name, " tritt hinzu bei: ", listOfUsers)
   });
 
-  // Event zum Abrufen der Teilnehmer in einer Lobby (wird an die Clients gesendet)
-  socket.on("getParticipants", (lobbyCode) => {
-    const participants = lobbies[lobbyCode]?.map(user => user.name) || [];
-    console.log(participants)
-    socket.emit("updateParticipants", participants);
+  // Benutzer beim Trennen der Verbindung entfernen
+  socket.on("disconnectUser", (userID) => {
+    if (userID) {
+      userManager.removeUserByID(userID);
+      listOfUsers = userManager.getAllUsers().map(user => user.getName);
+      socket.emit("updateUserList", listOfUsers);
+      console.log(`Benutzer mit ID ${userID} wurde entfernt.`, listOfUsers);
+    }
   });
-  
 
-
-  //TODO: remove USER???????????????????????????????????????????????????
-
+  socket.on("requestUserList", () => {
+    socket.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
+  });
 });
 
 server.listen(3000, () => {

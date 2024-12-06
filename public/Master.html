@@ -2,14 +2,30 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Lobby</title>
+  <title>Master - Aktuelle Benutzerliste</title>
 </head>
 <body>
   <h1>Master</h1>
+  <h2>Aktuelle Benutzer:</h2>
+  <ul id="userList"></ul> <!-- Liste für Benutzer -->
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io(); // Verbindung zum Server
+    const userListElement = document.getElementById("userList");
+
+    // Event, um die Benutzerliste zu aktualisieren
+    socket.on("updateUserList", (userNames) => {
+      userListElement.innerHTML = ""; // Aktuelle Liste löschen
+      userNames.forEach(name => {
+        const listItem = document.createElement("li");
+        listItem.textContent = name;
+        userListElement.appendChild(listItem); // Benutzer zur Liste hinzufügen
+      });
+    });
+
+    // Bei Verbindung Benutzerliste anfordern
+    socket.emit("requestUserList");
   </script>
 </body>
 </html>
