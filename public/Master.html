@@ -6,6 +6,7 @@
 </head>
 <body>
   <h1>Master</h1>
+  <button onclick="startQuiz">Quiz starten</button>
   <h2>Aktuelle Benutzer:</h2>
   <ul id="userList"></ul> <!-- Liste für Benutzer -->
 
@@ -26,6 +27,10 @@
 
     // Bei Verbindung Benutzerliste anfordern
     socket.emit("requestUserList");
+
+    function startQuiz() {
+      //Senden an Server und damit an alle Clients
+    }
 
   </script>
 </body>
