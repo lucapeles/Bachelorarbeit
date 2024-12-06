@@ -16,14 +16,12 @@ class UserManager {
 
   // Benutzer anhand der ID suchen
   getUserByID(id) {
-    return this.users.find(user => user.getUserID === id); // Benutzer anhand der ID suchen
+    return this.users = this.users.filter(user => String(user.getUserID) !== String(id));
   }
 
   // Benutzer anhand der ID entfernen
   removeUserByID(id) {
-    console.log(this.users)
-    this.users = this.users.filter(user => user.getUserID !== id);
-    console.log(this.users)
+    this.users = this.users.filter(user => String(user.getUserID) !== String(id));
   }
 
   // Alle Benutzer abrufen
