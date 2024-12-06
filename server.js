@@ -18,7 +18,6 @@ io.on("connection", (socket) => {
     currentUserID = userManager.addUser(name);  // Benutzer erstellen
     socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
     io.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
-    console.log(name, " tritt hinzu")
   });
 
   // Benutzer beim Trennen der Verbindung entfernen
@@ -26,7 +25,6 @@ io.on("connection", (socket) => {
     if (userID) {
       userManager.removeUserByID(userID);
       io.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
-      console.log(`Benutzer mit ID ${userID} wurde entfernt.`);
     }
   });
 

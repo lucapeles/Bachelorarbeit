@@ -3,15 +3,15 @@ const User = require('./user');
 class UserManager {
   constructor() {
     this.users = [];
-    this.nextUserID = 1000; // Start-ID
+    this.nextUserID = 28472384593108; // Start-ID
   }
 
   // Einen neuen Benutzer hinzufügen & dessen ID zurückgeben
   addUser(name) {
     const user = new User(name, this.nextUserID); // Benutzer mit ID erstellen
     this.users.push(user);
-    this.nextUserID++; // Nächste ID vorbereiten
-    return (this.nextUserID - 1); //UserID zurückgeben
+    this.nextUserID = this.nextUserID + 2354341238; // Nächste ID vorbereiten
+    return (this.nextUserID - 2354341238); //UserID zurückgeben
   }
 
   // Benutzer anhand der ID suchen
