@@ -10,8 +10,8 @@ class UserManager {
   addUser(name) {
     const user = new User(name, this.nextUserID); // Benutzer mit ID erstellen
     this.users.push(user);
-    this.nextUserID = this.nextUserID + 2354341238; // Nächste ID vorbereiten
-    return (this.nextUserID - 2354341238); //UserID zurückgeben
+    this.nextUserID += 2354341238; // Nächste ID vorbereiten
+    return user.userID; // Benutzer-ID zurückgeben
   }
 
   // Benutzer anhand der ID suchen
@@ -22,6 +22,21 @@ class UserManager {
   // Benutzer anhand der ID entfernen
   removeUserByID(id) {
     this.users = this.users.filter(user => String(user.getUserID) !== String(id));
+  }
+
+  // Punkte eines Benutzers aktualisieren
+  updatePoints(userId, points) {
+    const user = this.getUserByID(userId);
+    if (user) {
+      user.points += points; // Punkte hinzufügen
+    }
+  }
+  
+  // Punktestand zurücksetzen
+  resetAllPoints() {
+    this.users.forEach(user => {
+      user.points = 0; // Punkte für alle Benutzer zurücksetzen
+    });
   }
 
   // Alle Benutzer abrufen

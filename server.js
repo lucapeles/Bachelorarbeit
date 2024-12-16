@@ -9,7 +9,9 @@ const io = socketIO(server);
 app.use(express.static("public"));
 
 const UserManager = require("./users/userManager");
+const TaskManager = require("./tasks/TaskManager");
 const userManager = new UserManager();
+const taskManager = new TaskManager(userManager);
 
 io.on("connection", (socket) => {
 
@@ -31,6 +33,28 @@ io.on("connection", (socket) => {
   socket.on("requestUserList", () => {
     socket.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
   });
+
+  //Für das Quiz
+  socket.on("submitTask", ({ userId, correct, time }) => {
+    taskManager.markTaskCompleted(userId, correct, time);
+  
+    const allUsers = userManager.getAllUsers().map(user => user.userID);
+    if (taskManager.isTaskComplete(allUsers)) {
+      taskManager.assignPoints(); // Punkte zuweisen
+      const nextTask = taskManager.nextTask();
+  
+      if (nextTask) {
+        io.emit("taskStarted", nextTask); // Nächste Aufgabe senden
+      } else {
+        io.emit("quizCompleted", userManager.getAllUsers().map(user => ({
+          name: user.getName,
+          points: user.points
+        }))); // Quiz-Endergebnisse senden
+        userManager.resetAllPoints(); // Punkte zurücksetzen
+      }
+    }
+  });
+  
 });
 
 server.listen(3000, () => {

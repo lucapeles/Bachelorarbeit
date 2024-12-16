@@ -15,8 +15,6 @@
   <h2>Oder treten Sie bei:</h2>
   <input type="text" id="userInputExisting" placeholder="Benutzername eingeben">
   <button onclick="joinExistingLobby()">Beitreten</button>
-  <h3>Beispielaufgabe:</h3>
-  <button onclick="openTask()">Zur Aufgabe</button>
 
 
   <script src="/socket.io/socket.io.js"></script>
@@ -47,10 +45,6 @@
     socket.on("lobbyCreated", (userId, name) => {
       window.location.href = `/lobby.html?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`;
     });
-
-    function openTask() {
-      window.location.href = `/tasks/taskTestMultipleChoice.html`;
-    }
   </script>
 </body>
 </html>

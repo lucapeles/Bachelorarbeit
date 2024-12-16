@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz</title>
+</head>
+<body>
+  <h1>Programmierung-Quiz</h1>
+  <div id="quizContainer">
+    <h2 id="questionText"></h2>
+    <div id="answerOptions"></div>
+    <button onclick="submitAnswer()">Antwort abschicken</button>
+  </div>
+  
+
+  <script>
+  const socket = io();
+  
+  // Neue Frage anzeigen
+  socket.on("newQuestion", (task) => {
+    document.getElementById("questionText").textContent = task.description;
+    const optionsContainer = document.getElementById("answerOptions");
+    optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
+
+    if (task.type === "multipleChoice") {
+      task.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => selectAnswer(option);
+        optionsContainer.appendChild(button);
+      });
+    } else if (task.type === "coding") {
+      const editorContainer = document.createElement("textarea");
+      editorContainer.id = "codeEditor";
+      optionsContainer.appendChild(editorContainer);
+    }
+  });
+
+  let selectedAnswer = null;
+
+  function selectAnswer(answer) {
+    selectedAnswer = answer;
+  }
+
+  function submitAnswer() {
+    const taskId = 1; // Beispiel
+    const userId = 123; // Beispiel
+    if (selectedAnswer) {
+      socket.emit("submitTask", { userId, taskId, answer: selectedAnswer });
+    }
+  }
+
+  </script>
+</body>
+</html>
