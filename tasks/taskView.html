@@ -17,7 +17,7 @@
   const socket = io();
   
   // Neue Frage anzeigen
-  socket.on("newQuestion", (task) => {
+  socket.on("taskStarted", (task) => {
     document.getElementById("questionText").textContent = task.description;
     const optionsContainer = document.getElementById("answerOptions");
     optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
@@ -49,6 +49,11 @@
       socket.emit("submitTask", { userId, taskId, answer: selectedAnswer });
     }
   }
+
+  socket.on("quizCompleted", (results) => {
+  alert("Das Quiz ist beendet!");
+  // Ergebnisse anzeigen
+  });
 
   </script>
 </body>

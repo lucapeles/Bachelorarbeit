@@ -58,6 +58,14 @@ class TaskManager {
       }
       return null; // Keine weiteren Aufgaben verfügbar
     }
+
+    // Anzeigen des Fortschritts
+    getProgress() {
+      return Object.entries(this.taskProgress).map(([userId, progress]) => ({
+        user: this.userManager.getUserByID(userId),
+        completed: progress.completed
+      }));
+    }
   }
   
   module.exports = TaskManager;

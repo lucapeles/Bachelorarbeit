@@ -6,8 +6,14 @@
 </head>
 <body>
   <h1>Master</h1>
+  <h2>Aufgaben auswählen</h2>
+  <ul id="taskSelectionList">
+    <!-- Dynamisch gefüllte Aufgabenliste -->
+  </ul>
   <button onclick="startQuiz">Quiz starten</button>
-  <h2>Aktuelle Benutzer:</h2>
+  <h3>Fortschritt</h3>
+  <ul id="progressList"></ul>
+  <h4>Aktuelle Benutzer:</h4>
   <ul id="userList"></ul> <!-- Liste für Benutzer -->
 
   <script src="/socket.io/socket.io.js"></script>
@@ -28,10 +34,55 @@
     // Bei Verbindung Benutzerliste anfordern
     socket.emit("requestUserList");
 
-    function startQuiz() {
-      //Senden an Server und damit an alle Clients
+    // Für das Spiel, auswählen der Aufgaben und weiterschicken.
+    const tasks = [
+    { id: 1, name: "Aufgabe 1: Multiple Choice" },
+    { id: 2, name: "Aufgabe 2: Coding" }
+    ];
+
+    const selectedTasks = [];
+
+    function populateTaskSelection() {
+      const taskList = document.getElementById("taskSelectionList");
+      tasks.forEach(task => {
+        const listItem = document.createElement("li");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = task.id;
+        checkbox.onchange = (e) => {
+          if (e.target.checked) {
+            selectedTasks.push(task);
+          } else {
+            const index = selectedTasks.findIndex(t => t.id === task.id);
+            if (index > -1) selectedTasks.splice(index, 1);
+          }
+        };
+        listItem.appendChild(checkbox);
+        listItem.appendChild(document.createTextNode(task.name));
+        taskList.appendChild(listItem);
+      });
     }
 
+    populateTaskSelection();
+
+    function startQuiz() {
+      if (selectedTasks.length > 0) {
+        io.emit("startQuiz", selectedTasks);
+      } else {
+        alert("Bitte wählen Sie mindestens eine Aufgabe aus.");
+      }
+    }
+
+    // Fortschritt der Benutzer
+    socket.on("progressUpdate", (progress) => {
+    const progressList = document.getElementById("progressList");
+    progressList.innerHTML = ""; // Vorherigen Fortschritt löschen
+    progress.forEach(({ user, completed }) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = `${user.name}: ${completed ? "Fertig" : "Nicht fertig"}`;
+      progressList.appendChild(listItem);
+    });
+  });
   </script>
 </body>
 </html>

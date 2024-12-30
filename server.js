@@ -7,6 +7,8 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 app.use(express.static("public"));
+app.use("/tasks", express.static("tasks"));
+
 
 const UserManager = require("./users/userManager");
 const TaskManager = require("./tasks/TaskManager");
@@ -34,25 +36,35 @@ io.on("connection", (socket) => {
     socket.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
   });
 
-  //Für das Quiz
+  //Quiz starten:
+  socket.on("startQuiz", (tasks) => {
+    taskManager.loadTasks(tasks); // Aufgaben in den TaskManager laden
+    const firstTask = taskManager.getCurrentTask();
+    if (firstTask) {
+      io.emit("taskStarted", firstTask); // Erste Aufgabe an alle Clients senden
+    }
+  });
+  
+  //Prüfen ob alle fertig sind
   socket.on("submitTask", ({ userId, correct, time }) => {
     taskManager.markTaskCompleted(userId, correct, time);
   
     const allUsers = userManager.getAllUsers().map(user => user.userID);
     if (taskManager.isTaskComplete(allUsers)) {
-      taskManager.assignPoints(); // Punkte zuweisen
       const nextTask = taskManager.nextTask();
-  
       if (nextTask) {
-        io.emit("taskStarted", nextTask); // Nächste Aufgabe senden
+        io.emit("taskStarted", nextTask); // Nächste Aufgabe an alle Clients senden
       } else {
         io.emit("quizCompleted", userManager.getAllUsers().map(user => ({
           name: user.getName,
           points: user.points
-        }))); // Quiz-Endergebnisse senden
-        userManager.resetAllPoints(); // Punkte zurücksetzen
+        })));
       }
     }
+  
+    // Fortschritt an Master senden
+    const progress = taskManager.getProgress();
+    io.to("master").emit("progressUpdate", progress);
   });
   
 });

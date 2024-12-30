@@ -6,10 +6,7 @@
 </head>
 <body>
   <h1 id="welcomeMessage">Herzlich Willkommen!</h1>
-  <h2>Deine Daten:</h2>
-  <p>Name: <span id="userName"></span></p>
-  <p>ID: <span id="userId"></span></p>
-  <h3>Gleich beginnen die Aufgaben, du erhälst Punkte für die Richtigkeit und die Zeit, sei also schnell und gut!</h3>
+  <h2>Gleich beginnen die Aufgaben, du erhälst Punkte für die Richtigkeit und die Zeit, sei also schnell und gut!</h2>
 
   <script src="/socket.io/socket.io.js"></script>
 
@@ -22,15 +19,18 @@
     const userName = urlParams.get('name'); // Name des Benutzers aus der URL holen
     const userId = urlParams.get('userId'); // ID des Benutzers aus der URL holen
 
-    // Begrüßung und Benutzerinformationen anzeigen
+    // Begrüßung anzeigen
     document.getElementById("welcomeMessage").textContent = `Herzlich Willkommen, ${userName}!`;
-    document.getElementById("userName").textContent = userName;
-    document.getElementById("userId").textContent = userId;
 
     // Benutzer beim Verlassen der Seite abmelden
     window.addEventListener("beforeunload", () => {
     socket.emit("disconnectUser", userId);
     });
+
+    socket.on("startQuiz", (tasks) => {
+      window.location.href = `/tasks/taskView.html?name=${encodeURIComponent(userName)}&userId=${encodeURIComponent(userId)}`;
+    });
+
 
   </script>
 </body>
