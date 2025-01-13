@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Master - Aktuelle Benutzerliste</title>
+  <link rel="stylesheet" href="/css/styles.css"> <!-- CSS einbinden -->
 </head>
 <body>
   <h1>Master</h1>
@@ -10,7 +11,7 @@
   <ul id="taskSelectionList">
     <!-- Dynamisch gefüllte Aufgabenliste -->
   </ul>
-  <button onclick="startQuiz()">Quiz starten</button>
+  <button id="submitButton" onclick="startQuiz()">Quiz starten</button>
   <h3>Fortschritt</h3>
   <ul id="progressList"></ul>
   <h4>Aktuelle Benutzer:</h4>
@@ -62,6 +63,7 @@
 
     function startQuiz() {
       if (selectedTasks.length > 0) {
+        //document.getElementById("submitButton").style.display = "none";
         socket.emit("startQuiz", selectedTasks);
       } else {
         alert("Bitte wählen Sie mindestens eine Aufgabe aus.");
