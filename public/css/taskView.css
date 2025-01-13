@@ -1,0 +1,21 @@
+/* Button standardmäßig unsichtbar */
+#submitButton {
+    display: none;
+  }
+  
+  /* Standard-Stil für Multiple-Choice-Optionen */
+  .optionButton {
+    margin: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Stil für markierte Antwort */
+  .optionButton.selected {
+    background-color: #4caf50; /* Grün für ausgewählte Option */
+    color: white;
+  }
+  

@@ -3,12 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz</title>
-  <style>
-    /* Button standardmäßig unsichtbar */
-    #submitButton {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="/css/taskView.css"> <!-- CSS einbinden -->
 </head>
 <body>
   <h1>Programmierung-Quiz</h1>
@@ -39,7 +34,8 @@
       task.options.forEach((option) => {
         const button = document.createElement("button");
         button.textContent = option;
-        button.onclick = () => selectAnswer(option);
+        button.className = "optionButton";
+        button.onclick = () => selectAnswer(button, option);
         optionsContainer.appendChild(button);
       });
     } else if (task.type === "coding") {
@@ -53,29 +49,37 @@
     }
   });
 
-
   let selectedAnswer = null;
+  let previousSelectedButton = null;
 
-  function selectAnswer(answer) {
+  function selectAnswer(button, answer) {
     selectedAnswer = answer;
+
+    // Entferne die Markierung von der vorherigen Auswahl
+    if (previousSelectedButton) {
+      previousSelectedButton.classList.remove("selected");
+    }
+
+    // Markiere die aktuelle Auswahl
+    button.classList.add("selected");
+    previousSelectedButton = button; // Speichere die aktuelle Auswahl
   }
 
   function submitAnswer() {
-    const taskId = 1; // Beispiel
-    const userId = 123; // Beispiel
+    document.getElementById("submitButton").style.display = "none";
     if (selectedAnswer) {
-      socket.emit("submitTask", { userId, taskId, answer: selectedAnswer });
+      socket.emit("submitTask", { userId, taskId: 1, answer: selectedAnswer }); // Beispiel-Task-ID
     }
   }
 
   socket.on("quizCompleted", (results) => {
-  alert("Das Quiz ist beendet!");
-  // Ergebnisse anzeigen
+    alert("Das Quiz ist beendet!");
+    // Ergebnisse anzeigen
   });
 
   // Benutzer beim Verlassen der Seite abmelden
   window.addEventListener("beforeunload", () => {
-  socket.emit("disconnectUser", userId);
+    socket.emit("disconnectUser", userId);
   });
 
   </script>
