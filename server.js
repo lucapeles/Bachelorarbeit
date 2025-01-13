@@ -11,7 +11,7 @@ app.use("/tasks", express.static("tasks"));
 
 
 const UserManager = require("./users/userManager");
-const TaskManager = require("./tasks/TaskManager");
+const TaskManager = require("./tasks/taskManager");
 const userManager = new UserManager();
 const taskManager = new TaskManager(userManager);
 
@@ -38,6 +38,8 @@ io.on("connection", (socket) => {
 
   //Quiz starten:
   socket.on("startQuiz", (tasks) => {
+    console.log(tasks)
+    io.emit("startQuiz");
     taskManager.loadTasks(tasks); // Aufgaben in den TaskManager laden
     const firstTask = taskManager.getCurrentTask();
     if (firstTask) {

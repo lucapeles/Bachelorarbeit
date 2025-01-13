@@ -10,7 +10,7 @@
   <ul id="taskSelectionList">
     <!-- Dynamisch gefüllte Aufgabenliste -->
   </ul>
-  <button onclick="startQuiz">Quiz starten</button>
+  <button onclick="startQuiz()">Quiz starten</button>
   <h3>Fortschritt</h3>
   <ul id="progressList"></ul>
   <h4>Aktuelle Benutzer:</h4>
@@ -42,6 +42,7 @@
 
     const selectedTasks = [];
 
+    //ANzeigen der Aufgaben mit Checkbox
     function populateTaskSelection() {
       const taskList = document.getElementById("taskSelectionList");
       tasks.forEach(task => {
@@ -67,7 +68,7 @@
 
     function startQuiz() {
       if (selectedTasks.length > 0) {
-        io.emit("startQuiz", selectedTasks);
+        socket.emit("startQuiz", selectedTasks);
       } else {
         alert("Bitte wählen Sie mindestens eine Aufgabe aus.");
       }
