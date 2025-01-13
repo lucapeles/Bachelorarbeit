@@ -68,7 +68,7 @@
   function submitAnswer() {
     document.getElementById("submitButton").style.display = "none";
     if (selectedAnswer) {
-      socket.emit("submitTask", { userId, taskId: 1, answer: selectedAnswer }); // Beispiel-Task-ID
+      socket.emit("submitTask", { userId, answer: selectedAnswer }); // Beispiel-Task-ID
     }
   }
 

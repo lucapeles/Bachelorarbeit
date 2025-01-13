@@ -4,6 +4,7 @@ class TaskManager {
       this.currentTaskIndex = -1; // Index der aktuellen Aufgabe
       this.taskProgress = {}; // Fortschritt der Benutzer: { userId: { completed: boolean, correct: boolean, time: number } }
       this.userManager = userManager; // Referenz auf den UserManager
+      this.usersWhoHaveFinished = []
     }
   
     // Aufgaben laden
@@ -19,24 +20,43 @@ class TaskManager {
     }
   
     // Benutzer bearbeitet Aufgabe und gibt ab
-    markTaskCompleted(userId, correct, time) {
-      if (!this.taskProgress[userId]) {
-        this.taskProgress[userId] = { completed: false, correct: false, time: Infinity };
+    markTaskCompleted(userId, answer) {
+      this.usersWhoHaveFinished.push(userId);
+      const currentTask = this.getCurrentTask();
+      if (!currentTask) return; // Keine gültige Aufgabe
+      const isCorrect = this.checkAnswer(currentTask, answer); // Antwort überprüfen
+
+      //TODO: Reihenfolge der Abgabe (zB: Liste mit allen users und dann länge ist Platz des aktuelen Users)
+
+      this.taskProgress[userId] = { completed: true, correct: isCorrect, time }; //als completed markieren
+      // Punkte zuweisen, wenn die Antwort korrekt ist
+      if (isCorrect) {
+        assignPoints(userId);
       }
-      this.taskProgress[userId] = { completed: true, correct, time };
+      if (this.usersWhoHaveFinished.length == this.userManager.getAllUsers().length) {
+        this.usersWhoHaveFinished = []; // Zurücksetzen der Liste, wenn ale fertig sind
+        socket.emit("taskCompleted");
+      }
     }
-  
-    // Punktevergabe durch UserManager
-    assignPoints() {
-      const correctUsers = Object.entries(this.taskProgress)
-        .filter(([_, progress]) => progress.correct) // Nur korrekte Antworten
-        .sort(([, a], [, b]) => a.time - b.time); // Nach Zeit sortieren (schnellste zuerst)
-  
-      let points = 20; // Startpunkte
-      correctUsers.forEach(([userId]) => {
-        this.userManager.updatePoints(userId, Math.max(points, 2)); // Punkte zuweisen
-        points = Math.max(points - 2, 2); // Punkte reduzieren, nicht unter 2
-      });
+
+    // Antwort prüfen (je nach Aufgabentyp)
+    checkAnswer(task, answer) {
+      if (task.type === "multipleChoice") {
+        return task.correctAnswer === answer; // Vergleich für Multiple-Choice
+      } else if (task.type === "text") {
+        return answer.trim().toLowerCase() === task.correctAnswer?.trim().toLowerCase(); // Vergleich für Text
+      } else if (task.type === "coding") {
+
+        //TODO
+
+        return false; // Noch nicht implementiert
+      }
+      return false; // Unbekannter Typ
+    }  
+
+    // Punktevergabe durch UserManager abhängig der Reihenfolge
+    assignPoints(userId) {
+      this.userManager.updatePoints(userId, this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length);
     }
   
     // Prüfen, ob alle Benutzer die Aufgabe abgeschlossen haben

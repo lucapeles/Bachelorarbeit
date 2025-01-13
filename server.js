@@ -53,9 +53,9 @@ io.on("connection", (socket) => {
     }
   });
   
-  //Prüfen ob alle fertig sind
-  socket.on("submitTask", ({ userId, correct, time }) => {
-    taskManager.markTaskCompleted(userId, correct, time);
+  //Korrigieren , speichern & prüfen ob alle fertig sind
+  socket.on("submitTask", ({ userId, anwser }) => {
+    taskManager.markTaskCompleted(userId, anwser);
   
     const allUsers = userManager.getAllUsers().map(user => user.userID);
     if (taskManager.isTaskComplete(allUsers)) {
