@@ -74,6 +74,10 @@ io.on("connection", (socket) => {
     const progress = taskManager.getProgress();
     io.to("master").emit("progressUpdate", progress);
   });
+
+  socket.on("test", (test) => {
+    console.log(test);
+  });
   
 });
 
