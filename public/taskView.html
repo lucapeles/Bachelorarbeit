@@ -17,7 +17,7 @@
   const socket = io();
   
   // Neue Frage anzeigen
-  socket.on("taskStarted", (task) => {
+  socket.on("newTask", (task) => {
     document.getElementById("questionText").textContent = task.description;
 
     const optionsContainer = document.getElementById("answerOptions");

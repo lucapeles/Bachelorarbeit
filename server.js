@@ -46,13 +46,11 @@ io.on("connection", (socket) => {
 
   //Quiz starten:
   socket.on("startQuiz", (tasks) => {
-    io.emit("startQuiz");
+    io.emit("sendToTaskView");
     taskManager.loadTasks(tasks); // Aufgaben in den TaskManager laden
     const firstTask = taskManager.getCurrentTask();
-    console.log(tasks)
     if (firstTask) {
-      console.log(firstTask.description)
-      io.emit("taskStarted", firstTask); // Erste Aufgabe an alle Clients senden
+      io.emit("newTask", firstTask); // Erste Aufgabe an alle Clients senden
     }
   });
   

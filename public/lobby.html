@@ -27,7 +27,7 @@
     socket.emit("disconnectUser", userId);
     });
 
-    socket.on("startQuiz", (tasks) => {
+    socket.on("sendToTaskView", (tasks) => {
       window.location.href = `/taskView.html?name=${encodeURIComponent(userName)}&userId=${encodeURIComponent(userId)}`;
     });
 
