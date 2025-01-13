@@ -14,6 +14,8 @@ const UserManager = require("./users/userManager");
 const TaskManager = require("./tasks/taskManager");
 const userManager = new UserManager();
 const taskManager = new TaskManager(userManager);
+const taskPool = require("./tasks/taskData");
+
 
 io.on("connection", (socket) => {
 
@@ -32,17 +34,24 @@ io.on("connection", (socket) => {
     }
   });
 
+  //Alle User anzeigen
   socket.on("requestUserList", () => {
     socket.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
   });
 
+  //Aufgaben an Masteransicht senden
+  socket.on("requestTaskPool", () => {
+    socket.emit("sendTaskPool", taskPool); // Aufgaben an den Client senden
+  });
+
   //Quiz starten:
   socket.on("startQuiz", (tasks) => {
-    console.log(tasks)
     io.emit("startQuiz");
     taskManager.loadTasks(tasks); // Aufgaben in den TaskManager laden
     const firstTask = taskManager.getCurrentTask();
+    console.log(tasks)
     if (firstTask) {
+      console.log(firstTask.description)
       io.emit("taskStarted", firstTask); // Erste Aufgabe an alle Clients senden
     }
   });

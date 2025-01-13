@@ -19,11 +19,12 @@
   // Neue Frage anzeigen
   socket.on("taskStarted", (task) => {
     document.getElementById("questionText").textContent = task.description;
+
     const optionsContainer = document.getElementById("answerOptions");
     optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
 
     if (task.type === "multipleChoice") {
-      task.options.forEach((option, index) => {
+      task.options.forEach((option) => {
         const button = document.createElement("button");
         button.textContent = option;
         button.onclick = () => selectAnswer(option);
@@ -33,8 +34,13 @@
       const editorContainer = document.createElement("textarea");
       editorContainer.id = "codeEditor";
       optionsContainer.appendChild(editorContainer);
+    } else if (task.type === "text") {
+      const textArea = document.createElement("textarea");
+      textArea.id = "textAnswer";
+      optionsContainer.appendChild(textArea);
     }
   });
+
 
   let selectedAnswer = null;
 

@@ -34,16 +34,12 @@
     // Bei Verbindung Benutzerliste anfordern
     socket.emit("requestUserList");
 
-    // Für das Spiel, auswählen der Aufgaben und weiterschicken.
-    const tasks = [
-    { id: 1, name: "Aufgabe 1: Multiple Choice" },
-    { id: 2, name: "Aufgabe 2: Coding" }
-    ];
+    socket.emit("requestTaskPool"); // Anfrage an den Server senden
 
     const selectedTasks = [];
 
-    //ANzeigen der Aufgaben mit Checkbox
-    function populateTaskSelection() {
+    //für dynamische Aufgabenansicht
+    socket.on("sendTaskPool", (tasks) => {
       const taskList = document.getElementById("taskSelectionList");
       tasks.forEach(task => {
         const listItem = document.createElement("li");
@@ -59,12 +55,10 @@
           }
         };
         listItem.appendChild(checkbox);
-        listItem.appendChild(document.createTextNode(task.name));
+        listItem.appendChild(document.createTextNode(task.description));
         taskList.appendChild(listItem);
       });
-    }
-
-    populateTaskSelection();
+    });
 
     function startQuiz() {
       if (selectedTasks.length > 0) {
