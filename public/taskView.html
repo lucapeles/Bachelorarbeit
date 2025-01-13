@@ -3,21 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz</title>
+  <style>
+    /* Button standardmäßig unsichtbar */
+    #submitButton {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <h1>Programmierung-Quiz</h1>
   <div id="quizContainer">
     <h2 id="questionText"></h2>
     <div id="answerOptions"></div>
-    <button onclick="submitAnswer()">Antwort abschicken</button>
+    <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
   </div>
   
 
   <script>
   const socket = io();
+
+  // URL-Parameter auslesen
+  const urlParams = new URLSearchParams(window.location.search);
+  const userName = urlParams.get('name'); // Name des Benutzers aus der URL holen
+  const userId = urlParams.get('userId'); // ID des Benutzers aus der URL holen
   
   // Neue Frage anzeigen
   socket.on("newTask", (task) => {
+    document.getElementById("submitButton").style.display = "block";
     document.getElementById("questionText").textContent = task.description;
 
     const optionsContainer = document.getElementById("answerOptions");
@@ -59,6 +71,11 @@
   socket.on("quizCompleted", (results) => {
   alert("Das Quiz ist beendet!");
   // Ergebnisse anzeigen
+  });
+
+  // Benutzer beim Verlassen der Seite abmelden
+  window.addEventListener("beforeunload", () => {
+  socket.emit("disconnectUser", userId);
   });
 
   </script>
