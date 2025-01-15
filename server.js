@@ -54,11 +54,15 @@ io.on("connection", (socket) => {
   });
   
   //Korrigieren , speichern & prüfen ob alle fertig sind
-  socket.on("submitTask", ({ userId, anwser }) => {
-    taskManager.markTaskCompleted(userId, anwser);
+  socket.on("submitTask", (data) => { // data = { userId, selectedAnwser }
+    console.log(data[0]);
+    console.log(data[1]);
+    if (taskManager.markTaskCompleted(data[0], data[1])) {
+      //nächste aufgabe
+    }
   
     const allUsers = userManager.getAllUsers().map(user => user.userID);
-    if (taskManager.isTaskComplete(allUsers)) {
+    /*if (taskManager.isTaskComplete(allUsers)) {
       const nextTask = taskManager.nextTask();
       if (nextTask) {
         io.emit("taskStarted", nextTask); // Nächste Aufgabe an alle Clients senden
@@ -68,7 +72,7 @@ io.on("connection", (socket) => {
           points: user.points
         })));
       }
-    }
+    }*/
   
     // Fortschritt an Master senden
     const progress = taskManager.getProgress();

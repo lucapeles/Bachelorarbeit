@@ -2,7 +2,7 @@ class TaskManager {
     constructor(userManager) {
       this.tasks = []; // Liste aller Aufgaben
       this.currentTaskIndex = -1; // Index der aktuellen Aufgabe
-      this.taskProgress = {}; // Fortschritt der Benutzer: { userId: { completed: boolean, correct: boolean, time: number } }
+      this.taskProgress = {}; // Fortschritt der Benutzer: { userId: { completed: boolean, correct: boolean } }
       this.userManager = userManager; // Referenz auf den UserManager
       this.usersWhoHaveFinished = []
     }
@@ -28,15 +28,16 @@ class TaskManager {
 
       //TODO: Reihenfolge der Abgabe (zB: Liste mit allen users und dann länge ist Platz des aktuelen Users)
 
-      this.taskProgress[userId] = { completed: true, correct: isCorrect, time }; //als completed markieren
+      this.taskProgress[userId] = { completed: true, correct: isCorrect }; //als completed markieren
       // Punkte zuweisen, wenn die Antwort korrekt ist
       if (isCorrect) {
-        assignPoints(userId);
+        this.assignPoints(userId);
       }
       if (this.usersWhoHaveFinished.length == this.userManager.getAllUsers().length) {
         this.usersWhoHaveFinished = []; // Zurücksetzen der Liste, wenn ale fertig sind
-        socket.emit("taskCompleted");
+        return true; //Alle fertig, also jetzt Ergebnis anzeigen
       }
+      return false;
     }
 
     // Antwort prüfen (je nach Aufgabentyp)
@@ -56,12 +57,9 @@ class TaskManager {
 
     // Punktevergabe durch UserManager abhängig der Reihenfolge
     assignPoints(userId) {
-      this.userManager.updatePoints(userId, this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length);
-    }
-  
-    // Prüfen, ob alle Benutzer die Aufgabe abgeschlossen haben
-    isTaskComplete(userIds) {
-      return userIds.every(userId => this.taskProgress[userId]?.completed);
+      let points = this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length;
+      console.log(points);
+      this.userManager.updatePoints(userId, points);
     }
   
     // Fortschritt zurücksetzen

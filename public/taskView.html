@@ -49,7 +49,7 @@
     }
   });
 
-  let selectedAnswer = null;
+  let selectedAnswer = "nurAlsSchranke";
   let previousSelectedButton = null;
 
   function selectAnswer(button, answer) {
@@ -67,8 +67,10 @@
 
   function submitAnswer() {
     document.getElementById("submitButton").style.display = "none";
-    if (selectedAnswer) {
-      socket.emit("submitTask", { userId, answer: selectedAnswer }); // Beispiel-Task-ID
+    if (selectedAnswer != "nurAlsSchranke") {
+      socket.emit("submitTask", [userId, selectedAnswer]);
+    } else {
+      alert("Bitte gib eine Lösung ein.")
     }
   }
 
