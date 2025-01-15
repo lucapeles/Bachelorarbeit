@@ -1,21 +1,34 @@
 /* Button standardmäßig unsichtbar */
 #submitButton {
     display: none;
-  }
+}
+
+#nextTaskButton {
+  display: none;
+}
   
-  /* Standard-Stil für Multiple-Choice-Optionen */
-  .optionButton {
-    margin: 5px;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+/* Standard-Stil für Multiple-Choice-Optionen */
+.optionButton {
+  margin: 5px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Stil für markierte Antwort */
+.optionButton.selected {
+  background-color: #4caf50; /* Grün für ausgewählte Option */
+  color: white;
+}
+
+#correctAnswerContainer {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e8f5e9; /* Heller Grünton */
+  border: 1px solid #4caf50; /* Dunklerer Grünton */
+  border-radius: 5px;
+}
   
-  /* Stil für markierte Antwort */
-  .optionButton.selected {
-    background-color: #4caf50; /* Grün für ausgewählte Option */
-    color: white;
-  }
   

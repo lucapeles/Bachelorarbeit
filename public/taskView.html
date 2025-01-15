@@ -12,6 +12,10 @@
     <div id="answerOptions"></div>
     <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
   </div>
+  <div id="correctAnswerContainer" style="display: none;">
+    <h3>Korrekte Lösung:</h3>
+    <p id="correctAnswerText"></p>
+  </div>
   
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -24,6 +28,7 @@
   
   // Neue Frage anzeigen
   socket.on("newTask", (task) => {
+    correctAnswerContainer.style.display = "none"; // Container unsichtbar machen
     document.getElementById("submitButton").style.display = "block";
     document.getElementById("questionText").textContent = task.description;
 
@@ -73,6 +78,17 @@
       alert("Bitte gib eine Lösung ein.")
     }
   }
+
+  // Nachricht vom Server empfangen: Aufgabe abgeschlossen
+  socket.on("taskCompleted", (correctAnswer) => {
+    // Korrekte Lösung anzeigen
+    const correctAnswerContainer = document.getElementById("correctAnswerContainer");
+    const correctAnswerText = document.getElementById("correctAnswerText");
+
+    correctAnswerContainer.style.display = "block"; // Container sichtbar machen
+    correctAnswerText.textContent = correctAnswer; // Korrekte Lösung einfügen
+  });
+
 
   socket.on("quizCompleted", (results) => {
     alert("Das Quiz ist beendet!");

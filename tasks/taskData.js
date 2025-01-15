@@ -10,13 +10,14 @@ const taskPool = [
       id: 2,
       type: "coding",
       description: "Schreibe eine Funktion, die zwei Zahlen addiert.",
-      template: "function add(a, b) {\n  // Dein Code hier\n}"
+      template: "function add(a, b) {\n  // Dein Code hier\n}",
+      correctAnswer: "TODO"
     },
     {
       id: 3,
       type: "text",
       description: "Erkläre in eigenen Worten, was ein Array ist.",
-      correctAnswer: null
+      correctAnswer: "TODO"
     }
   ];
   

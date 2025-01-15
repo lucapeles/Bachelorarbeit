@@ -56,25 +56,23 @@ io.on("connection", (socket) => {
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userId, selectedAnwser }
     if (taskManager.markTaskCompleted(data[0], data[1])) {
-      //nächste aufgabe
+      io.emit("taskCompleted", taskManager.getCurrentSolution());
+      io.emit("nextTaskButton");
     }
-  
-    const allUsers = userManager.getAllUsers().map(user => user.userID);
-    /*if (taskManager.isTaskComplete(allUsers)) {
-      const nextTask = taskManager.nextTask();
-      if (nextTask) {
-        io.emit("taskStarted", nextTask); // Nächste Aufgabe an alle Clients senden
-      } else {
-        io.emit("quizCompleted", userManager.getAllUsers().map(user => ({
-          name: user.getName,
-          points: user.points
-        })));
-      }
-    }*/
-  
+
+
     // Fortschritt an Master senden
     const progress = taskManager.getProgress();
     io.to("master").emit("progressUpdate", progress);
+  });
+
+  //Nächste Aufgabe oder letzte Aufgabe
+  socket.on("startNextTask", () => {
+    if (taskManager.nextTask()) {
+      io.emit("newTask", taskManager.nextTask()); // Nächste Aufgabe an alle Clients senden
+    } else {
+      //TODO: Quiz fertig
+    }
   });
 
   socket.on("test", (test) => {

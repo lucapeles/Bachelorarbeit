@@ -18,6 +18,11 @@ class TaskManager {
     getCurrentTask() {
       return this.tasks[this.currentTaskIndex] || null;
     }
+
+    // Aktuelle Lösung holen
+    getCurrentSolution() {
+      return this.tasks[this.currentTaskIndex].correctAnswer || null;
+    }
   
     // Benutzer bearbeitet Aufgabe und gibt ab
     markTaskCompleted(userId, answer) {
