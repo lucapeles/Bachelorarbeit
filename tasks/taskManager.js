@@ -57,8 +57,7 @@ class TaskManager {
 
     // Punktevergabe durch UserManager abhängig der Reihenfolge
     assignPoints(userId) {
-      let points = this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length;
-      console.log(points);
+      let points = this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length + 1;
       this.userManager.updatePoints(userId, points);
     }
   
