@@ -23,21 +23,31 @@ io.on("connection", (socket) => {
   socket.on("joinLobby", (name) => {
     currentUserID = userManager.addUser(name);  // Benutzer erstellen
     socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
-    io.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
+    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
+      name: user.getName,
+      points: user.points
+    })));
   });
 
   // Benutzer beim Trennen der Verbindung entfernen
   socket.on("disconnectUser", (userID) => {
     if (userID) {
       userManager.removeUserByID(userID);
-      io.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
+      io.emit("updateUserList", userManager.getAllUsers().map(user => ({
+        name: user.getName,
+        points: user.points
+      })));
     }
   });
 
-  //Alle User anzeigen
+  // Benutzerliste mit Punktestand senden
   socket.on("requestUserList", () => {
-    socket.emit("updateUserList", userManager.getAllUsers().map(user => user.getName));
+    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
+      name: user.getName,
+      points: user.points
+    })));
   });
+
 
   //Aufgaben an Masteransicht senden
   socket.on("requestTaskPool", () => {
@@ -59,11 +69,11 @@ io.on("connection", (socket) => {
       io.emit("taskCompleted", taskManager.getCurrentSolution());
       io.emit("nextTaskButton");
     }
-
-
-    // Fortschritt an Master senden
-    const progress = taskManager.getProgress();
-    io.to("master").emit("progressUpdate", progress);
+    //Master aktualisieren mit neuer Punktzahl
+    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
+      name: user.getName,
+      points: user.points
+    })));
   });
 
   //Nächste Aufgabe oder letzte Aufgabe
@@ -74,10 +84,6 @@ io.on("connection", (socket) => {
     } else {
       //TODO: Quiz fertig
     }
-  });
-
-  socket.on("test", (test) => {
-    console.log(test);
   });
 
 });

@@ -31,8 +31,6 @@ class TaskManager {
     if (!currentTask) return; // Keine gültige Aufgabe
     const isCorrect = this.checkAnswer(currentTask, answer); // Antwort überprüfen
 
-    //TODO: Reihenfolge der Abgabe (zB: Liste mit allen users und dann länge ist Platz des aktuelen Users)
-
     this.taskProgress[userId] = { completed: true, correct: isCorrect }; //als completed markieren
     // Punkte zuweisen, wenn die Antwort korrekt ist
     if (isCorrect) {

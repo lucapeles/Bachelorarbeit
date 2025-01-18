@@ -27,19 +27,18 @@
     const userListElement = document.getElementById("userList");
 
     // Event, um die Benutzerliste zu aktualisieren
-    socket.on("updateUserList", (userNames) => {
+    socket.on("updateUserList", (users) => {
       userListElement.innerHTML = ""; // Aktuelle Liste löschen
-      userNames.forEach(name => {
+      users.forEach(user => {
         const listItem = document.createElement("li");
-        listItem.textContent = name;
+        listItem.textContent = `${user.name}: ${user.points} Punkte`; // Name und Punktestand anzeigen
         userListElement.appendChild(listItem); // Benutzer zur Liste hinzufügen
       });
     });
 
-    // Bei Verbindung Benutzerliste anfordern
+    // Bei Verbindung Benutzerliste & Aufgaben anfordern
     socket.emit("requestUserList");
-
-    socket.emit("requestTaskPool"); // Anfrage an den Server senden
+    socket.emit("requestTaskPool");
 
     const selectedTasks = [];
 
@@ -73,17 +72,6 @@
         alert("Bitte wählen Sie mindestens eine Aufgabe aus.");
       }
     }
-
-    // Fortschritt der Benutzer
-    socket.on("progressUpdate", (progress) => {
-      const progressList = document.getElementById("progressList");
-      progressList.innerHTML = ""; // Vorherigen Fortschritt löschen
-      progress.forEach(({ user, completed }) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${user.name}: ${completed ? "Fertig" : "Nicht fertig"}`;
-        progressList.appendChild(listItem);
-      });
-    });
 
     //für nächste Aufgabe zuerst Button anzeigen
     socket.on("nextTaskButton", () => {

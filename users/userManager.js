@@ -16,7 +16,7 @@ class UserManager {
 
   // Benutzer anhand der ID suchen
   getUserByID(id) {
-    return this.users.filter(user => String(user.getUserID) !== String(id));
+    return this.users.find(user => String(user.getUserID) === String(id));
   }
 
   // Benutzer anhand der ID entfernen
