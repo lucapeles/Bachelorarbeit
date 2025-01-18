@@ -21,7 +21,7 @@
     // URL-Parameter auslesen
     const urlParams = new URLSearchParams(window.location.search);
     const userName = urlParams.get('name'); // Name des Benutzers aus der URL holen
-    const userId = urlParams.get('userId'); // ID des Benutzers aus der URL holen
+    const userID = urlParams.get('userID'); // ID des Benutzers aus der URL holen
 
     // Neue Frage anzeigen
     socket.on("newTask", (task) => {
@@ -70,7 +70,7 @@
       document.getElementById("submitButton").style.display = "none"; //submitButton ausblenden
       document.getElementById("quizContainer").style.display = "none"; // Antwortmöglichkeiten ausblenden
       if (selectedAnswer != "nurAlsSchranke") {
-        socket.emit("submitTask", [userId, selectedAnswer]);
+        socket.emit("submitTask", [userID, selectedAnswer]);
       } else {
         alert("Bitte gib eine Lösung ein.")
       }
@@ -84,7 +84,7 @@
 
     // Benutzer beim Verlassen der Seite abmelden
     window.addEventListener("beforeunload", () => {
-      socket.emit("disconnectUser", userId);
+      socket.emit("disconnectUser", userID);
     });
 
   </script>

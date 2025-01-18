@@ -25,8 +25,8 @@ class UserManager {
   }
 
   // Punkte eines Benutzers aktualisieren
-  updatePoints(userId, points) {
-    const user = this.getUserByID(userId);
+  updatePoints(userID, points) {
+    const user = this.getUserByID(userID);
     if (user) {
       user.points += points; // Punkte hinzufügen
     }
@@ -42,6 +42,17 @@ class UserManager {
   // Alle Benutzer abrufen
   getAllUsers() {
     return this.users;
+  }
+
+  changeName(userID, newName) {
+    const user = this.getUserByID(userID);
+    console.log(userID);
+    console.log(newName);
+    console.log(user);
+    if (user) {
+      user.setName = newName;
+    }
+    console.log(user.getName);
   }
 }
 

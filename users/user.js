@@ -15,6 +15,11 @@ class User {
     return this.name;
   }
 
+  // Setter für name
+  set setName(newName) {
+    this.name = newName;
+  }
+
   // Getter für points
   get getPoints() {
     return this.points;

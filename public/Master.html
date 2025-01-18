@@ -31,10 +31,26 @@
       userListElement.innerHTML = ""; // Aktuelle Liste löschen
       users.forEach(user => {
         const listItem = document.createElement("li");
-        listItem.textContent = `${user.name}: ${user.points} Punkte`; // Name und Punktestand anzeigen
+        listItem.textContent = `${user.name}: ${user.points} Punkte `; // Name und Punktestand anzeigen
+
+        // Button zum Ändern des Namens
+        const changeNameButton = document.createElement("button");
+        changeNameButton.textContent = "Name ändern";
+        changeNameButton.onclick = () => changeUserName(user.userID); // Button mit Funktion verknüpfen
+        listItem.appendChild(changeNameButton);
+
         userListElement.appendChild(listItem); // Benutzer zur Liste hinzufügen
       });
     });
+
+
+    function changeUserName(userID) {
+      // Zufällige 4-stellige Kombination aus Buchstaben und Zahlen generieren
+      const newName = Math.random().toString(36).substring(2, 6).toUpperCase();
+      // Server benachrichtigen, um den Namen zu aktualisieren
+      socket.emit("changeUserName", [userID, newName]);
+    }
+
 
     // Bei Verbindung Benutzerliste & Aufgaben anfordern
     socket.emit("requestUserList");

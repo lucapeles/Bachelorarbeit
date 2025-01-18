@@ -43,8 +43,8 @@
     }
 
     // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
-    socket.on("lobbyCreated", (userId, name) => {
-      window.location.href = `/taskView.html?name=${encodeURIComponent(name)}&userId=${encodeURIComponent(userId)}`;
+    socket.on("lobbyCreated", (userID, name) => {
+      window.location.href = `/taskView.html?name=${encodeURIComponent(name)}&userID=${encodeURIComponent(userID)}`;
     });
   </script>
 </body>

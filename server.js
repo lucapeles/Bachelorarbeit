@@ -21,10 +21,11 @@ io.on("connection", (socket) => {
 
   // Event zum Beitreten einer bestehenden Lobby
   socket.on("joinLobby", (name) => {
-    currentUserID = userManager.addUser(name);  // Benutzer erstellen
-    socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
+    currentuserID = userManager.addUser(name);  // Benutzer erstellen
+    socket.emit("lobbyCreated", currentuserID, name);   // Lobby-Code an den Client zurücksenden
     io.emit("updateUserList", userManager.getAllUsers().map(user => ({
       name: user.getName,
+      userID: user.getUserID,
       points: user.points
     })));
   });
@@ -35,6 +36,7 @@ io.on("connection", (socket) => {
       userManager.removeUserByID(userID);
       io.emit("updateUserList", userManager.getAllUsers().map(user => ({
         name: user.getName,
+        userID: user.getUserID,
         points: user.points
       })));
     }
@@ -44,9 +46,23 @@ io.on("connection", (socket) => {
   socket.on("requestUserList", () => {
     io.emit("updateUserList", userManager.getAllUsers().map(user => ({
       name: user.getName,
+      userID: user.getUserID,
       points: user.points
     })));
   });
+
+  //Benutzername ändern
+  socket.on("changeUserName", (data) => { // data = { userID, newName }
+    console.log("in server: " + data[0]);
+    userManager.changeName(data[0], data[1]);
+    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
+      name: user.getName,
+      userID: user.getUserID,
+      points: user.points
+    })));
+
+  });
+
 
 
   //Aufgaben an Masteransicht senden
@@ -64,7 +80,8 @@ io.on("connection", (socket) => {
   });
 
   //Korrigieren , speichern & prüfen ob alle fertig sind
-  socket.on("submitTask", (data) => { // data = { userId, selectedAnwser }
+  socket.on("submitTask", (data) => { // data = { userID, selectedAnwser }
+    console.log(data[0]);
     if (taskManager.markTaskCompleted(data[0], data[1])) {
       io.emit("taskCompleted", taskManager.getCurrentSolution());
       io.emit("nextTaskButton");
@@ -72,6 +89,7 @@ io.on("connection", (socket) => {
     //Master aktualisieren mit neuer Punktzahl
     io.emit("updateUserList", userManager.getAllUsers().map(user => ({
       name: user.getName,
+      userID: user.getUserID,
       points: user.points
     })));
   });
