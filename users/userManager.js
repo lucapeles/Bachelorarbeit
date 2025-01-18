@@ -31,7 +31,7 @@ class UserManager {
       user.points += points; // Punkte hinzufügen
     }
   }
-  
+
   // Punktestand zurücksetzen
   resetAllPoints() {
     this.users.forEach(user => {

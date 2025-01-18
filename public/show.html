@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="/css/showStyle.css"> <!-- CSS einbinden -->
+</head>
+
+<body>
+    <!-- Oberer Bereich -->
+    <div class="top-section">
+        <p id="topText">Hier erscheint später dynamischer Text.</p>
+    </div>
+
+    <!-- Unterer Bereich -->
+    <div class="bottom-section">
+        <!-- Linker Bereich -->
+        <div class="left-box">
+            <p>Hier erscheint das Diagramm.</p>
+        </div>
+
+        <!-- Rechter Bereich -->
+        <div class="right-box">
+            <div class="timer">30 Sekunden</div>
+            <div class="progress-bar">
+                <div class="progress-bar-inner" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simuliert einen vertikalen Fortschrittsbalken, der über 30 Sekunden abläuft
+        let duration = 30; // Sekunden
+        let currentProgress = 100; // Start bei 100%
+
+        function updateProgressBar() {
+            const progressBarInner = document.getElementById('progressBar');
+            const timer = document.querySelector('.timer');
+
+            const interval = setInterval(() => {
+                if (currentProgress <= 0) {
+                    clearInterval(interval); // Stoppt die Aktualisierung
+                } else {
+                    currentProgress -= 100 / duration; // Reduziert den Fortschritt
+                    progressBarInner.style.height = `${currentProgress}%`;
+                    timer.textContent = `${Math.ceil((duration * currentProgress) / 100)} Sekunden`;
+                }
+            }, 1000);
+        }
+
+        // Startet den Fortschrittsbalken beim Laden der Seite
+        window.onload = updateProgressBar;
+    </script>
+</body>
+
+</html>

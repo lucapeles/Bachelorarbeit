@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
       io.emit("newTask", firstTask); // Erste Aufgabe an alle Clients senden
     }
   });
-  
+
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userId, selectedAnwser }
     if (taskManager.markTaskCompleted(data[0], data[1])) {
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
   socket.on("test", (test) => {
     console.log(test);
   });
-  
+
 });
 
 server.listen(3000, () => {

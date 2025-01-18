@@ -1,12 +1,12 @@
 /* Button standardmäßig unsichtbar */
 #submitButton {
-    display: none;
+  display: none;
 }
 
 #nextTaskButton {
   display: none;
 }
-  
+
 /* Standard-Stil für Multiple-Choice-Optionen */
 .optionButton {
   margin: 5px;
@@ -19,16 +19,17 @@
 
 /* Stil für markierte Antwort */
 .optionButton.selected {
-  background-color: #4caf50; /* Grün für ausgewählte Option */
+  background-color: #4caf50;
+  /* Grün für ausgewählte Option */
   color: white;
 }
 
 #correctAnswerContainer {
   margin-top: 20px;
   padding: 10px;
-  background-color: #e8f5e9; /* Heller Grünton */
-  border: 1px solid #4caf50; /* Dunklerer Grünton */
+  background-color: #e8f5e9;
+  /* Heller Grünton */
+  border: 1px solid #4caf50;
+  /* Dunklerer Grünton */
   border-radius: 5px;
 }
-  
-  

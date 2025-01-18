@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <title>Quiz</title>
   <link rel="stylesheet" href="/css/styles.css"> <!-- CSS einbinden -->
 </head>
+
 <body>
   <h1>Programmierung-Quiz</h1>
   <div id="quizContainer">
@@ -16,90 +18,91 @@
     <h3>Korrekte Lösung:</h3>
     <p id="correctAnswerText"></p>
   </div>
-  
+
   <script src="/socket.io/socket.io.js"></script>
   <script>
-  const socket = io();
+    const socket = io();
 
-  // URL-Parameter auslesen
-  const urlParams = new URLSearchParams(window.location.search);
-  const userName = urlParams.get('name'); // Name des Benutzers aus der URL holen
-  const userId = urlParams.get('userId'); // ID des Benutzers aus der URL holen
-  
-  // Neue Frage anzeigen
-  socket.on("newTask", (task) => {
-    correctAnswerContainer.style.display = "none"; // Container unsichtbar machen
-    document.getElementById("submitButton").style.display = "block";
-    document.getElementById("questionText").textContent = task.description;
+    // URL-Parameter auslesen
+    const urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('name'); // Name des Benutzers aus der URL holen
+    const userId = urlParams.get('userId'); // ID des Benutzers aus der URL holen
 
-    const optionsContainer = document.getElementById("answerOptions");
-    optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
+    // Neue Frage anzeigen
+    socket.on("newTask", (task) => {
+      correctAnswerContainer.style.display = "none"; // Container unsichtbar machen
+      document.getElementById("submitButton").style.display = "block";
+      document.getElementById("questionText").textContent = task.description;
 
-    if (task.type === "multipleChoice") {
-      task.options.forEach((option) => {
-        const button = document.createElement("button");
-        button.textContent = option;
-        button.className = "optionButton";
-        button.onclick = () => selectAnswer(button, option);
-        optionsContainer.appendChild(button);
-      });
-    } else if (task.type === "coding") {
-      const editorContainer = document.createElement("textarea");
-      editorContainer.id = "codeEditor";
-      optionsContainer.appendChild(editorContainer);
-    } else if (task.type === "text") {
-      const textArea = document.createElement("textarea");
-      textArea.id = "textAnswer";
-      optionsContainer.appendChild(textArea);
+      const optionsContainer = document.getElementById("answerOptions");
+      optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
+
+      if (task.type === "multipleChoice") {
+        task.options.forEach((option) => {
+          const button = document.createElement("button");
+          button.textContent = option;
+          button.className = "optionButton";
+          button.onclick = () => selectAnswer(button, option);
+          optionsContainer.appendChild(button);
+        });
+      } else if (task.type === "coding") {
+        const editorContainer = document.createElement("textarea");
+        editorContainer.id = "codeEditor";
+        optionsContainer.appendChild(editorContainer);
+      } else if (task.type === "text") {
+        const textArea = document.createElement("textarea");
+        textArea.id = "textAnswer";
+        optionsContainer.appendChild(textArea);
+      }
+    });
+
+    let selectedAnswer = "nurAlsSchranke";
+    let previousSelectedButton = null;
+
+    function selectAnswer(button, answer) {
+      selectedAnswer = answer;
+
+      // Entferne die Markierung von der vorherigen Auswahl
+      if (previousSelectedButton) {
+        previousSelectedButton.classList.remove("selected");
+      }
+
+      // Markiere die aktuelle Auswahl
+      button.classList.add("selected");
+      previousSelectedButton = button; // Speichere die aktuelle Auswahl
     }
-  });
 
-  let selectedAnswer = "nurAlsSchranke";
-  let previousSelectedButton = null;
-
-  function selectAnswer(button, answer) {
-    selectedAnswer = answer;
-
-    // Entferne die Markierung von der vorherigen Auswahl
-    if (previousSelectedButton) {
-      previousSelectedButton.classList.remove("selected");
+    function submitAnswer() {
+      document.getElementById("submitButton").style.display = "none";
+      if (selectedAnswer != "nurAlsSchranke") {
+        socket.emit("submitTask", [userId, selectedAnswer]);
+      } else {
+        alert("Bitte gib eine Lösung ein.")
+      }
     }
 
-    // Markiere die aktuelle Auswahl
-    button.classList.add("selected");
-    previousSelectedButton = button; // Speichere die aktuelle Auswahl
-  }
+    // Nachricht vom Server empfangen: Aufgabe abgeschlossen
+    socket.on("taskCompleted", (correctAnswer) => {
+      // Korrekte Lösung anzeigen
+      const correctAnswerContainer = document.getElementById("correctAnswerContainer");
+      const correctAnswerText = document.getElementById("correctAnswerText");
 
-  function submitAnswer() {
-    document.getElementById("submitButton").style.display = "none";
-    if (selectedAnswer != "nurAlsSchranke") {
-      socket.emit("submitTask", [userId, selectedAnswer]);
-    } else {
-      alert("Bitte gib eine Lösung ein.")
-    }
-  }
-
-  // Nachricht vom Server empfangen: Aufgabe abgeschlossen
-  socket.on("taskCompleted", (correctAnswer) => {
-    // Korrekte Lösung anzeigen
-    const correctAnswerContainer = document.getElementById("correctAnswerContainer");
-    const correctAnswerText = document.getElementById("correctAnswerText");
-
-    correctAnswerContainer.style.display = "block"; // Container sichtbar machen
-    correctAnswerText.textContent = correctAnswer; // Korrekte Lösung einfügen
-  });
+      correctAnswerContainer.style.display = "block"; // Container sichtbar machen
+      correctAnswerText.textContent = correctAnswer; // Korrekte Lösung einfügen
+    });
 
 
-  socket.on("quizCompleted", (results) => {
-    alert("Das Quiz ist beendet!");
-    // Ergebnisse anzeigen
-  });
+    socket.on("quizCompleted", (results) => {
+      alert("Das Quiz ist beendet!");
+      // Ergebnisse anzeigen
+    });
 
-  // Benutzer beim Verlassen der Seite abmelden
-  window.addEventListener("beforeunload", () => {
-    socket.emit("disconnectUser", userId);
-  });
+    // Benutzer beim Verlassen der Seite abmelden
+    window.addEventListener("beforeunload", () => {
+      socket.emit("disconnectUser", userId);
+    });
 
   </script>
 </body>
+
 </html>

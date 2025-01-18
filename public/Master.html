@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
-  <title>Master - Aktuelle Benutzerliste</title>
+  <title>Master</title>
   <link rel="stylesheet" href="/css/styles.css"> <!-- CSS einbinden -->
 </head>
+
 <body>
   <h1>Master</h1>
+  <button id="showWindow" onclick="showShow()">show</button>
   <h2>Aufgaben auswählen</h2>
   <ul id="taskSelectionList">
     <!-- Dynamisch gefüllte Aufgabenliste -->
@@ -73,30 +76,37 @@
 
     // Fortschritt der Benutzer
     socket.on("progressUpdate", (progress) => {
-    const progressList = document.getElementById("progressList");
-    progressList.innerHTML = ""; // Vorherigen Fortschritt löschen
-    progress.forEach(({ user, completed }) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${user.name}: ${completed ? "Fertig" : "Nicht fertig"}`;
-      progressList.appendChild(listItem);
+      const progressList = document.getElementById("progressList");
+      progressList.innerHTML = ""; // Vorherigen Fortschritt löschen
+      progress.forEach(({ user, completed }) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${user.name}: ${completed ? "Fertig" : "Nicht fertig"}`;
+        progressList.appendChild(listItem);
+      });
     });
-  });
 
-  //für nächste Aufgabe zuerst Button anzeigen
-  socket.on("nextTaskButton", () => {
-    const nextTaskButton = document.getElementById("nextTaskButton");
-    nextTaskButton.style.display = "block"; // Button sichtbar machen
-  });
+    //für nächste Aufgabe zuerst Button anzeigen
+    socket.on("nextTaskButton", () => {
+      const nextTaskButton = document.getElementById("nextTaskButton");
+      nextTaskButton.style.display = "block"; // Button sichtbar machen
+    });
 
 
-  //beim Betätigen des Buttons nächste Aufgabe anzeigen, Button unsichtbar
-  function startNextTask() {
-    // Button ausblenden
-    document.getElementById("nextTaskButton").style.display = "none";
-    // Server mitteilen, dass die nächste Aufgabe gestartet wird
-    socket.emit("startNextTask");
-  }
+    //beim Betätigen des Buttons nächste Aufgabe anzeigen, Button unsichtbar
+    function startNextTask() {
+      // Button ausblenden
+      document.getElementById("nextTaskButton").style.display = "none";
+      // Server mitteilen, dass die nächste Aufgabe gestartet wird
+      socket.emit("startNextTask");
+    }
+
+    //show öffnen
+    function showShow() {
+      window.open('show.html', '_blank');
+    }
+
 
   </script>
 </body>
+
 </html>
