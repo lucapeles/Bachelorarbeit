@@ -69,7 +69,6 @@ io.on("connection", (socket) => {
   //Nächste Aufgabe oder letzte Aufgabe
   socket.on("startNextTask", () => {
     const nextTask = taskManager.nextTask();
-    console.log(nextTask);
     if (nextTask) {
       io.emit("newTask", nextTask); // Nächste Aufgabe an alle Clients senden
     } else {

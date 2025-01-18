@@ -8,7 +8,7 @@ body {
 }
 
 /* Oberes Rechteck */
-.top-section {
+.questionText {
     flex: 2;
     /* Größerer Anteil der Höhe */
     background-color: #f4f4f4;

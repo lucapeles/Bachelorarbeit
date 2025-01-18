@@ -9,8 +9,8 @@
 
 <body>
     <!-- Oberer Bereich -->
-    <div class="top-section">
-        <p id="topText">Hier erscheint später dynamischer Text.</p>
+    <div class="questionText">
+        <h1 id="questionText">Aufgabenanzeige</h1>
     </div>
 
     <!-- Unterer Bereich -->
@@ -29,8 +29,16 @@
         </div>
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        // Simuliert einen vertikalen Fortschrittsbalken, der über 30 Sekunden abläuft
+        const socket = io();
+
+        // Neue Frage anzeigen
+        socket.on("newTask", (task) => {
+            document.getElementById("questionText").textContent = task.description;
+        });
+
+        // Fortschrittsbalken
         let duration = 30; // Sekunden
         let currentProgress = 100; // Start bei 100%
 
@@ -42,14 +50,13 @@
                 if (currentProgress <= 0) {
                     clearInterval(interval); // Stoppt die Aktualisierung
                 } else {
-                    currentProgress -= 100 / duration; // Reduziert den Fortschritt
+                    currentProgress -= 100 / duration;
                     progressBarInner.style.height = `${currentProgress}%`;
                     timer.textContent = `${Math.ceil((duration * currentProgress) / 100)} Sekunden`;
                 }
             }, 1000);
         }
 
-        // Startet den Fortschrittsbalken beim Laden der Seite
         window.onload = updateProgressBar;
     </script>
 </body>

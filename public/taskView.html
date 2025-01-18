@@ -10,7 +10,6 @@
 <body>
   <h1>Programmierung-Quiz</h1>
   <div id="quizContainer">
-    <h2 id="questionText"></h2>
     <div id="answerOptions"></div>
     <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
   </div>
@@ -32,7 +31,6 @@
     socket.on("newTask", (task) => {
       correctAnswerContainer.style.display = "none"; // Container unsichtbar machen
       document.getElementById("submitButton").style.display = "block";
-      document.getElementById("questionText").textContent = task.description;
 
       const optionsContainer = document.getElementById("answerOptions");
       optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
