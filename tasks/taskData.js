@@ -17,7 +17,7 @@ const taskPool = [
       id: 3,
       type: "text",
       description: "Erkläre in eigenen Worten, was ein Array ist.",
-      correctAnswer: "TODO"
+      correctAnswer: "TODO" //muss Liste sein, welche Eingaben akzeptiere ich? Unterschiedliche Punkte?
     }
   ];
   

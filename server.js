@@ -68,8 +68,10 @@ io.on("connection", (socket) => {
 
   //Nächste Aufgabe oder letzte Aufgabe
   socket.on("startNextTask", () => {
-    if (taskManager.nextTask()) {
-      io.emit("newTask", taskManager.nextTask()); // Nächste Aufgabe an alle Clients senden
+    const nextTask = taskManager.nextTask();
+    console.log(nextTask);
+    if (nextTask) {
+      io.emit("newTask", nextTask); // Nächste Aufgabe an alle Clients senden
     } else {
       //TODO: Quiz fertig
     }
