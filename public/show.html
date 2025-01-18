@@ -35,8 +35,18 @@
 
         // Neue Frage anzeigen
         socket.on("newTask", (task) => {
+            const questionTextContainer = document.querySelector(".questionText");
+            questionTextContainer.style.backgroundColor = "#f4f4f4"; // Hintergrund auf Standard zurücksetzen (weiß)
             document.getElementById("questionText").textContent = task.description;
         });
+
+        // Korrekte Lösung anzeigen
+        socket.on("taskCompleted", (correctAnswer) => {
+            const questionTextContainer = document.querySelector(".questionText");
+            questionTextContainer.style.backgroundColor = "#d4edda"; // Hintergrund grün setzen
+            document.getElementById("questionText").textContent = correctAnswer;
+        });
+
 
         // Fortschrittsbalken
         let duration = 30; // Sekunden
