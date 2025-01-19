@@ -15,6 +15,7 @@
     <!-- Dynamisch gefüllte Aufgabenliste -->
   </ul>
   <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
+  <button id="resetPointsButton" onclick="resetPoints()">Punkte zurücksetzen</button>
   <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
   <h3>Fortschritt</h3>
   <ul id="progressList"></ul>
@@ -43,11 +44,9 @@
       });
     });
 
-
+    //Nutzername ändern
     function changeUserName(userID) {
-      // Zufällige 4-stellige Kombination aus Buchstaben und Zahlen generieren
       const newName = Math.random().toString(36).substring(2, 6).toUpperCase();
-      // Server benachrichtigen, um den Namen zu aktualisieren
       socket.emit("changeUserName", [userID, newName]);
     }
 
@@ -83,6 +82,7 @@
     function startQuiz() {
       if (selectedTasks.length > 0) {
         //document.getElementById("submitButton").style.display = "none";
+        document.getElementById("startQuizButton").style.backgroundColor = "#4caf50";
         socket.emit("startQuiz", selectedTasks);
       } else {
         alert("Bitte wählen Sie mindestens eine Aufgabe aus.");
@@ -107,6 +107,10 @@
     //show öffnen
     function showShow() {
       window.open('show.html', '_blank');
+    }
+
+    function resetPoints() {
+      socket.emit("resetPoints");
     }
 
 

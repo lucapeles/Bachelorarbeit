@@ -23,50 +23,31 @@ io.on("connection", (socket) => {
   socket.on("joinLobby", (name) => {
     currentUserID = userManager.addUser(name);  // Benutzer erstellen
     socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
-    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
-      name: user.getName,
-      userID: user.getUserID,
-      points: user.points
-    })));
+    updateUserList();
   });
 
   // Benutzer beim Trennen der Verbindung entfernen
   socket.on("disconnectUser", (userID) => {
     if (userID) {
       userManager.removeUserByID(userID);
-      io.emit("updateUserList", userManager.getAllUsers().map(user => ({
-        name: user.getName,
-        userID: user.getUserID,
-        points: user.points
-      })));
+      updateUserList();
     }
   });
 
   // Benutzerliste mit Punktestand senden
   socket.on("requestUserList", () => {
-    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
-      name: user.getName,
-      userID: user.getUserID,
-      points: user.points
-    })));
+    updateUserList();
   });
 
-  //Benutzername ändern
+  //Benutzername ändern, im Link des Clients egal
   socket.on("changeUserName", (data) => { // data = { userID, newName }
-    console.log("in server: " + data[0]);
     userManager.changeName(data[0], data[1]);
-    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
-      name: user.getName,
-      userID: user.getUserID,
-      points: user.points
-    })));
-
+    updateUserList();
   });
-
-
 
   //Aufgaben an Masteransicht senden
   socket.on("requestTaskPool", () => {
+    userManager.resetAllPoints();
     socket.emit("sendTaskPool", taskPool); // Aufgaben an den Client senden
   });
 
@@ -81,17 +62,12 @@ io.on("connection", (socket) => {
 
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser }
-    console.log(data[0]);
     if (taskManager.markTaskCompleted(data[0], data[1])) {
       io.emit("taskCompleted", taskManager.getCurrentSolution());
       io.emit("nextTaskButton");
     }
     //Master aktualisieren mit neuer Punktzahl
-    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
-      name: user.getName,
-      userID: user.getUserID,
-      points: user.points
-    })));
+    updateUserList();
   });
 
   //Nächste Aufgabe oder letzte Aufgabe
@@ -103,6 +79,20 @@ io.on("connection", (socket) => {
       //TODO: Quiz fertig
     }
   });
+
+  //Punkte zurücksetzen
+  socket.on("resetPoints", () => {
+    userManager.resetAllPoints();
+    updateUserList();
+  });
+
+  function updateUserList() {
+    io.emit("updateUserList", userManager.getAllUsers().map(user => ({
+      name: user.getName,
+      userID: user.getUserID,
+      points: user.points
+    })));
+  }
 
 });
 

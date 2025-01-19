@@ -46,13 +46,9 @@ class UserManager {
 
   changeName(userID, newName) {
     const user = this.getUserByID(userID);
-    console.log(userID);
-    console.log(newName);
-    console.log(user);
     if (user) {
       user.setName = newName;
     }
-    console.log(user.getName);
   }
 }
 
