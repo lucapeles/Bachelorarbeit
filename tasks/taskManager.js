@@ -2,7 +2,7 @@ class TaskManager {
   constructor(userManager) {
     this.tasks = []; // Liste aller Aufgaben
     this.currentTaskIndex = -1; // Index der aktuellen Aufgabe
-    this.taskProgress = {}; // Fortschritt der Benutzer: { userId: { completed: boolean, correct: boolean } }
+    this.taskProgress = {}; // Fortschritt der Benutzer: { userID: { completed: boolean, correct: boolean } }
     this.userManager = userManager; // Referenz auf den UserManager
     this.usersWhoHaveFinished = []
   }
@@ -25,16 +25,16 @@ class TaskManager {
   }
 
   // Benutzer bearbeitet Aufgabe und gibt ab
-  markTaskCompleted(userId, answer) {
-    this.usersWhoHaveFinished.push(userId);
+  markTaskCompleted(userID, answer) {
+    this.usersWhoHaveFinished.push(userID);
     const currentTask = this.getCurrentTask();
     if (!currentTask) return; // Keine gültige Aufgabe
     const isCorrect = this.checkAnswer(currentTask, answer); // Antwort überprüfen
 
-    this.taskProgress[userId] = { completed: true, correct: isCorrect }; //als completed markieren
+    this.taskProgress[userID] = { completed: true, correct: isCorrect }; //als completed markieren
     // Punkte zuweisen, wenn die Antwort korrekt ist
     if (isCorrect) {
-      this.assignPoints(userId);
+      this.assignPoints(userID);
     }
     if (this.usersWhoHaveFinished.length == this.userManager.getAllUsers().length) {
       this.usersWhoHaveFinished = []; // Zurücksetzen der Liste, wenn ale fertig sind
@@ -59,9 +59,9 @@ class TaskManager {
   }
 
   // Punktevergabe durch UserManager abhängig der Reihenfolge
-  assignPoints(userId) {
+  assignPoints(userID) {
     let points = this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length + 1;
-    this.userManager.updatePoints(userId, points);
+    this.userManager.updatePoints(userID, points);
   }
 
   // Fortschritt zurücksetzen
@@ -81,8 +81,8 @@ class TaskManager {
 
   // Anzeigen des Fortschritts
   getProgress() {
-    return Object.entries(this.taskProgress).map(([userId, progress]) => ({
-      user: this.userManager.getUserByID(userId),
+    return Object.entries(this.taskProgress).map(([userID, progress]) => ({
+      user: this.userManager.getUserByID(userID),
       completed: progress.completed
     }));
   }

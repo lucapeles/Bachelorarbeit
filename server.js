@@ -21,8 +21,8 @@ io.on("connection", (socket) => {
 
   // Event zum Beitreten einer bestehenden Lobby
   socket.on("joinLobby", (name) => {
-    currentuserID = userManager.addUser(name);  // Benutzer erstellen
-    socket.emit("lobbyCreated", currentuserID, name);   // Lobby-Code an den Client zurücksenden
+    currentUserID = userManager.addUser(name);  // Benutzer erstellen
+    socket.emit("lobbyCreated", currentUserID, name);   // Lobby-Code an den Client zurücksenden
     io.emit("updateUserList", userManager.getAllUsers().map(user => ({
       name: user.getName,
       userID: user.getUserID,
