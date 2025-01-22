@@ -4,23 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Spielansicht</title>
-    <link rel="stylesheet" href="/css/showStyle.css"> <!-- CSS einbinden -->
+    <link rel="stylesheet" href="/css/showStyle.css"> <!-- CSS-Datei einbinden -->
 </head>
 
 <body>
     <!-- Oberer Bereich -->
     <div class="questionText">
         <h1 id="questionText">Aufgabenanzeige</h1>
+        <pre id="codeDisplay" style="display: none;"></pre>
     </div>
 
     <!-- Unterer Bereich -->
     <div class="bottom-section">
         <!-- Linker Bereich -->
         <div class="left-box">
-            <p>Hier erscheint das Diagramm.</p>
+            <p>Hier wird der Inhalt für andere Aufgaben angezeigt.</p>
         </div>
 
-        <!-- Rechter Bereich -->
+        <!-- Rechte Spalte -->
         <div class="right-box">
             <div class="timer">30 Sekunden</div>
             <div class="progress-bar">
@@ -33,32 +34,48 @@
     <script>
         const socket = io();
 
-        // Neue Frage anzeigen
         socket.on("newTask", (task) => {
+            const questionText = document.getElementById("questionText");
+            const codeDisplay = document.getElementById("codeDisplay");
             const questionTextContainer = document.querySelector(".questionText");
-            questionTextContainer.style.backgroundColor = "#f4f4f4"; // Hintergrund auf Standard zurücksetzen (weiß)
-            document.getElementById("questionText").textContent = task.description;
+
+            // Setze die Fragebeschreibung
+            questionText.textContent = task.description;
+
+            // Prüfen, ob es Code gibt
+            if (task.type === "output" || task.type === "coding") {
+                // Code anzeigen und zentrierte Klasse entfernen
+                codeDisplay.style.display = "block";
+                codeDisplay.textContent = task.template;
+                questionTextContainer.classList.remove("centered");
+            } else {
+                // Code ausblenden und zentrierte Klasse hinzufügen
+                codeDisplay.style.display = "none";
+                questionTextContainer.classList.add("centered");
+            }
         });
+
+
 
         // Korrekte Lösung anzeigen
         socket.on("taskCompleted", (correctAnswer) => {
             const questionTextContainer = document.querySelector(".questionText");
-            questionTextContainer.style.backgroundColor = "#d4edda"; // Hintergrund grün setzen
-            document.getElementById("questionText").textContent = correctAnswer;
+            questionTextContainer.style.backgroundColor = "#d4edda";
+            document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer}`;
         });
 
-
         // Fortschrittsbalken
-        let duration = 30; // Sekunden
-        let currentProgress = 100; // Start bei 100%
+        let duration = 30;
+        let currentProgress = 100;
 
         function updateProgressBar() {
-            const progressBarInner = document.getElementById('progressBar');
-            const timer = document.querySelector('.timer');
+            const progressBarInner = document.getElementById("progressBar");
+            const timer = document.querySelector(".timer");
 
             const interval = setInterval(() => {
                 if (currentProgress <= 0) {
-                    clearInterval(interval); // Stoppt die Aktualisierung
+                    clearInterval(interval);
+                    timer.textContent = "Zeit abgelaufen!";
                 } else {
                     currentProgress -= 100 / duration;
                     progressBarInner.style.height = `${currentProgress}%`;

@@ -18,6 +18,13 @@ const taskPool = [
     type: "text",
     description: "Erkläre in eigenen Worten, was ein Array ist.",
     correctAnswer: "TODO" //muss Liste sein, welche Eingaben akzeptiere ich? Unterschiedliche Punkte?
+  },
+  {
+    id: 4,
+    type: "output",
+    description: "Welche Ausgabe erzeugt der folgende Code:",
+    template: `def generateOutput():\n    return "aaa"\n\noutput = generateOutput()\nprint(output)`,
+    correctAnswer: "aaa"
   }
 ];
 

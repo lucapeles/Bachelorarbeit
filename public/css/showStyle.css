@@ -7,54 +7,77 @@ body {
     height: 100vh;
 }
 
-/* Oberes Rechteck */
+/* Oberer Bereich */
 .questionText {
-    flex: 2;
-    /* Größerer Anteil der Höhe */
-    background-color: #f4f4f4;
-    text-align: center;
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    height: 50%;
+}
+
+.questionText.centered {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    border-bottom: 2px solid #ccc;
+    height: 50%;
+    text-align: center;
+    padding: 0;
+    background-color: transparent;
 }
 
-/* Untere Sektion (enthält linke und rechte Spalten) */
+/* Überschrift für Frage */
+.questionText h1 {
+    flex: 1;
+    text-align: left;
+}
+
+.questionText.centered h1 {
+    text-align: center;
+}
+
+/* Code-Anzeige */
+#codeDisplay {
+    flex: 1;
+    font-family: monospace;
+    background-color: #444444;
+    color: #fff;
+    padding: 15px;
+    margin: 0 20px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+/* Unterer Bereich */
 .bottom-section {
-    flex: 3;
-    /* Nimmt den restlichen Platz ein */
     display: flex;
+    height: 50%;
 }
 
-/* Linke Spalte */
 .left-box {
     flex: 4;
-    /* 80% der Breite */
     background-color: #e8f5e9;
-    border-right: 2px solid #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Rechte Spalte */
 .right-box {
     flex: 1;
-    /* 20% der Breite */
     background-color: #ffebee;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
 }
 
-/* Vertikaler Fortschrittsbalken */
+/* Fortschrittsbalken */
 .progress-bar {
     width: 30px;
-    /* Festgelegte Breite */
     height: 80%;
-    /* Höhe des Balkens */
     background-color: #ccc;
     border-radius: 15px;
     overflow: hidden;
@@ -70,7 +93,6 @@ body {
     transition: height 1s linear;
 }
 
-/* Timer-Anzeige */
 .timer {
     font-size: 1.5rem;
     margin-bottom: 20px;
