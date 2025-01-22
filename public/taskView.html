@@ -42,7 +42,7 @@
         const editorContainer = document.createElement("textarea");
         editorContainer.id = "codeEditor";
         optionsContainer.appendChild(editorContainer);
-      } else if (task.type === "text") {
+      } else if (task.type === "text" || task.type === "output") {
         const textArea = document.createElement("textarea");
         textArea.id = "textAnswer";
         optionsContainer.appendChild(textArea);
@@ -68,6 +68,11 @@
     function submitAnswer() {
       document.getElementById("submitButton").style.display = "none"; //submitButton ausblenden
       document.getElementById("quizContainer").style.display = "none"; // Antwortmöglichkeiten ausblenden
+      // Falls es sich um eine Text- oder Output-Aufgabe handelt:
+      const textAnswer = document.getElementById("textAnswer");
+      if (textAnswer) {
+        selectedAnswer = textAnswer.value.trim(); // Eingabe aus Textfeld holen und speichern
+      }
       if (selectedAnswer != "nurAlsSchranke") {
         socket.emit("submitTask", [userID, selectedAnswer]);
       } else {
