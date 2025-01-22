@@ -23,3 +23,9 @@
   /* Grün für ausgewählte Option */
   color: white;
 }
+
+.largeTextArea {
+  width: 600px;
+  height: 300px;
+  font-family: monospace;
+}

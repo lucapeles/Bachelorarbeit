@@ -42,10 +42,13 @@
       } else if (task.type === "coding") {
         const editorContainer = document.createElement("textarea");
         editorContainer.id = "codeEditor";
+        editorContainer.classList.add("largeTextArea"); // CSS-Klasse zuweisen
+        editorContainer.value = task.template || "";   // Template-Inhalt einsetzen
         optionsContainer.appendChild(editorContainer);
       } else if (task.type === "text" || task.type === "output") {
         const textArea = document.createElement("textarea");
         textArea.id = "textAnswer";
+        textArea.classList.add("largeTextArea"); // CSS-Klasse zuweisen
         optionsContainer.appendChild(textArea);
       }
     });
