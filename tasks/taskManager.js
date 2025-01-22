@@ -4,7 +4,7 @@ class TaskManager {
     this.currentTaskIndex = -1; // Index der aktuellen Aufgabe
     this.taskProgress = {}; // Fortschritt der Benutzer: { userID: { completed: boolean, correct: boolean } }
     this.userManager = userManager; // Referenz auf den UserManager
-    this.usersWhoHaveFinished = []
+    this.usersWhoHaveFinished = [];
   }
 
   // Aufgaben laden
