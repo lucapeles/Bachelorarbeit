@@ -5,6 +5,7 @@ class TaskManager {
     this.taskProgress = {}; // Fortschritt der Benutzer: { userID: { completed: boolean, correct: boolean } }
     this.userManager = userManager; // Referenz auf den UserManager
     this.usersWhoHaveFinished = [];
+    this.currentCorrectUsers = [];
   }
 
   // Aufgaben laden
@@ -24,6 +25,11 @@ class TaskManager {
     return this.tasks[this.currentTaskIndex].correctAnswer || null;
   }
 
+  // Aktuelle korrekte Nutzer holen
+  getCurrentCorrectUsers() {
+    return this.currentCorrectUsers;
+  }
+
   // Benutzer bearbeitet Aufgabe und gibt ab
   markTaskCompleted(userID, answer) {
     this.usersWhoHaveFinished.push(userID);
@@ -34,6 +40,7 @@ class TaskManager {
     this.taskProgress[userID] = { completed: true, correct: isCorrect }; //als completed markieren
     // Punkte zuweisen, wenn die Antwort korrekt ist
     if (isCorrect) {
+      this.currentCorrectUsers.push(userID);
       this.assignPoints(userID);
     }
     if (this.usersWhoHaveFinished.length == this.userManager.getAllUsers().length) {
@@ -76,6 +83,7 @@ class TaskManager {
     if (this.currentTaskIndex < this.tasks.length - 1) {
       this.currentTaskIndex++;
       this.resetProgress(); // Fortschritt für neue Aufgabe zurücksetzen
+      this.currentCorrectUsers = [];
       return this.getCurrentTask();
     }
     return null; // Keine weiteren Aufgaben verfügbar

@@ -24,6 +24,7 @@
 
     // Neue Frage anzeigen
     socket.on("newTask", (task) => {
+      document.body.style.backgroundColor = "white";
       document.getElementById("quizContainer").style.display = "block"; // Container wieder sichtbar machen
       document.getElementById("submitButton").style.display = "block"; //submitButton wieder sichtbar machen
 
@@ -80,6 +81,13 @@
       }
     }
 
+    socket.on("showTrueOrFalse", (userIDs) => {
+      if (userIDs.includes(userID)) {
+        document.body.style.backgroundColor = "lightgreen";
+      } else {
+        document.body.style.backgroundColor = "lightcoral";
+      }
+    });
 
     socket.on("quizCompleted", (results) => {
       alert("Das Quiz ist beendet!");

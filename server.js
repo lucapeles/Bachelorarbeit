@@ -63,8 +63,8 @@ io.on("connection", (socket) => {
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser }
     if (taskManager.markTaskCompleted(data[0], data[1])) {
-      io.emit("taskCompleted", taskManager.getCurrentSolution());
-      io.emit("showCorrekt",)
+      io.emit("taskCompleted", taskManager.getCurrentSolution()); //an show senden
+      io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers());
       io.emit("nextTaskButton");
     }
     //Master aktualisieren mit neuer Punktzahl
