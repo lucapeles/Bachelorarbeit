@@ -8,7 +8,7 @@ body {
 }
 
 /* Oberer Bereich */
-.questionText {
+.questionText.code {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -17,7 +17,7 @@ body {
     height: 50%;
 }
 
-.questionText.centered {
+.questionText {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -29,27 +29,39 @@ body {
 }
 
 /* Überschrift für Frage */
-.questionText h1 {
+.questionText.code h1 {
     flex: 1;
     text-align: left;
 }
 
-.questionText.centered h1 {
+.questionText h1 {
     text-align: center;
 }
 
-/* Code-Anzeige */
 #codeDisplay {
-    flex: 1;
+    flex: 2;
+    /* Vergrößert den Anteil des Code-Bereichs */
     font-family: monospace;
+    font-size: 1.2rem;
+    /* Größere Schriftgröße */
     background-color: #444444;
+    /* Beibehaltung des dunklen Hintergrunds */
     color: #fff;
-    padding: 15px;
-    margin: 0 20px;
+    padding: 20px;
+    /* Mehr Abstand innerhalb des Code-Bereichs */
+    margin: 0 30px;
+    /* Mehr Platz zwischen Code-Bereich und anderen Elementen */
     border-radius: 5px;
     white-space: pre-wrap;
+    /* Beibehaltung der Zeilenumbrüche */
     text-align: left;
+    /* Text links ausrichten */
+    overflow: auto;
+    /* Falls der Code zu groß wird, wird ein Scrollbalken angezeigt */
+    height: auto;
+    /* Anpassbare Höhe basierend auf dem Inhalt */
 }
+
 
 /* Unterer Bereich */
 .bottom-section {

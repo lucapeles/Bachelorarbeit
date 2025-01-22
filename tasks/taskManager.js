@@ -54,6 +54,8 @@ class TaskManager {
       //TODO
 
       return false; // Noch nicht implementiert
+    } else if (task.type === "output") { //output angeben
+      return answer === task.correctAnswer;
     }
     return false; // Unbekannter Typ
   }

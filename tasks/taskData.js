@@ -22,7 +22,7 @@ const taskPool = [
   {
     id: 4,
     type: "output",
-    description: "Welche Ausgabe erzeugt der folgende Code:",
+    description: "Welche Ausgabe erzeugt dieser Code:",
     template: `def generateOutput():\n    return "aaa"\n\noutput = generateOutput()\nprint(output)`,
     correctAnswer: "aaa"
   }

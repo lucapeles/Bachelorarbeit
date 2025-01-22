@@ -38,6 +38,8 @@
             const questionText = document.getElementById("questionText");
             const codeDisplay = document.getElementById("codeDisplay");
             const questionTextContainer = document.querySelector(".questionText");
+            questionTextContainer.style.backgroundColor = "#fff";
+
 
             // Setze die Fragebeschreibung
             questionText.textContent = task.description;
@@ -47,11 +49,11 @@
                 // Code anzeigen und zentrierte Klasse entfernen
                 codeDisplay.style.display = "block";
                 codeDisplay.textContent = task.template;
-                questionTextContainer.classList.remove("centered");
+                questionTextContainer.classList.add("code");
             } else {
                 // Code ausblenden und zentrierte Klasse hinzufügen
                 codeDisplay.style.display = "none";
-                questionTextContainer.classList.add("centered");
+                questionTextContainer.classList.remove("code");
             }
         });
 
@@ -60,7 +62,10 @@
         // Korrekte Lösung anzeigen
         socket.on("taskCompleted", (correctAnswer) => {
             const questionTextContainer = document.querySelector(".questionText");
+            const codeDisplay = document.getElementById("codeDisplay");
+            questionTextContainer.classList.remove("code");
             questionTextContainer.style.backgroundColor = "#d4edda";
+            codeDisplay.style.display = "none";
             document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer}`;
         });
 
