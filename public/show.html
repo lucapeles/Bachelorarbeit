@@ -23,7 +23,7 @@
 
         <!-- Rechte Spalte -->
         <div class="right-box">
-            <div class="timer">30 Sekunden</div>
+            <div class="timer">Verbleibende Zeit</div>
             <div class="progress-bar">
                 <div class="progress-bar-inner" id="progressBar"></div>
             </div>
@@ -40,9 +40,16 @@
             const questionTextContainer = document.querySelector(".questionText");
             questionTextContainer.style.backgroundColor = "#fff";
 
-
             // Setze die Fragebeschreibung
             questionText.textContent = task.description;
+
+            //Setze Timer auf Anfang:
+            // Timer und Fortschrittsbalken vollständig zurücksetzen
+            clearInterval(progressInterval); // Laufenden Timer stoppen
+            const progressBarInner = document.getElementById("progressBar");
+            const timer = document.querySelector(".timer");
+            progressBarInner.style.height = "100%"; // Fortschrittsbalken auf 100% setzen
+            timer.textContent = "Verbleibende Zeit"; // Timer-Anzeige zurücksetzen
 
             // Prüfen, ob es Code gibt
             if (task.type === "output" || task.type === "coding") {
@@ -116,12 +123,14 @@
 
 
         // ----------------------Fortschrittsbalken-------------------------------------
-        let duration = 30;
-        let currentProgress = 100;
+        socket.on("timeLeft", (time) => {
+            updateProgressBar(time);
+        });
 
-        function updateProgressBar() {
+        function updateProgressBar(duration) {
             const progressBarInner = document.getElementById("progressBar");
             const timer = document.querySelector(".timer");
+            let currentProgress = 100;
 
             const interval = setInterval(() => {
                 if (currentProgress <= 0) {
@@ -134,8 +143,6 @@
                 }
             }, 1000);
         }
-
-        window.onload = updateProgressBar;
     </script>
 </body>
 

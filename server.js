@@ -15,6 +15,7 @@ const TaskManager = require("./tasks/taskManager");
 const userManager = new UserManager();
 const taskManager = new TaskManager(userManager);
 const taskPool = require("./tasks/taskData");
+const { log } = require("console");
 
 
 io.on("connection", (socket) => {
@@ -61,14 +62,18 @@ io.on("connection", (socket) => {
   });
 
   //Korrigieren , speichern & prüfen ob alle fertig sind
-  socket.on("submitTask", (data) => { // data = { userID, selectedAnwser }
-    if (taskManager.markTaskCompleted(data[0], data[1])) {
+  socket.on("submitTask", (data) => { // data = { userID, selectedAnwser, time }
+    if (taskManager.markTaskCompleted(data[0], data[1], data[2])) {
       io.emit("taskCompleted", taskManager.getCurrentSolution()); //an show senden
       io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers());
       io.emit("nextTaskButton");
     }
     //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
     updateUserList();
+    if (taskManager.getTime()) {
+      io.emit("timeLeft", taskManager.getTime());
+      taskManager.setTime();
+    }
   });
 
   //Nächste Aufgabe oder letzte Aufgabe
@@ -84,6 +89,7 @@ io.on("connection", (socket) => {
   //Punkte zurücksetzen
   socket.on("resetPoints", () => {
     userManager.resetAllPoints();
+    taskManager.resetAll();
     updateUserList();
     io.emit("reset");
   });

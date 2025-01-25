@@ -21,6 +21,8 @@
     // URL-Parameter auslesen
     const urlParams = new URLSearchParams(window.location.search);
     const userID = urlParams.get('userID'); // ID des Benutzers aus der URL holen
+    let startTime; // Startzeitpunkt des Timers
+    let elapsedTime; // Verstrichene Zeit in Sekunden
 
     // Neue Frage anzeigen
     socket.on("newTask", (task) => {
@@ -30,6 +32,9 @@
 
       const optionsContainer = document.getElementById("answerOptions");
       optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
+
+      startTime = Date.now(); // Zeitstempel beim Start der Aufgabe
+      elapsedTime = 0; // Timer zurücksetzen
 
       if (task.type === "multipleChoice") {
         task.options.forEach((option) => {
@@ -78,7 +83,8 @@
         selectedAnswer = textAnswer.value.trim(); // Eingabe aus Textfeld holen und speichern
       }
       if (selectedAnswer != "nurAlsSchranke") {
-        socket.emit("submitTask", [userID, selectedAnswer]);
+        elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
       } else {
         alert("Bitte gib eine Lösung ein.")
       }

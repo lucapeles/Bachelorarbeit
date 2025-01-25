@@ -6,6 +6,7 @@ class TaskManager {
     this.userManager = userManager; // Referenz auf den UserManager
     this.usersWhoHaveFinished = [];
     this.currentCorrectUsers = [];
+    this.time = null;
   }
 
   // Aufgaben laden
@@ -31,7 +32,7 @@ class TaskManager {
   }
 
   // Benutzer bearbeitet Aufgabe und gibt ab
-  markTaskCompleted(userID, answer) {
+  markTaskCompleted(userID, answer, time) {
     this.usersWhoHaveFinished.push(userID);
     const currentTask = this.getCurrentTask();
     if (!currentTask) return; // Keine gültige Aufgabe
@@ -42,6 +43,9 @@ class TaskManager {
     if (isCorrect) {
       this.currentCorrectUsers.push(userID);
       this.assignPoints(userID);
+      if (this.currentCorrectUsers.length == 1) { //der Erste mit richtiger Antwort
+        this.time = time;
+      }
     }
     if (this.usersWhoHaveFinished.length == this.userManager.getAllUsers().length) {
       this.usersWhoHaveFinished = []; // Zurücksetzen der Liste, wenn ale fertig sind
@@ -73,6 +77,14 @@ class TaskManager {
     this.userManager.updatePoints(userID, points);
   }
 
+  resetAll() {
+    this.tasks = []; // Liste aller Aufgaben
+    this.currentTaskIndex = -1; // Index der aktuellen Aufgabe
+    this.taskProgress = {}; // Fortschritt der Benutzer: { userID: { completed: boolean, correct: boolean } }
+    this.usersWhoHaveFinished = [];
+    this.currentCorrectUsers = [];
+  }
+
   // Fortschritt zurücksetzen
   resetProgress() {
     this.taskProgress = {}; // Fortschritt für nächste Aufgabe leeren
@@ -95,6 +107,14 @@ class TaskManager {
       user: this.userManager.getUserByID(userID),
       completed: progress.completed
     }));
+  }
+
+  getTime() {
+    return this.time;
+  }
+
+  setTime() {
+    this.time = null;
   }
 }
 
