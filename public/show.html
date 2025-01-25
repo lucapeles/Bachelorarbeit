@@ -57,6 +57,16 @@
             }
         });
 
+        //Alles auf Anfang zurücksetzen
+        socket.on("reset", () => {
+            const questionText = document.getElementById("questionText");
+            const codeDisplay = document.getElementById("codeDisplay");
+            const questionTextContainer = document.querySelector(".questionText");
+            questionTextContainer.style.backgroundColor = "#fff";
+            questionText.textContent = "Aufgabenstellung";
+            codeDisplay.style.display = "none";
+            questionTextContainer.classList.remove("code");
+        });
 
 
         // Korrekte Lösung anzeigen

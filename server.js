@@ -85,6 +85,7 @@ io.on("connection", (socket) => {
   socket.on("resetPoints", () => {
     userManager.resetAllPoints();
     updateUserList();
+    io.emit("reset");
   });
 
   function updateUserList() {

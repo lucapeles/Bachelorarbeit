@@ -25,6 +25,20 @@ const taskPool = [
     description: "Welche Ausgabe erzeugt dieser Code:",
     template: `def generateOutput():\n    return "aaa"\n\noutput = generateOutput()\nprint(output)`,
     correctAnswer: "aaa"
+  },
+  {
+    id: 5,
+    type: "multipleChoice",
+    description: "Was ist die Hauptstadt von Baden-Württemberg?",
+    options: ["Berlin", "München", "Stuttgart", "Köln"],
+    correctAnswer: "Stuttgart"
+  },
+  {
+    id: 6,
+    type: "multipleChoice",
+    description: "Was ist die Hauptstadt von Frankreich?",
+    options: ["Berlin", "Paris", "Stuttgart", "Köln"],
+    correctAnswer: "Paris"
   }
 ];
 

@@ -97,6 +97,12 @@
       // Ergebnisse anzeigen
     });
 
+    socket.on("reset", () => {
+      document.body.style.backgroundColor = "white";
+      document.getElementById("quizContainer").style.display = "none";
+      document.getElementById("submitButton").style.display = "none";
+    });
+
     // Benutzer beim Verlassen der Seite abmelden
     window.addEventListener("beforeunload", () => {
       socket.emit("disconnectUser", userID);
