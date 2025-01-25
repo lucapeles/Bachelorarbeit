@@ -18,7 +18,7 @@
     <div class="bottom-section">
         <!-- Linker Bereich -->
         <div class="left-box">
-            <p>Hier wird der Inhalt für andere Aufgaben angezeigt.</p>
+            <div id="chart-container" class="chart-container"></div>
         </div>
 
         <!-- Rechte Spalte -->
@@ -69,7 +69,43 @@
             document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer}`;
         });
 
-        // Fortschrittsbalken
+        //------------------Balkendiagramm------------------------------------------
+
+        socket.on("loadDiagram", (players) => {
+            // Sortiere Spieler nach Punkten, max. 15 anzeigen
+            const topPlayers = players.sort((a, b) => b.points - a.points).slice(0, 15);
+
+            // Höchste Punktzahl bestimmen
+            const maxPoints = topPlayers[0]?.points || 1;
+
+            const chartContainer = document.getElementById("chart-container");
+            chartContainer.innerHTML = ""; // Vorherigen Inhalt löschen
+
+            topPlayers.forEach((player, index) => {
+                // Erstelle Balken
+                const bar = document.createElement("div");
+                bar.classList.add("bar");
+                if (index === 0) bar.classList.add("gold");
+                else if (index === 1) bar.classList.add("silver");
+                else if (index === 2) bar.classList.add("bronze");
+
+                // Höhe des Balkens prozentual zur maximalen Punktzahl
+                bar.style.height = `${(player.points / maxPoints) * 100}%`;
+
+                // Name und Punkte hinzufügen
+                const label = document.createElement("span");
+                label.innerHTML = `${player.name}<br>${player.points} Pkt`;
+                bar.appendChild(label);
+
+                // Balken zum Chart hinzufügen
+                chartContainer.appendChild(bar);
+            });
+        });
+
+
+
+
+        // ----------------------Fortschrittsbalken-------------------------------------
         let duration = 30;
         let currentProgress = 100;
 

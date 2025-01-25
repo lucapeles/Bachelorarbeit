@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
       io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers());
       io.emit("nextTaskButton");
     }
-    //Master aktualisieren mit neuer Punktzahl
+    //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
     updateUserList();
   });
 
@@ -93,7 +93,16 @@ io.on("connection", (socket) => {
       userID: user.getUserID,
       points: user.points
     })));
+    io.emit("loadDiagram", userManager.getAllUsers().map(user => ({
+      name: user.getName,
+      userID: user.getUserID,
+      points: user.points
+    })));
   }
+
+  socket.on("test", (data) => {
+    console.log(data);
+  });
 
 });
 
