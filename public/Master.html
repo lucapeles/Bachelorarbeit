@@ -4,25 +4,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Master</title>
-  <link rel="stylesheet" href="/css/styles.css"> <!-- CSS einbinden -->
+  <link rel="stylesheet" href="/css/masterStyles.css"> <!-- CSS einbinden -->
 </head>
 
 <body>
-  <h1>Master</h1>
-  <button id="showWindow" onclick="showShow()">show</button>
-  <h2>Aufgaben auswählen</h2>
-  <ul id="taskSelectionList">
-    <!-- Dynamisch gefüllte Aufgabenliste -->
-  </ul>
-  <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
-  <button id="resetPointsButton" onclick="resetPoints()">Alles zurücksetzen</button>
-  <button id="resetQuestionsButton" onclick="resetQuestions()">Fragen zurücksetzen</button>
-  <button id="plusSecondsButton" onclick="plus15Seconds()">+ 15 Sekunden</button>
-  <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
-  <h3>Fortschritt</h3>
-  <ul id="progressList"></ul>
-  <h4 id="userCountHeader">Aktuelle Benutzer:</h4>
-  <ul id="userList"></ul> <!-- Liste für Benutzer -->
+  <div class="header-container">
+    <h1>Master</h1>
+    <button id="showWindow" onclick="showShow()">Show</button>
+  </div>
+
+  <div class="main-container">
+    <!-- Aufgabenbereich -->
+    <div class="task-container">
+      <h2>Aufgaben auswählen</h2>
+      <ul id="taskSelectionList">
+        <!-- Dynamisch gefüllte Aufgabenliste -->
+      </ul>
+      <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
+      <button id="resetPointsButton" onclick="resetPoints()">Alles zurücksetzen</button>
+      <button id="resetQuestionsButton" onclick="resetQuestions()">Fragen zurücksetzen</button>
+      <button id="plusSecondsButton" onclick="plus15Seconds()">+ 15 Sekunden</button>
+      <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
+    </div>
+
+    <!-- Benutzerbereich -->
+    <div class="user-container">
+      <ul id="progressList"></ul>
+      <h4 id="userCountHeader">Aktuelle Benutzer:</h4>
+      <ul id="userList"></ul> <!-- Liste für Benutzer -->
+    </div>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -65,27 +76,51 @@
 
     const selectedTasks = [];
 
-    //für dynamische Aufgabenansicht
     socket.on("sendTaskPool", (tasks) => {
+      // Aufgaben nach Typ gruppieren
+      const groupedTasks = tasks.reduce((groups, task) => {
+        if (!groups[task.type]) {
+          groups[task.type] = []; // Falls der Typ noch nicht existiert, initialisieren
+        }
+        groups[task.type].push(task); // Aufgabe der entsprechenden Gruppe hinzufügen
+        return groups;
+      }, {});
+
+      // HTML-Liste leeren
       const taskList = document.getElementById("taskSelectionList");
-      tasks.forEach(task => {
-        const listItem = document.createElement("li");
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = task.id;
-        checkbox.onchange = (e) => {
-          if (e.target.checked) {
-            selectedTasks.push(task);
-          } else {
-            const index = selectedTasks.findIndex(t => t.id === task.id);
-            if (index > -1) selectedTasks.splice(index, 1);
-          }
-        };
-        listItem.appendChild(checkbox);
-        listItem.appendChild(document.createTextNode(task.description));
-        taskList.appendChild(listItem);
+      taskList.innerHTML = "";
+
+      // Gruppierte Aufgaben rendern
+      Object.keys(groupedTasks).sort().forEach(type => {
+        // Überschrift für den Typ hinzufügen
+        const typeHeader = document.createElement("h3");
+        typeHeader.textContent = `Aufgabentyp: ${type}`;
+        taskList.appendChild(typeHeader);
+
+        // Aufgaben unter der Überschrift auflisten
+        groupedTasks[type].forEach(task => {
+          const listItem = document.createElement("li");
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.value = task.id;
+
+          // Checkbox-Event zur Verwaltung der ausgewählten Aufgaben
+          checkbox.onchange = (e) => {
+            if (e.target.checked) {
+              selectedTasks.push(task);
+            } else {
+              const index = selectedTasks.findIndex(t => t.id === task.id);
+              if (index > -1) selectedTasks.splice(index, 1);
+            }
+          };
+
+          listItem.appendChild(checkbox);
+          listItem.appendChild(document.createTextNode(task.description));
+          taskList.appendChild(listItem);
+        });
       });
     });
+
 
     function startQuiz() {
       if (selectedTasks.length > 0) {
