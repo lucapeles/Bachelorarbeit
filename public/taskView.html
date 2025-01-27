@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <h1>Programmierung-Quiz</h1>
+  <h1 id="quizTitle">Informatik-Quiz</h1>
   <div id="quizContainer">
     <div id="answerOptions"></div>
     <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
@@ -23,6 +23,17 @@
     const userID = urlParams.get('userID'); // ID des Benutzers aus der URL holen
     let startTime; // Startzeitpunkt des Timers
     let elapsedTime; // Verstrichene Zeit in Sekunden
+
+    //Anzeigen des Namens
+    socket.on("updateUserList", (users) => {
+      const quizTitle = document.getElementById("quizTitle");
+      users.forEach(user => {
+        if (user.userID == userID) {
+          quizTitle.textContent = `Informatik-Quiz (Name: ${user.name})`;
+        }
+      });
+    });
+
 
     // Neue Frage anzeigen
     socket.on("newTask", (task) => {
@@ -123,6 +134,10 @@
     window.addEventListener("beforeunload", () => {
       socket.emit("disconnectUser", userID);
     });
+
+    window.onload = () => {
+      socket.emit("requestUserList");
+    };
 
   </script>
 </body>

@@ -20,7 +20,7 @@
   <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
   <h3>Fortschritt</h3>
   <ul id="progressList"></ul>
-  <h4>Aktuelle Benutzer:</h4>
+  <h4 id="userCountHeader">Aktuelle Benutzer:</h4>
   <ul id="userList"></ul> <!-- Liste für Benutzer -->
 
   <script src="/socket.io/socket.io.js"></script>
@@ -31,6 +31,11 @@
     // Event, um die Benutzerliste zu aktualisieren
     socket.on("updateUserList", (users) => {
       userListElement.innerHTML = ""; // Aktuelle Liste löschen
+
+      // Benutzeranzahl aktualisieren
+      const userCountHeader = document.getElementById("userCountHeader");
+      userCountHeader.textContent = `Aktuelle Benutzer: ${users.length}`;
+
       users.forEach(user => {
         const listItem = document.createElement("li");
         listItem.textContent = `${user.name}: ${user.points} Punkte `; // Name und Punktestand anzeigen
@@ -44,6 +49,7 @@
         userListElement.appendChild(listItem); // Benutzer zur Liste hinzufügen
       });
     });
+
 
     //Nutzername ändern
     function changeUserName(userID) {
