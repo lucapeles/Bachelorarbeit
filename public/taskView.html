@@ -96,6 +96,7 @@
       } else {
         document.body.style.backgroundColor = "lightcoral";
       }
+      resetPage();
     });
 
     socket.on("quizCompleted", (results) => {
@@ -105,6 +106,10 @@
 
     socket.on("reset", () => {
       document.body.style.backgroundColor = "white";
+      resetPage();
+    });
+
+    function resetPage() {
       document.getElementById("quizContainer").style.display = "none";
       document.getElementById("submitButton").style.display = "none";
       // Zustand zurücksetzen
@@ -112,7 +117,7 @@
       previousSelectedButton = null; // Button-Auswahl zurücksetzen
       startTime = null; // Timer zurücksetzen
       elapsedTime = 0; // Verstrichene Zeit zurücksetzen
-    });
+    }
 
     // Benutzer beim Verlassen der Seite abmelden
     window.addEventListener("beforeunload", () => {

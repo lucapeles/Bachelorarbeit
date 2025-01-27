@@ -16,7 +16,7 @@
   </ul>
   <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
   <button id="resetPointsButton" onclick="resetPoints()">Alles zurücksetzen</button>
-  <button id="plusSecondsButton" onclick="plusSeconds()">+ 15 Sekunden</button>
+  <button id="plusSecondsButton" onclick="plus15Seconds()">+ 15 Sekunden</button>
   <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
   <h3>Fortschritt</h3>
   <ul id="progressList"></ul>
@@ -115,6 +115,9 @@
       location.reload();
     }
 
+    function plus15Seconds() {
+      socket.emit("addTime", 15);
+    }
 
   </script>
 </body>

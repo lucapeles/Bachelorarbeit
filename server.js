@@ -65,14 +65,14 @@ io.on("connection", (socket) => {
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser, time }
     if (taskManager.markTaskCompleted(data[0], data[1], data[2])) {
       io.emit("taskCompleted", taskManager.getCurrentSolution()); //an show senden
-      io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers());
+      io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
       io.emit("nextTaskButton");
     }
     //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
     updateUserList();
     if (taskManager.getTime()) {
       io.emit("timeLeft", taskManager.getTime());
-      taskManager.setTime();
+      taskManager.resetTime();
     }
   });
 
@@ -86,12 +86,25 @@ io.on("connection", (socket) => {
     }
   });
 
+  //Zeit abgelaufen
+  socket.on("timeLost", () => {
+    taskManager.resetFinished(); //weil markTaskCompleted übergangen wird
+    io.emit("taskCompleted", taskManager.getCurrentSolution()); //an show senden
+    io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
+    io.emit("nextTaskButton");
+  });
+
   //Punkte zurücksetzen
   socket.on("resetPoints", () => {
     userManager.resetAllPoints();
     taskManager.resetAll();
     updateUserList();
     io.emit("reset");
+  });
+
+  //Zeit hinzufügen
+  socket.on("addTime", (time) => {
+    io.emit("addTimeForShow", time);
   });
 
   function updateUserList() {

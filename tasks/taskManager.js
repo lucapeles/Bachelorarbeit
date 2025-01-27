@@ -48,7 +48,7 @@ class TaskManager {
       }
     }
     if (this.usersWhoHaveFinished.length == this.userManager.getAllUsers().length) {
-      this.usersWhoHaveFinished = []; // Zurücksetzen der Liste, wenn ale fertig sind
+      this.usersWhoHaveFinished = []; // Zurücksetzen der Liste, wenn alle fertig sind
       return true; //Alle fertig, also jetzt Ergebnis anzeigen
     }
     return false;
@@ -85,6 +85,11 @@ class TaskManager {
     this.currentCorrectUsers = [];
   }
 
+  //zurücksetzen der Fertigen
+  resetFinished() {
+    this.usersWhoHaveFinished = [];
+  }
+
   // Fortschritt zurücksetzen
   resetProgress() {
     this.taskProgress = {}; // Fortschritt für nächste Aufgabe leeren
@@ -113,7 +118,7 @@ class TaskManager {
     return this.time;
   }
 
-  setTime() {
+  resetTime() {
     this.time = null;
   }
 }

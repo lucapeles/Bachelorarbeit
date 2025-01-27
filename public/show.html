@@ -80,6 +80,7 @@
             questionTextContainer.style.backgroundColor = "#d4edda";
             codeDisplay.style.display = "none";
             document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer}`;
+            timerReset();
         });
 
         //------------------Balkendiagramm------------------------------------------
@@ -123,24 +124,24 @@
             updateProgressBar(time);
         });
 
+        let progressInterval = null; // Variable, um das laufende Intervall zu speichern
+
         function updateProgressBar(remainingTime) {
             const progressBarInner = document.getElementById("progressBar");
             const timer = document.querySelector(".timer");
             const rigthBox = document.getElementById("right-Box");
-
-
             const totalHeight = 100; // Fortschrittsbalken startet bei 100%
             const interval = 1000; // Intervallzeit: 1 Sekunde
-
-            // Berechnung der Höhe, die pro Intervall reduziert wird
-            const decrement = totalHeight / remainingTime;
-
-            // Timer-Intervall starten
-            const progressInterval = setInterval(() => {
+            const decrement = totalHeight / remainingTime; // Berechnung der Höhe, die pro Intervall reduziert wird
+            if (progressInterval) { // Sicherstellen, dass ein laufender Timer abgebrochen wird
+                clearInterval(progressInterval);
+            }
+            progressInterval = setInterval(() => {
                 if (remainingTime <= 0) {
                     clearInterval(progressInterval); // Timer stoppen, wenn Zeit abgelaufen
                     progressBarInner.style.height = "0%"; // Fortschrittsbalken auf 0% setzen
                     timer.textContent = "Zeit abgelaufen!";
+                    socket.emit("timeLost");
                 } else {
                     remainingTime -= 1; // Reduziere die verbleibende Zeit um 1 Sekunde
                     progressBarInner.style.height = `${remainingTime * decrement}%`; // Fortschrittsbalken anpassen
@@ -154,11 +155,24 @@
         function timerReset() {
             const progressBarInner = document.getElementById("progressBar");
             const timer = document.querySelector(".timer");
-            const rigthBox = document.getElementById("right-Box");
+            const rightBox = document.getElementById("right-Box");
+            if (progressInterval) { //laufenden Timer stoppen
+                clearInterval(progressInterval);
+                progressInterval = null; // Timer-Variable zurücksetzen
+            }
             progressBarInner.style.height = "100%"; // Fortschrittsbalken auf 100% setzen
             timer.textContent = "Verbleibende Zeit"; // Timer-Anzeige zurücksetzen
             rightBox.style.backgroundColor = "#d4edda"; // Hintergrund auf Standard-Grün zurücksetzen
         }
+
+        socket.on("addTimeForShow", (time) => {
+
+        });
+
+        window.onload = () => {
+            timerReset(); // Timer direkt nach dem Laden zurücksetzen
+        };
+
 
     </script>
 </body>
