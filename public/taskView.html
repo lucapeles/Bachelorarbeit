@@ -107,6 +107,11 @@
       document.body.style.backgroundColor = "white";
       document.getElementById("quizContainer").style.display = "none";
       document.getElementById("submitButton").style.display = "none";
+      // Zustand zurücksetzen
+      selectedAnswer = "nurAlsSchranke"; // Antwort zurücksetzen
+      previousSelectedButton = null; // Button-Auswahl zurücksetzen
+      startTime = null; // Timer zurücksetzen
+      elapsedTime = 0; // Verstrichene Zeit zurücksetzen
     });
 
     // Benutzer beim Verlassen der Seite abmelden

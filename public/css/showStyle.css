@@ -6,7 +6,6 @@ body {
     flex-direction: column;
     height: 100vh;
     box-sizing: border-box;
-    /* Einheitliche Box-Model-Berechnung */
 }
 
 /* Oberer Bereich */
@@ -66,33 +65,27 @@ body {
 .left-box,
 .right-box {
     height: 100%;
-    /* Gleiche Höhe wie die bottom-section */
     box-sizing: border-box;
-    /* Padding wird innerhalb berücksichtigt */
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* Zentrierte Inhalte */
     align-items: center;
 }
 
 .left-box {
     flex: 4;
-    /* 80% der Breite */
     background-color: #e8f5e9;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    /* Abstände werden berücksichtigt */
     overflow: hidden;
 }
 
 .right-box {
     flex: 1;
-    /* 20% der Breite */
-    background-color: #ffebee;
+    background-color: #d4edda;
 }
 
 /* Fortschrittsbalken */
@@ -125,26 +118,19 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    /* Gleichmäßige Verteilung der Balken */
     gap: 1%;
-    /* Fester Abstand zwischen den Balken (prozentual) */
     height: 100%;
-    /* Höhe des Containers */
     width: 100%;
-    /* Breite des Containers */
     overflow: hidden;
-    /* Kein Scrollen notwendig */
     background-color: #f9f9f9;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 0;
-    /* Kein zusätzliches Padding */
 }
 
 /* Balken im Diagramm */
 .bar {
     position: relative;
     width: calc((100% - 14%) / 15);
-    /* Balkenbreite = Containerbreite abzüglich der Lücken */
     background-color: lightblue;
     border-radius: 5px;
     transition: height 0.3s, order 0.3s;
