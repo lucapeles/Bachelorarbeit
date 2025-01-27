@@ -16,6 +16,7 @@
   </ul>
   <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
   <button id="resetPointsButton" onclick="resetPoints()">Alles zurücksetzen</button>
+  <button id="resetQuestionsButton" onclick="resetQuestions()">Fragen zurücksetzen</button>
   <button id="plusSecondsButton" onclick="plus15Seconds()">+ 15 Sekunden</button>
   <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
   <h3>Fortschritt</h3>
@@ -117,7 +118,12 @@
     }
 
     function resetPoints() {
-      socket.emit("resetPoints");
+      socket.emit("resetQuestions", "points");
+      location.reload();
+    }
+
+    function resetQuestions() {
+      socket.emit("resetQuestions", "questions");
       location.reload();
     }
 

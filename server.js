@@ -48,7 +48,6 @@ io.on("connection", (socket) => {
 
   //Aufgaben an Masteransicht senden
   socket.on("requestTaskPool", () => {
-    userManager.resetAllPoints();
     socket.emit("sendTaskPool", taskPool); // Aufgaben an den Client senden
   });
 
@@ -95,8 +94,10 @@ io.on("connection", (socket) => {
   });
 
   //Punkte zurücksetzen
-  socket.on("resetPoints", () => {
-    userManager.resetAllPoints();
+  socket.on("resetQuestions", (data) => { //data = points OR questions
+    if (data === "points") {
+      userManager.resetAllPoints();
+    }
     taskManager.resetAll();
     updateUserList();
     io.emit("reset");
