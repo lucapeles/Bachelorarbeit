@@ -125,8 +125,10 @@
         });
 
         let progressInterval = null; // Variable, um das laufende Intervall zu speichern
+        let remainingTime = 0; // Globale Variable für die verbleibende Zeit
 
-        function updateProgressBar(remainingTime) {
+        function updateProgressBar(duration) {
+            remainingTime = duration;
             const progressBarInner = document.getElementById("progressBar");
             const timer = document.querySelector(".timer");
             const rigthBox = document.getElementById("right-Box");
@@ -165,8 +167,8 @@
             rightBox.style.backgroundColor = "#d4edda"; // Hintergrund auf Standard-Grün zurücksetzen
         }
 
-        socket.on("addTimeForShow", (time) => {
-
+        socket.on("addTimeForShow", (additionalTime) => {
+            remainingTime += additionalTime; // Verbleibende Zeit um die zusätzliche Zeit erhöhen
         });
 
         window.onload = () => {
