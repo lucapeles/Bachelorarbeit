@@ -1,77 +1,76 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-/* Container für Header */
 .header-container {
     display: flex;
-    /* Elemente nebeneinander */
     align-items: center;
-    /* Vertikale Ausrichtung */
     justify-content: flex-start;
-    /* Button und Überschrift linksbündig */
     gap: 1%;
-    /* Abstand zwischen Überschrift und Button */
     padding: 1%;
-    /* Abstand nach innen */
 }
 
-/* Hauptcontainer für Layout */
+.control-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin: 1em 2em;
+    padding: 1em;
+    background-color: #f1f1f1;
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
+}
+
 .main-container {
     display: flex;
     flex-direction: row;
-    /* Elemente nebeneinander */
     justify-content: space-between;
-    /* Platz zwischen den Elementen */
     gap: 2%;
-    /* Abstand zwischen den Spalten */
     padding: 2%;
-    /* Außenabstand */
 }
 
-/* Aufgabenbereich */
 .task-container {
     flex: 3;
-    /* Aufgabenbereich nimmt mehr Platz ein */
     padding: 2%;
     background-color: #f9f9f9;
-    /* Heller Hintergrund */
     border: 0.1em solid #ccc;
     border-radius: 0.5em;
 }
 
-/* Benutzerbereich */
+.task-container h2 {
+    margin-top: 0;
+}
+
+.bottom-controls {
+    margin-top: 1em;
+    display: flex;
+    gap: 1em;
+}
+
 .user-container {
     flex: 1;
-    /* Benutzerbereich nimmt weniger Platz ein */
     padding: 2%;
     background-color: #f1f1f1;
-    /* Heller Hintergrund */
     border: 0.1em solid #ccc;
     border-radius: 0.5em;
 }
 
-/* Titel im Aufgaben- und Benutzerbereich */
-.task-container h2,
 .user-container h4 {
     margin-top: 0;
-    /* Kein zusätzlicher Abstand oben */
 }
 
-/* Listen-Elemente (optional für Styling) */
 ul {
     list-style-type: none;
-    /* Keine Aufzählungspunkte */
     padding: 0;
-    /* Kein Abstand */
+    margin: 0;
 }
 
 li {
     margin: 2% 0;
-    /* Abstand zwischen den Elementen */
 }
 
-/* Buttons */
 button {
     margin: 1%;
     padding: 1.5% 3%;
@@ -83,12 +82,45 @@ button {
     cursor: pointer;
 }
 
+button:hover {
+    background-color: #00293a;
+}
+
 #nextTaskButton {
     display: none;
 }
 
+/* Custom-Checkbox */
+#taskSelectionList input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 0.2em;
+    margin-right: 0.5em;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    vertical-align: middle;
+}
 
-button:hover {
-    background-color: #00293a;
-    /* Leicht dunkler beim Hover */
+/* Standard-Hintergrundfarbe bei checked */
+#taskSelectionList input[type="checkbox"]:checked::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #395b69;
+    border-radius: 0.2em;
+}
+
+/* Wenn data-number existiert, zeige Nummer statt Häkchen */
+#taskSelectionList input[type="checkbox"][data-number]:checked::after {
+    content: attr(data-number);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
 }

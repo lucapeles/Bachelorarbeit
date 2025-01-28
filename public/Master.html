@@ -4,114 +4,102 @@
 <head>
   <meta charset="UTF-8">
   <title>Master</title>
-  <link rel="stylesheet" href="/css/masterStyles.css"> <!-- CSS einbinden -->
+  <link rel="stylesheet" href="/css/masterStyles.css">
 </head>
 
 <body>
+
   <div class="header-container">
     <h1>Master</h1>
     <button id="showWindow" onclick="showShow()">Show</button>
   </div>
 
+  <div class="control-container">
+    <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
+    <button id="resetPointsButton" onclick="resetPoints()">Alles zurücksetzen</button>
+    <button id="resetQuestionsButton" onclick="resetQuestions()">Fragen zurücksetzen</button>
+    <button id="plusSecondsButton" onclick="plus15Seconds()">+ 15 Sekunden</button>
+    <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
+  </div>
+
   <div class="main-container">
-    <!-- Aufgabenbereich -->
     <div class="task-container">
       <h2>Aufgaben auswählen</h2>
       <ul id="taskSelectionList">
         <!-- Dynamisch gefüllte Aufgabenliste -->
       </ul>
-      <button id="startQuizButton" onclick="startQuiz()">Quiz starten</button>
-      <button id="resetPointsButton" onclick="resetPoints()">Alles zurücksetzen</button>
-      <button id="resetQuestionsButton" onclick="resetQuestions()">Fragen zurücksetzen</button>
-      <button id="plusSecondsButton" onclick="plus15Seconds()">+ 15 Sekunden</button>
-      <button id="nextTaskButton" onclick="startNextTask()">Nächste Aufgabe starten</button>
     </div>
 
-    <!-- Benutzerbereich -->
     <div class="user-container">
       <ul id="progressList"></ul>
       <h4 id="userCountHeader">Aktuelle Benutzer:</h4>
-      <ul id="userList"></ul> <!-- Liste für Benutzer -->
+      <ul id="userList"></ul>
     </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io(); // Verbindung zum Server
+    const socket = io();
     const userListElement = document.getElementById("userList");
+    const selectedTasks = [];
 
-    // Event, um die Benutzerliste zu aktualisieren
     socket.on("updateUserList", (users) => {
-      userListElement.innerHTML = ""; // Aktuelle Liste löschen
-
-      // Benutzeranzahl aktualisieren
+      userListElement.innerHTML = "";
       const userCountHeader = document.getElementById("userCountHeader");
       userCountHeader.textContent = `Aktuelle Benutzer: ${users.length}`;
 
       users.forEach(user => {
         const listItem = document.createElement("li");
-        listItem.textContent = `${user.name}: ${user.points} Punkte `; // Name und Punktestand anzeigen
-
-        // Button zum Ändern des Namens
+        listItem.textContent = `${user.name}: ${user.points} Punkte `;
         const changeNameButton = document.createElement("button");
         changeNameButton.textContent = "Name ändern";
-        changeNameButton.onclick = () => changeUserName(user.userID); // Button mit Funktion verknüpfen
+        changeNameButton.onclick = () => changeUserName(user.userID);
         listItem.appendChild(changeNameButton);
-
-        userListElement.appendChild(listItem); // Benutzer zur Liste hinzufügen
+        userListElement.appendChild(listItem);
       });
     });
 
-
-    //Nutzername ändern
     function changeUserName(userID) {
       const newName = Math.random().toString(36).substring(2, 6).toUpperCase();
       socket.emit("changeUserName", [userID, newName]);
     }
 
-
-    // Bei Verbindung Benutzerliste & Aufgaben anfordern
     socket.emit("requestUserList");
     socket.emit("requestTaskPool");
 
-    const selectedTasks = [];
-
     socket.on("sendTaskPool", (tasks) => {
-      // Aufgaben nach Typ gruppieren
       const groupedTasks = tasks.reduce((groups, task) => {
         if (!groups[task.type]) {
-          groups[task.type] = []; // Falls der Typ noch nicht existiert, initialisieren
+          groups[task.type] = [];
         }
-        groups[task.type].push(task); // Aufgabe der entsprechenden Gruppe hinzufügen
+        groups[task.type].push(task);
         return groups;
       }, {});
 
-      // HTML-Liste leeren
       const taskList = document.getElementById("taskSelectionList");
       taskList.innerHTML = "";
 
-      // Gruppierte Aufgaben rendern
       Object.keys(groupedTasks).sort().forEach(type => {
-        // Überschrift für den Typ hinzufügen
         const typeHeader = document.createElement("h3");
         typeHeader.textContent = `Aufgabentyp: ${type}`;
         taskList.appendChild(typeHeader);
 
-        // Aufgaben unter der Überschrift auflisten
         groupedTasks[type].forEach(task => {
           const listItem = document.createElement("li");
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
           checkbox.value = task.id;
 
-          // Checkbox-Event zur Verwaltung der ausgewählten Aufgaben
           checkbox.onchange = (e) => {
             if (e.target.checked) {
               selectedTasks.push(task);
             } else {
               const index = selectedTasks.findIndex(t => t.id === task.id);
-              if (index > -1) selectedTasks.splice(index, 1);
+              if (index > -1) {
+                selectedTasks.splice(index, 1);
+              }
             }
+            updateCheckboxNumbers();
           };
 
           listItem.appendChild(checkbox);
@@ -121,10 +109,8 @@
       });
     });
 
-
     function startQuiz() {
       if (selectedTasks.length > 0) {
-        //document.getElementById("submitButton").style.display = "none";
         document.getElementById("startQuizButton").style.backgroundColor = "#4caf50";
         socket.emit("startQuiz", selectedTasks);
       } else {
@@ -132,22 +118,16 @@
       }
     }
 
-    //für nächste Aufgabe zuerst Button anzeigen
     socket.on("nextTaskButton", () => {
       const nextTaskButton = document.getElementById("nextTaskButton");
-      nextTaskButton.style.display = "block"; // Button sichtbar machen
+      nextTaskButton.style.display = "block";
     });
 
-
-    //beim Betätigen des Buttons nächste Aufgabe anzeigen, Button unsichtbar
     function startNextTask() {
-      // Button ausblenden
       document.getElementById("nextTaskButton").style.display = "none";
-      // Server mitteilen, dass die nächste Aufgabe gestartet wird
       socket.emit("startNextTask");
     }
 
-    //show öffnen
     function showShow() {
       window.open('show.html', '_blank');
     }
@@ -166,6 +146,18 @@
       socket.emit("addTime", 15);
     }
 
+    // Vergibt fortlaufende Nummern an die angeklickten Checkboxen
+    function updateCheckboxNumbers() {
+      const allCheckboxes = document.querySelectorAll('#taskSelectionList input[type="checkbox"]');
+      allCheckboxes.forEach(cb => cb.removeAttribute('data-number'));
+
+      selectedTasks.forEach((task, index) => {
+        const cb = document.querySelector(`#taskSelectionList input[type="checkbox"][value="${task.id}"]`);
+        if (cb) {
+          cb.setAttribute('data-number', index + 1);
+        }
+      });
+    }
   </script>
 </body>
 
