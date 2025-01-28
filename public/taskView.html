@@ -4,15 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz</title>
-  <link rel="stylesheet" href="/css/styles.css"> <!-- CSS einbinden -->
+  <link rel="stylesheet" href="/css/taskViewStyles.css"> <!-- CSS einbinden -->
 </head>
 
 <body>
-  <h1 id="quizTitle">Informatik-Quiz</h1>
+
+  <!-- Fester Header für die Quiz-Überschrift -->
+  <div id="headerContainer">
+    <h1 id="quizTitle">INFORMATIK-QUIZ</h1>
+  </div>
+
+  <!-- Quiz-Container -->
   <div id="quizContainer">
     <div id="answerOptions"></div>
     <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
   </div>
+
 
   <script src="/socket.io/socket.io.js"></script>
   <script>

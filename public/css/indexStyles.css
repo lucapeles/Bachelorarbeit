@@ -1,0 +1,117 @@
+/* Allgemeine Einstellungen */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h1,
+h2 {
+    text-align: center;
+    margin: 0;
+    color: #2c3e50;
+}
+
+h1 {
+    font-size: 1.6em;
+    margin-bottom: 2%;
+}
+
+h2 {
+    font-size: 1.4em;
+    margin-top: 3%;
+    margin-bottom: 2%;
+}
+
+/* Eingabefelder */
+input[type="text"],
+input[type="password"] {
+    width: 55%;
+    /* Schmaler als zuvor */
+    padding: 1.5%;
+    /* Beibehaltung der Höhe */
+    margin-bottom: 2%;
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
+    box-sizing: border-box;
+    font-size: 1em;
+    text-align: center;
+    background-color: #f1f1f1;
+    /* Leicht heller Hintergrund */
+    color: #2c3e50;
+    /* Dunkler Text */
+}
+
+/* Buttons */
+button {
+    width: 45%;
+    /* Noch schmaler als Eingabefelder */
+    padding: 1.5% 3%;
+    /* Höhe bleibt gleich */
+    font-size: 1em;
+    color: #fff;
+    background-color: #395b69;
+    /* Passend zu deiner Vorlage */
+    border: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 2%;
+}
+
+button:hover {
+    background-color: #00293a;
+    /* Leicht dunkler beim Hover */
+}
+
+button:active {
+    background-color: #001f2b;
+    /* Noch dunkler beim Klick */
+}
+
+/* Zusatztexte */
+h3 {
+    font-size: 1em;
+    color: #7f8c8d;
+    text-align: center;
+    margin-top: 3%;
+}
+
+/* Layout */
+.container {
+    width: 80%;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Responsivität */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.4em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    button {
+        width: 75%;
+        /* Auf kleinen Geräten etwas breiter */
+        padding: 1.2%;
+        /* Leicht reduzierte Höhe */
+    }
+
+    h3 {
+        font-size: 0.9em;
+    }
+}

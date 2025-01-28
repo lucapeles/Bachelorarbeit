@@ -76,6 +76,7 @@ button {
     margin: 1%;
     padding: 1.5% 3%;
     background-color: #395b69;
+    transition: background-color 0.3s ease;
     color: white;
     border: none;
     border-radius: 0.5em;

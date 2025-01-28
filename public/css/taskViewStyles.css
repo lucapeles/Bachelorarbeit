@@ -1,0 +1,202 @@
+/* Allgemeine Einstellungen */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #2c3e50;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  /* Verhindert horizontales Scrollen */
+}
+
+/* Fixierter Header für die Überschrift */
+#headerContainer {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 1% 0;
+  border-bottom: 0.2em solid #395b69;
+  z-index: 10;
+}
+
+h1 {
+  font-size: 4.5vh;
+  font-weight: bold;
+  color: #2c3e50;
+  text-transform: uppercase;
+}
+
+/* Dynamischer Quiz-Container */
+#quizContainer {
+  width: 85%;
+  padding: 4%;
+  background-color: #f1f1f1;
+  border: 0.1em solid #ccc;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 12vh;
+  /* Platz für den Header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  overflow: hidden;
+  /* Kein Überlaufen des Containers */
+  position: relative;
+  /* Begrenzung für das Textfeld */
+  max-width: 90vw;
+  /* Begrenzt den Container auf 90% der Bildschirmbreite */
+}
+
+/* Antwortoptionen */
+#answerOptions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3%;
+  width: 100%;
+  margin: 3% 0;
+  justify-content: center;
+}
+
+/* Multiple-Choice-Buttons */
+.optionButton {
+  width: 90%;
+  padding: 3%;
+  font-size: 3vh;
+  background-color: #f0f0f0;
+  border: 0.2em solid #ccc;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+}
+
+/* Hover-Effekt für Multiple-Choice-Buttons */
+.optionButton:hover {
+  background-color: #bfdaf0;
+  border-color: #395b69;
+  transform: scale(1.05);
+}
+
+/* Ausgewählter Button */
+.optionButton.selected {
+  background-color: #4caf50;
+  color: white;
+  border-color: #2e7d32;
+  font-weight: bold;
+  transform: scale(1.1);
+}
+
+/* Sicherstellen, dass das Textfeld nicht aus dem Container ragt */
+.textAreaContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2%;
+  overflow: hidden;
+  position: relative;
+  /* Begrenzung für das Textfeld */
+}
+
+/* Antwort-Eingabefeld - Begrenzte Breite, aber beliebig vergrößerbar */
+.largeTextArea {
+  width: 100%;
+  max-width: 85vw;
+  /* Maximale Breite verhindern */
+  min-height: 40vh;
+  font-family: monospace;
+  font-size: 3vh;
+  color: #2c3e50;
+  background-color: #ffffff;
+  border: 0.2em solid #ccc;
+  border-radius: 0.5em;
+  padding: 2%;
+  padding-left: 3%;
+  /* Verhindert, dass Text am linken Rand klebt */
+  box-sizing: border-box;
+  resize: both;
+  /* Beliebig vergrößerbar */
+  text-align: left;
+  overflow: auto;
+}
+
+/* Falls das Textfeld zu groß wird, bleibt es im Container */
+.largeTextArea:focus {
+  min-height: 45vh;
+  max-width: 85vw;
+  padding-left: 3%;
+  /* Gleicher linker Rand beim Fokus */
+}
+
+/* Falls es noch weiter wächst, begrenzen */
+.largeTextArea:focus-visible {
+  min-height: 50vh;
+  max-width: 85vw;
+  padding-left: 3%;
+}
+
+/* Buttons */
+#submitButton {
+  width: 60%;
+  padding: 3%;
+  font-size: 3vh;
+  margin: 3% auto;
+  background-color: #395b69;
+  color: white;
+  border: none;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#submitButton:hover {
+  background-color: #00293a;
+}
+
+#submitButton:active {
+  transform: scale(0.98);
+}
+
+/* Responsivität */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 4vh;
+  }
+
+  #quizContainer {
+    width: 95%;
+    padding: 5%;
+  }
+
+  #answerOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .optionButton {
+    width: 100%;
+    padding: 3%;
+    font-size: 2.5vh;
+  }
+
+  .largeTextArea {
+    width: 90%;
+    min-height: 50vh;
+    max-width: 95vw;
+    /* Auch auf Mobilgeräten verhindern, dass es überläuft */
+    font-size: 2.5vh;
+    padding-left: 3%;
+  }
+
+  #submitButton {
+    width: 80%;
+    font-size: 2.5vh;
+  }
+}
