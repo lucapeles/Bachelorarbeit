@@ -145,6 +145,7 @@ h1 {
 
 /* Buttons */
 #submitButton {
+  display: none;
   width: 60%;
   padding: 3%;
   font-size: 3vh;
