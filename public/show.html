@@ -73,14 +73,17 @@
 
 
         // Korrekte Lösung anzeigen
-        socket.on("taskCompleted", (correctAnswer) => {
+        socket.on("taskCompleted", (data) => { // data = { correctAnswer, submit = true }
+            let correctAnswer = data[0];
             const questionTextContainer = document.querySelector(".questionText");
             const codeDisplay = document.getElementById("codeDisplay");
             questionTextContainer.classList.remove("code");
             questionTextContainer.style.backgroundColor = "#d4edda";
             codeDisplay.style.display = "none";
             document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer}`;
-            timerReset();
+            if (data[1]) { //falls alle abgegeben haben, dann Timer zurücksetzen
+                timerReset();
+            }
         });
 
         //------------------Balkendiagramm------------------------------------------
@@ -115,9 +118,6 @@
                 chartContainer.appendChild(bar);
             });
         });
-
-
-
 
         // ----------------------Fortschrittsbalken-------------------------------------
         socket.on("timeLeft", (time) => {

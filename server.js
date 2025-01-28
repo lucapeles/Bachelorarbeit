@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser, time }
     if (taskManager.markTaskCompleted(data[0], data[1], data[2])) {
-      io.emit("taskCompleted", taskManager.getCurrentSolution()); //an show senden
+      io.emit("taskCompleted", [taskManager.getCurrentSolution(), true]); //an show senden
       io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
       io.emit("nextTaskButton");
     }
@@ -88,7 +88,7 @@ io.on("connection", (socket) => {
   //Zeit abgelaufen
   socket.on("timeLost", () => {
     taskManager.resetFinished(); //weil markTaskCompleted übergangen wird
-    io.emit("taskCompleted", taskManager.getCurrentSolution()); //an show senden
+    io.emit("taskCompleted", [taskManager.getCurrentSolution(), false]); //an show senden
     io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
     io.emit("nextTaskButton");
   });
