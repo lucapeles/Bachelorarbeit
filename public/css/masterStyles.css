@@ -83,6 +83,11 @@ button {
     cursor: pointer;
 }
 
+#nextTaskButton {
+    display: none;
+}
+
+
 button:hover {
     background-color: #00293a;
     /* Leicht dunkler beim Hover */

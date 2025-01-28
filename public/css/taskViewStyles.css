@@ -88,9 +88,9 @@ h1 {
 
 /* Ausgewählter Button */
 .optionButton.selected {
-  background-color: #4caf50;
+  background-color: #395b69;
   color: white;
-  border-color: #2e7d32;
+  border-color: #263d46;
   font-weight: bold;
   transform: scale(1.1);
 }
