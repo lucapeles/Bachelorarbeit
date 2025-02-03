@@ -36,7 +36,6 @@ class TaskManager {
 
   // Rang des Spielers holen
   getRankForUser(userID) {
-    console.log(this.currentCorrectUsers.indexOf(userID) + 1);
     return this.currentCorrectUsers.indexOf(userID) + 1; // Platzierung holen
   }
 
