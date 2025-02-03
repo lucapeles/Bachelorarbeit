@@ -65,14 +65,12 @@ io.on("connection", (socket) => {
     }
   });
 
+  let taskCompleted = false;
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser, time }
-    let taskCompleted = false;
+    taskCompleted = false;
     if (taskManager.markTaskCompleted(data[0], data[1], data[2])) {
-      io.emit("taskCompleted", [taskManager.getCurrentSolution(), true]); //an show senden
-      io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
-      io.emit("nextTaskButton");
-      taskCompleted = true;
+      taskFinished();
     }
     updateUserList(); //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
 
@@ -91,22 +89,28 @@ io.on("connection", (socket) => {
     }
   });
 
+  //Zeit abgelaufen
+  socket.on("timeLost", () => {
+    taskManager.resetFinished(); //weil markTaskCompleted übergangen wird
+    taskFinished();
+  });
+
+  function taskFinished() {
+    io.emit("taskCompleted", [taskManager.getCurrentSolution(), true]); //an show senden
+    io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
+    io.emit("nextTaskButton");
+    taskCompleted = true;
+    io.emit("nextTaskCountdown", 6); // Starte den Countdown (6 Sekunden)
+  }
+
   //Nächste Aufgabe oder letzte Aufgabe
   socket.on("startNextTask", () => {
     const nextTask = taskManager.nextTask();
     if (nextTask) {
       io.emit("newTask", nextTask); // Nächste Aufgabe an alle Clients senden
     } else {
-      //TODO: Quiz fertig
+      io.emit("quizCompleted"); // Falls keine weiteren Aufgaben mehr da sind
     }
-  });
-
-  //Zeit abgelaufen
-  socket.on("timeLost", () => {
-    taskManager.resetFinished(); //weil markTaskCompleted übergangen wird
-    io.emit("taskCompleted", [taskManager.getCurrentSolution(), false]); //an show senden
-    io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
-    io.emit("nextTaskButton");
   });
 
   //Punkte zurücksetzen

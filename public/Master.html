@@ -130,9 +130,15 @@
     socket.on("nextTaskButton", () => {
       const nextTaskButton = document.getElementById("nextTaskButton");
       nextTaskButton.style.display = "block";
+    });
+
+    socket.on("newTask", () => {
+      const nextTaskButton = document.getElementById("nextTaskButton");
+      nextTaskButton.style.display = "none";
       const progressHeader = document.getElementById("progressHeader");
       progressHeader.textContent = `-Fortschrittsanzeige-`;
     });
+
 
     function startNextTask() {
       document.getElementById("nextTaskButton").style.display = "none";

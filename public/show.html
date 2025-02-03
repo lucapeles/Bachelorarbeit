@@ -167,6 +167,37 @@
             rightBox.style.backgroundColor = "#d4edda"; // Hintergrund auf Standard-Grün zurücksetzen
         }
 
+        // Timer bis zur nächsten Aufgabe
+        socket.on("nextTaskCountdown", (time) => {
+            const progressBarInner = document.getElementById("progressBar");
+            const timer = document.querySelector(".timer");
+            const rightBox = document.getElementById("right-Box");
+            let remainingTime = time;
+            const totalHeight = 100; // Fortschrittsbalken startet bei 100%
+            const decrement = totalHeight / remainingTime;
+            if (progressInterval) {
+                clearInterval(progressInterval); // Falls noch ein Timer läuft, stoppen
+            }
+            timer.textContent = `Nächste Aufgabe beginnt in ${remainingTime} Sekunden`;
+            progressBarInner.style.height = "100%"; // Voll starten
+            progressInterval = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(progressInterval);
+                    progressBarInner.style.height = "0%"; // Fortschrittsbalken leer
+                    timer.textContent = "Neue Aufgabe beginnt!";
+                    setTimeout(() => {
+                        socket.emit("startNextTask"); // Automatisch neue Aufgabe starten
+                    }, 1000);
+                } else {
+                    remainingTime--;
+                    progressBarInner.style.height = `${remainingTime * decrement}%`;
+                    timer.textContent = `Nächste Aufgabe beginnt in ${remainingTime} Sekunden`;
+                    rightBox.style.backgroundColor = "rgba(255, 165, 0, 0.3)"; // Orange für Countdown
+                }
+            }, 1000);
+        });
+
+
         socket.on("addTimeForShow", (additionalTime) => {
             remainingTime += additionalTime; // Verbleibende Zeit um die zusätzliche Zeit erhöhen
         });
