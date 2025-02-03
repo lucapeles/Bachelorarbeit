@@ -67,10 +67,13 @@ class TaskManager {
     }
     return false; // Unbekannter Typ
   }
-
-  // Punktevergabe durch UserManager abhängig der Reihenfolge
+  // zwischen 5 und 10 Punkten für eine richtige Antwort
   assignPoints(userID) {
-    let points = this.userManager.getAllUsers().length - this.usersWhoHaveFinished.length + 1;
+    let totalPlayers = this.userManager.getAllUsers().length;
+    let rank = this.usersWhoHaveFinished.length + 1;
+    let basePoints = 5; // Jeder bekommt mindestens 5 Punkte
+    let speedBonus = Math.round(5 * ((totalPlayers - rank) / totalPlayers)); // Bonus für die schnelleren
+    let points = basePoints + speedBonus;
     this.userManager.updatePoints(userID, points);
   }
 
