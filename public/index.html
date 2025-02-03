@@ -37,11 +37,21 @@
     function joinExistingLobby() {
       const userName = document.getElementById("userInputExisting").value;  // Benutzernamen vom Eingabefeld holen
       if (userName) {
-        socket.emit("joinLobby", userName);  // Benutzernamen beim Beitreten der Lobby senden
+        socket.emit("getNameList", userName); //Überprüfung ob Name bereits existiert
       } else {
         alert("Bitte geben Sie einen Benutzernamen ein.");
       }
     }
+
+    socket.on("NameList", (data) => { // data = { currentName, nameList }
+      let currentName = data[0];
+      let nameList = data[1].map(user => user.name); // Extrahiere die Namen aus der Liste
+      if (!nameList.some(name => name.toLowerCase() === currentName.toLowerCase())) {
+        socket.emit("joinLobby", currentName);
+      } else {
+        alert("Der Name existiert bereits!");
+      }
+    });
 
     // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
     socket.on("lobbyCreated", (userID, name) => {

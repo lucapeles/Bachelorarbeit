@@ -27,6 +27,12 @@ io.on("connection", (socket) => {
     updateUserList();
   });
 
+  //Namensliste zurückschicken
+  socket.on("getNameList", (userName) => {
+    console.log(userManager.getAllUsers().map(user => ({ name: user.getName })));
+    socket.emit("NameList", [userName, userManager.getAllUsers().map(user => ({ name: user.getName }))]);
+  });
+
   // Benutzer beim Trennen der Verbindung entfernen
   socket.on("disconnectUser", (userID) => {
     if (userID) {
