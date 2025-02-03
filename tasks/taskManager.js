@@ -29,6 +29,11 @@ class TaskManager {
     return this.currentCorrectUsers;
   }
 
+  // Spieler die fertig sind
+  getUsersWhoHaveFinished() {
+    return this.usersWhoHaveFinished;
+  }
+
   // Benutzer bearbeitet Aufgabe und gibt ab
   markTaskCompleted(userID, answer, time) {
     this.usersWhoHaveFinished.push(userID);

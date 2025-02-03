@@ -90,6 +90,14 @@ button:hover {
     display: none;
 }
 
+#progressHeader {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #395b69;
+    margin-top: 10px;
+}
+
+
 /* Custom-Checkbox */
 #taskSelectionList input[type="checkbox"] {
     appearance: none;

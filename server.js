@@ -29,7 +29,6 @@ io.on("connection", (socket) => {
 
   //Namensliste zurückschicken
   socket.on("getNameList", (userName) => {
-    console.log(userManager.getAllUsers().map(user => ({ name: user.getName })));
     socket.emit("NameList", [userName, userManager.getAllUsers().map(user => ({ name: user.getName }))]);
   });
 
@@ -68,13 +67,19 @@ io.on("connection", (socket) => {
 
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser, time }
+    let taskCompleted = false;
     if (taskManager.markTaskCompleted(data[0], data[1], data[2])) {
       io.emit("taskCompleted", [taskManager.getCurrentSolution(), true]); //an show senden
       io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
       io.emit("nextTaskButton");
+      taskCompleted = true;
     }
     //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
     updateUserList();
+    // data = { finishedUsers, numberOfUsers }
+    if (!taskCompleted) {
+      io.emit("updateProgress", [taskManager.getUsersWhoHaveFinished().length, userManager.getNumberOfUsers()]);
+    }
     if (taskManager.getTime()) {
       io.emit("timeLeft", taskManager.getTime());
       taskManager.resetTime();

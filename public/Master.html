@@ -31,6 +31,7 @@
     </div>
 
     <div class="user-container">
+      <h3 id="progressHeader">-Fortschrittsanzeige-</h3>
       <ul id="progressList"></ul>
       <h4 id="userCountHeader">Aktuelle Benutzer:</h4>
       <ul id="userList"></ul>
@@ -63,6 +64,13 @@
       const newName = Math.random().toString(36).substring(2, 6).toUpperCase();
       socket.emit("changeUserName", [userID, newName]);
     }
+
+    // Counter für fertige Spieler
+    socket.on("updateProgress", (data) => { // data = { finishedUsers, numberOfUsers }
+      const progressHeader = document.getElementById("progressHeader");
+      progressHeader.textContent = `Abgeschlossene Lösungen: ${data[0]} / ${data[1]}`;
+    });
+
 
     socket.emit("requestUserList");
     socket.emit("requestTaskPool");
@@ -118,9 +126,12 @@
       }
     }
 
+    //next Task button anzeigen, auf neue Aufgabe warten
     socket.on("nextTaskButton", () => {
       const nextTaskButton = document.getElementById("nextTaskButton");
       nextTaskButton.style.display = "block";
+      const progressHeader = document.getElementById("progressHeader");
+      progressHeader.textContent = `-Fortschrittsanzeige-`;
     });
 
     function startNextTask() {

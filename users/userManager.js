@@ -44,6 +44,10 @@ class UserManager {
     return this.users;
   }
 
+  getNumberOfUsers() {
+    return this.users.length;
+  }
+
   changeName(userID, newName) {
     const user = this.getUserByID(userID);
     if (user) {
