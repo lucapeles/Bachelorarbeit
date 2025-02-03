@@ -34,6 +34,13 @@ class TaskManager {
     return this.usersWhoHaveFinished;
   }
 
+  // Rang des Spielers holen
+  getRankForUser(userID) {
+    console.log(this.currentCorrectUsers.indexOf(userID) + 1);
+    return this.currentCorrectUsers.indexOf(userID) + 1; // Platzierung holen
+  }
+
+
   // Benutzer bearbeitet Aufgabe und gibt ab
   markTaskCompleted(userID, answer, time) {
     this.usersWhoHaveFinished.push(userID);

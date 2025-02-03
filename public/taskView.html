@@ -12,6 +12,7 @@
   <!-- Fester Header für die Quiz-Überschrift -->
   <div id="headerContainer">
     <h1 id="quizTitle">INFORMATIK-QUIZ</h1>
+    <p id="personalRankMessage"></p>
   </div>
 
   <!-- Quiz-Container -->
@@ -47,6 +48,7 @@
       document.body.style.backgroundColor = "white";
       document.getElementById("quizContainer").style.display = "block"; // Container wieder sichtbar machen
       document.getElementById("submitButton").style.display = "block"; //submitButton wieder sichtbar machen
+      document.getElementById("personalRankMessage").style.display = "none";
 
       const optionsContainer = document.getElementById("answerOptions");
       optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
@@ -107,6 +109,33 @@
         alert("Bitte gib eine Lösung ein.")
       }
     }
+
+    socket.on("showPersonalRank", (data) => { // data = { userID, rank }
+      if (data[0] === userID) {
+        let rank = data[1];
+        const rankMessage = document.getElementById("personalRankMessage");
+        let rankText = "";
+
+        // Entferne vorherige Klassen (falls bereits gesetzt)
+        rankMessage.classList.remove("rank-1", "rank-2", "rank-3");
+
+        if (rank === 1) {
+          rankText = "🥇 Du warst der/die SCHNELLSTE mit korrekter Antwort!";
+          rankMessage.classList.add("rank-1");
+        } else if (rank === 2) {
+          rankText = "🥈 Du warst der/die ZWEITSCHNELLSTE mit korrekter Antwort!";
+          rankMessage.classList.add("rank-2");
+        } else if (rank === 3) {
+          rankText = "🥉 Du warst der/die DRITTSCHNELLSTE mit korrekter Antwort!";
+          rankMessage.classList.add("rank-3");
+        }
+
+        rankMessage.textContent = rankText;
+        rankMessage.style.display = "block"; // Sichtbar machen
+      }
+    });
+
+
 
     socket.on("showTrueOrFalse", (userIDs) => {
       if (userIDs.includes(userID)) {

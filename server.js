@@ -74,12 +74,17 @@ io.on("connection", (socket) => {
       io.emit("nextTaskButton");
       taskCompleted = true;
     }
-    //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
-    updateUserList();
-    // data = { finishedUsers, numberOfUsers }
-    if (!taskCompleted) {
+    updateUserList(); //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
+
+    if (!taskCompleted) { // data = { finishedUsers, numberOfUsers }
       io.emit("updateProgress", [taskManager.getUsersWhoHaveFinished().length, userManager.getNumberOfUsers()]);
     }
+
+    const rank = taskManager.getRankForUser(data[0]); // Holt den Rang des Spielers
+    if (rank <= 3) { // Ranganzeige für top 3
+      io.emit("showPersonalRank", [data[0], rank]); // An den Spieler senden
+    }
+
     if (taskManager.getTime()) {
       io.emit("timeLeft", taskManager.getTime());
       taskManager.resetTime();
