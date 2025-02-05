@@ -15,6 +15,9 @@
     <p id="personalRankMessage"></p>
   </div>
 
+  <!-- Platzhalter für die persönliche Platzierung -->
+  <div id="personalRanking" class="personal-ranking"></div>
+
   <!-- Quiz-Container -->
   <div id="quizContainer">
     <div id="answerOptions"></div>
@@ -146,15 +149,22 @@
       resetPage();
     });
 
-    socket.on("quizCompleted", (results) => {
-      alert("Das Quiz ist beendet!");
-      // Ergebnisse anzeigen
-    });
-
     socket.on("reset", () => {
       document.body.style.backgroundColor = "white";
       document.getElementById("personalRankMessage").style.display = "none";
       resetPage();
+    });
+
+    //Anzeige des persönlichen Rankings
+    socket.on("quizCompleted", (ranking) => {
+      const myRank = ranking.find(player => player.userID == userID);
+      if (myRank) {
+        setTimeout(() => {
+          let rankMessage = document.getElementById("personalRanking");
+          rankMessage.textContent = `Du hast Platz ${myRank.rank} erreicht! 🎉`;
+          rankMessage.style.display = "block";
+        }, 7000); // Zeigt das eigene Ranking nach der Siegerehrung
+      }
     });
 
     function resetPage() {

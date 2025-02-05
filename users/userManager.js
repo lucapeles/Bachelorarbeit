@@ -39,6 +39,14 @@ class UserManager {
     });
   }
 
+  // Rangliste der Spieler
+  getRanking() {
+    return this.users
+      .sort((a, b) => b.getPoints - a.getPoints) // Nach Punkten absteigend sortieren
+      .map((user, index) => ({ rank: index + 1, name: user.getName, userID: user.getUserID, points: user.getPoints }));
+  }
+
+
   // Alle Benutzer abrufen
   getAllUsers() {
     return this.users;

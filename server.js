@@ -100,18 +100,34 @@ io.on("connection", (socket) => {
     io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
     io.emit("nextTaskButton");
     taskCompleted = true;
-    io.emit("nextTaskCountdown", 6); // Starte den Countdown (6 Sekunden)
+    if (taskManager.isThereATaskLeft()) {
+      console.log("nächste Frage");
+      io.emit("nextTaskCountdown", 6); // Starte den Countdown (6 Sekunden)
+    } else {
+      console.log("letzte Frage");
+      startNextTask();
+    }
   }
 
   //Nächste Aufgabe oder letzte Aufgabe
   socket.on("startNextTask", () => {
+    startNextTask();
+  });
+
+  function startNextTask() {
     const nextTask = taskManager.nextTask();
     if (nextTask) {
       io.emit("newTask", nextTask); // Nächste Aufgabe an alle Clients senden
     } else {
-      io.emit("quizCompleted"); // Falls keine weiteren Aufgaben mehr da sind
+      console.log(userManager.getRanking());
+      io.emit("quizCompleted", userManager.getRanking()); // Falls keine weiteren Aufgaben mehr da sind
     }
+  }
+
+  socket.on("requestRanking", () => {
+    socket.emit("sendRanking", userManager.getRanking());
   });
+
 
   //Punkte zurücksetzen
   socket.on("resetQuestions", (data) => { //data = points OR questions
@@ -121,6 +137,7 @@ io.on("connection", (socket) => {
     taskManager.resetAll();
     updateUserList();
     io.emit("reset");
+    io.emit("backToShow"); //Damit Siegerehrung wieder zu show wechselt
   });
 
   //Zeit hinzufügen

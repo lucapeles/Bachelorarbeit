@@ -110,6 +110,14 @@ class TaskManager {
     return null; // Keine weiteren Aufgaben verfügbar
   }
 
+  isThereATaskLeft() {
+    if (this.currentTaskIndex < this.tasks.length - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getTime() {
     return this.time;
   }

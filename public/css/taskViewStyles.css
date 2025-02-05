@@ -213,6 +213,18 @@ h1 {
   border: 0.2em solid #9c4a1a;
 }
 
+.personal-ranking {
+  display: none;
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 20px;
+  background-color: #76c7c0;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+}
+
+
 /* Animation für sanftes Einblenden */
 @keyframes fadeIn {
   from {

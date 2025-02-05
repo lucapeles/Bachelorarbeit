@@ -120,6 +120,7 @@
         });
 
         // ----------------------Fortschrittsbalken-------------------------------------
+
         socket.on("timeLeft", (time) => {
             updateProgressBar(time);
         });
@@ -201,6 +202,13 @@
         socket.on("addTimeForShow", (additionalTime) => {
             remainingTime += additionalTime; // Verbleibende Zeit um die zusätzliche Zeit erhöhen
         });
+
+        //---------------------Siegerehrung------------------------------
+
+        socket.on("quizCompleted", (ranking) => {
+            window.location.href = `/ranking.html`;
+        });
+
 
         window.onload = () => {
             timerReset(); // Timer direkt nach dem Laden zurücksetzen

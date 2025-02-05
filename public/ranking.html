@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Siegerehrung</title>
+    <link rel="stylesheet" href="/css/rankingStyles.css">
+</head>
+
+<body>
+    <div class="trophy-header">
+        🏆 <h1>Siegerehrung</h1> 🏆
+    </div>
+
+    <div class="podium-container">
+        <div class="podium">
+            <div class="place second hidden">
+                <div class="player" id="secondPlace">
+                    <span class="name"></span>
+                    <span class="points"></span>
+                </div>
+            </div>
+            <div class="place first hidden">
+                <div class="player" id="firstPlace">
+                    <span class="name"></span>
+                    <span class="points"></span>
+                </div>
+            </div>
+            <div class="place third hidden">
+                <div class="player" id="thirdPlace">
+                    <span class="name"></span>
+                    <span class="points"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        window.onload = () => {
+            socket.emit("requestRanking");
+        };
+
+        socket.on("sendRanking", (ranking) => {
+            if (ranking.length < 3) return;
+
+            document.getElementById("thirdPlace").querySelector(".name").textContent = `🥉 ${ranking[2].name}`;
+            document.getElementById("thirdPlace").querySelector(".points").textContent = `${ranking[2].points} Punkte`;
+
+            document.getElementById("secondPlace").querySelector(".name").textContent = `🥈 ${ranking[1].name}`;
+            document.getElementById("secondPlace").querySelector(".points").textContent = `${ranking[1].points} Punkte`;
+
+            document.getElementById("firstPlace").querySelector(".name").textContent = `🥇 ${ranking[0].name}`;
+            document.getElementById("firstPlace").querySelector(".points").textContent = `${ranking[0].points} Punkte`;
+
+            setTimeout(() => {
+                document.querySelector(".third").classList.remove("hidden");
+                document.querySelector(".third").classList.add("reveal");
+            }, 1000);
+
+            setTimeout(() => {
+                document.querySelector(".second").classList.remove("hidden");
+                document.querySelector(".second").classList.add("reveal");
+            }, 3000);
+
+            setTimeout(() => {
+                document.querySelector(".first").classList.remove("hidden");
+                document.querySelector(".first").classList.add("reveal");
+            }, 5000);
+        });
+
+        socket.on("backToShow", () => {
+            window.location.href = `/show.html`;
+        });
+    </script>
+</body>
+
+</html>
