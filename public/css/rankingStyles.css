@@ -1,4 +1,3 @@
-/* Allgemeine Stile */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -24,7 +23,7 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Podium-Container */
+/* Podium */
 .podium-container {
     display: flex;
     justify-content: center;
@@ -33,7 +32,6 @@ body {
     height: 60%;
 }
 
-/* Podium Basis */
 .podium {
     display: flex;
     align-items: flex-end;
@@ -42,7 +40,7 @@ body {
     gap: 3%;
 }
 
-/* Platzierungen als Balken */
+/* Balken */
 .place {
     width: 25%;
     display: flex;
@@ -55,53 +53,28 @@ body {
     font-weight: bold;
     opacity: 0;
     height: 10%;
-    /* ALLE STARTEN GLEICH */
-    animation: growUp 2s ease-out forwards;
+    transform: translateY(100vh);
+    transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
-/* Farben */
 .first {
     background: gold;
+    height: 60%;
 }
 
 .second {
     background: silver;
+    height: 45%;
 }
 
 .third {
     background: #cd7f32;
+    height: 30%;
 }
 
-/* 🏆 WICHTIGE ANIMATION 🏆 */
-@keyframes growUp {
-    from {
-        height: 10%;
-    }
-
-    to {
-        height: var(--final-height);
-    }
-}
-
-/* Höhen für die Animation setzen */
-.first {
-    --final-height: 60%;
-    animation-delay: 0.5s;
-}
-
-.second {
-    --final-height: 45%;
-    animation-delay: 1s;
-}
-
-.third {
-    --final-height: 30%;
-    animation-delay: 1.5s;
-}
-
-/* Animationsklassen */
-.reveal {
+.fly-up {
     opacity: 1;
+    transform: translateY(0);
 }
 
 /* Spielerinfo */
@@ -115,22 +88,18 @@ body {
     margin-bottom: 10px;
 }
 
-/* Gewinner mit Animation */
-.first .player {
-    animation: pulse 0.8s infinite alternate;
+/* Konfetti */
+#confettiCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 999;
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.05);
-    }
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 600px) {
     .trophy-header {
         font-size: 6vw;

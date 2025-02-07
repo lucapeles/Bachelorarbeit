@@ -122,6 +122,9 @@
         // ----------------------Fortschrittsbalken-------------------------------------
 
         socket.on("timeLeft", (time) => {
+            if (time < 5) { //Zeit mindestens 5 Sekunden
+                time = 5;
+            }
             updateProgressBar(time);
         });
 

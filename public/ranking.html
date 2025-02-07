@@ -14,26 +14,28 @@
 
     <div class="podium-container">
         <div class="podium">
-            <div class="place second hidden">
-                <div class="player" id="secondPlace">
+            <div class="place second hidden" id="secondPlace">
+                <div class="player">
                     <span class="name"></span>
                     <span class="points"></span>
                 </div>
             </div>
-            <div class="place first hidden">
-                <div class="player" id="firstPlace">
+            <div class="place first hidden" id="firstPlace">
+                <div class="player">
                     <span class="name"></span>
                     <span class="points"></span>
                 </div>
             </div>
-            <div class="place third hidden">
-                <div class="player" id="thirdPlace">
+            <div class="place third hidden" id="thirdPlace">
+                <div class="player">
                     <span class="name"></span>
                     <span class="points"></span>
                 </div>
             </div>
         </div>
     </div>
+
+    <canvas id="confettiCanvas"></canvas>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -46,6 +48,7 @@
         socket.on("sendRanking", (ranking) => {
             if (ranking.length < 3) return;
 
+            // Platzierungen setzen
             document.getElementById("thirdPlace").querySelector(".name").textContent = `🥉 ${ranking[2].name}`;
             document.getElementById("thirdPlace").querySelector(".points").textContent = `${ranking[2].points} Punkte`;
 
@@ -55,25 +58,86 @@
             document.getElementById("firstPlace").querySelector(".name").textContent = `🥇 ${ranking[0].name}`;
             document.getElementById("firstPlace").querySelector(".points").textContent = `${ranking[0].points} Punkte`;
 
+            // Animation von unten nach oben
             setTimeout(() => {
-                document.querySelector(".third").classList.remove("hidden");
-                document.querySelector(".third").classList.add("reveal");
+                document.getElementById("thirdPlace").classList.remove("hidden");
+                document.getElementById("thirdPlace").classList.add("fly-up");
             }, 1000);
 
             setTimeout(() => {
-                document.querySelector(".second").classList.remove("hidden");
-                document.querySelector(".second").classList.add("reveal");
-            }, 3000);
+                document.getElementById("secondPlace").classList.remove("hidden");
+                document.getElementById("secondPlace").classList.add("fly-up");
+            }, 2000);
 
             setTimeout(() => {
-                document.querySelector(".first").classList.remove("hidden");
-                document.querySelector(".first").classList.add("reveal");
-            }, 5000);
+                document.getElementById("firstPlace").classList.remove("hidden");
+                document.getElementById("firstPlace").classList.add("fly-up");
+                startConfetti();
+            }, 3000);
         });
 
         socket.on("backToShow", () => {
             window.location.href = `/show.html`;
         });
+
+        // Konfetti Animation
+        function startConfetti() {
+            const canvas = document.getElementById("confettiCanvas");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 4 + 2,
+                    d: Math.random() * 10 + 2,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    tilt: Math.random() * 10 - 5
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    ctx.beginPath();
+                    ctx.fillStyle = p.color;
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                update();
+            }
+
+            function update() {
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.y += p.d;
+                    p.x += Math.sin(p.y / 10) * 2;
+                    if (p.y > canvas.height) {
+                        particles[i] = {
+                            x: Math.random() * canvas.width,
+                            y: -10,
+                            r: p.r,
+                            d: p.d,
+                            color: p.color,
+                            tilt: p.tilt
+                        };
+                    }
+                }
+            }
+
+            function animate() {
+                draw();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
     </script>
 </body>
 
