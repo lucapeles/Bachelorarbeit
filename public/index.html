@@ -35,13 +35,18 @@
 
     // Lobby beitreten
     function joinExistingLobby() {
-      const userName = document.getElementById("userInputExisting").value;  // Benutzernamen vom Eingabefeld holen
-      if (userName) {
-        socket.emit("getNameList", userName); //Überprüfung ob Name bereits existiert
-      } else {
+      const userName = document.getElementById("userInputExisting").value.trim(); // Leerzeichen entfernen
+      if (!userName) {
         alert("Bitte geben Sie einen Benutzernamen ein.");
+        return;
       }
+      if (userName.length > 10) {
+        alert("Der Benutzername darf maximal 10 Zeichen lang sein.");
+        return;
+      }
+      socket.emit("getNameList", userName); // Überprüfung, ob Name bereits existiert
     }
+
 
     socket.on("NameList", (data) => { // data = { currentName, nameList }
       let currentName = data[0];

@@ -135,9 +135,9 @@ io.on("connection", (socket) => {
       userManager.resetAllPoints();
     }
     taskManager.resetAll();
-    updateUserList();
     io.emit("reset");
     io.emit("backToShow"); //Damit Siegerehrung wieder zu show wechselt
+    updateUserList();
   });
 
   //Zeit hinzufügen

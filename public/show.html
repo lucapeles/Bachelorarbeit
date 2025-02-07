@@ -89,14 +89,12 @@
         //------------------Balkendiagramm------------------------------------------
 
         socket.on("loadDiagram", (players) => {
-            // Sortiere Spieler nach Punkten, max. 15 anzeigen
             const topPlayers = players.sort((a, b) => b.points - a.points).slice(0, 15);
-
-            // Höchste Punktzahl bestimmen
             const maxPoints = topPlayers[0]?.points || 1;
+            const minDisplayThreshold = maxPoints * 0.2; // 20% der höchsten Punktzahl
 
             const chartContainer = document.getElementById("chart-container");
-            chartContainer.innerHTML = ""; // Vorherigen Inhalt löschen
+            chartContainer.innerHTML = "";
 
             topPlayers.forEach((player, index) => {
                 // Erstelle Balken
@@ -109,12 +107,21 @@
                 // Höhe des Balkens prozentual zur maximalen Punktzahl
                 bar.style.height = `${(player.points / maxPoints) * 100}%`;
 
-                // Name und Punkte hinzufügen
-                const label = document.createElement("span");
-                label.innerHTML = `${player.name}<br>${player.points} Pkt`;
-                bar.appendChild(label);
+                // Name oben
+                const nameLabel = document.createElement("div");
+                nameLabel.textContent = player.name;
+                nameLabel.classList.add("bar-name");
 
-                // Balken zum Chart hinzufügen
+                // Punktzahl unten nur anzeigen, wenn sie >= 20% der Top-Punktzahl ist & nicht 0
+                let pointsLabel = document.createElement("div");
+                if (player.points > 0 && player.points >= minDisplayThreshold) {
+                    pointsLabel.innerHTML = `<strong>${player.points} Pkt</strong>`;
+                    pointsLabel.classList.add("bar-points");
+                    bar.appendChild(pointsLabel);
+                }
+
+                // Elemente dem Balken hinzufügen
+                bar.appendChild(nameLabel);
                 chartContainer.appendChild(bar);
             });
         });
