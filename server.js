@@ -101,10 +101,8 @@ io.on("connection", (socket) => {
     io.emit("nextTaskButton");
     taskCompleted = true;
     if (taskManager.isThereATaskLeft()) {
-      console.log("nächste Frage");
       io.emit("nextTaskCountdown", 6); // Starte den Countdown (6 Sekunden)
     } else {
-      console.log("letzte Frage");
       startNextTask();
     }
   }
@@ -119,7 +117,6 @@ io.on("connection", (socket) => {
     if (nextTask) {
       io.emit("newTask", nextTask); // Nächste Aufgabe an alle Clients senden
     } else {
-      console.log(userManager.getRanking());
       io.emit("quizCompleted", userManager.getRanking()); // Falls keine weiteren Aufgaben mehr da sind
     }
   }
