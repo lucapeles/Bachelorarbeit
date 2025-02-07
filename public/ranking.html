@@ -8,6 +8,8 @@
 </head>
 
 <body>
+    <canvas id="confettiCanvas"></canvas> <!-- Konfetti im Hintergrund -->
+
     <div class="trophy-header">
         🏆 <h1>Siegerehrung</h1> 🏆
     </div>
@@ -35,8 +37,6 @@
         </div>
     </div>
 
-    <canvas id="confettiCanvas"></canvas>
-
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
@@ -48,7 +48,6 @@
         socket.on("sendRanking", (ranking) => {
             if (ranking.length < 3) return;
 
-            // Platzierungen setzen
             document.getElementById("thirdPlace").querySelector(".name").textContent = `🥉 ${ranking[2].name}`;
             document.getElementById("thirdPlace").querySelector(".points").textContent = `${ranking[2].points} Punkte`;
 
@@ -58,29 +57,19 @@
             document.getElementById("firstPlace").querySelector(".name").textContent = `🥇 ${ranking[0].name}`;
             document.getElementById("firstPlace").querySelector(".points").textContent = `${ranking[0].points} Punkte`;
 
-            // Animation von unten nach oben
+            // Zeitverzögertes Einfliegen der Balken
+            setTimeout(() => document.getElementById("thirdPlace").classList.add("fly-up"), 800);
+            setTimeout(() => document.getElementById("secondPlace").classList.add("fly-up"), 1600);
             setTimeout(() => {
-                document.getElementById("thirdPlace").classList.remove("hidden");
-                document.getElementById("thirdPlace").classList.add("fly-up");
-            }, 1000);
-
-            setTimeout(() => {
-                document.getElementById("secondPlace").classList.remove("hidden");
-                document.getElementById("secondPlace").classList.add("fly-up");
-            }, 2000);
-
-            setTimeout(() => {
-                document.getElementById("firstPlace").classList.remove("hidden");
                 document.getElementById("firstPlace").classList.add("fly-up");
                 startConfetti();
-            }, 3000);
+            }, 2400);
         });
 
         socket.on("backToShow", () => {
             window.location.href = `/show.html`;
         });
 
-        // Konfetti Animation
         function startConfetti() {
             const canvas = document.getElementById("confettiCanvas");
             const ctx = canvas.getContext("2d");
@@ -89,22 +78,24 @@
             canvas.height = window.innerHeight;
 
             let particles = [];
+            let numParticles = 250;
 
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    r: Math.random() * 4 + 2,
-                    d: Math.random() * 10 + 2,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    tilt: Math.random() * 10 - 5
+                    y: Math.random() * -canvas.height,
+                    r: Math.random() * 3 + 2,
+                    d: Math.random() * 10 + 3,
+                    color: `hsl(${Math.random() * 240}, 70%, 60%)`,
+                    speedY: Math.random() * 0.8 + 0.2,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    life: Math.random() * 900 + 500
                 });
             }
 
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < particles.length; i++) {
-                    let p = particles[i];
+                for (let p of particles) {
                     ctx.beginPath();
                     ctx.fillStyle = p.color;
                     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -114,19 +105,15 @@
             }
 
             function update() {
-                for (let i = 0; i < particles.length; i++) {
-                    let p = particles[i];
-                    p.y += p.d;
-                    p.x += Math.sin(p.y / 10) * 2;
-                    if (p.y > canvas.height) {
-                        particles[i] = {
-                            x: Math.random() * canvas.width,
-                            y: -10,
-                            r: p.r,
-                            d: p.d,
-                            color: p.color,
-                            tilt: p.tilt
-                        };
+                for (let p of particles) {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.life--;
+
+                    if (p.life <= 0) {
+                        p.y = -10;
+                        p.x = Math.random() * canvas.width;
+                        p.life = Math.random() * 900 + 500;
                     }
                 }
             }
