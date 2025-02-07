@@ -6,10 +6,14 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    /* Stellt sicher, dass alles nach unten ausgerichtet ist */
+    overflow: hidden;
+    /* Kein Scrollen mehr */
     position: relative;
 }
 
@@ -20,10 +24,12 @@ body {
     align-items: center;
     font-size: 5vw;
     font-weight: bold;
-    margin-bottom: 2%;
+    margin-bottom: 1%;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-    position: relative;
+    position: absolute;
+    top: 5%;
     z-index: 10;
+    width: 100%;
 }
 
 /* Podium */
@@ -32,8 +38,9 @@ body {
     justify-content: center;
     align-items: flex-end;
     width: 90%;
-    height: 60%;
-    position: relative;
+    height: 50%;
+    position: absolute;
+    bottom: 5%;
     z-index: 5;
 }
 
@@ -50,26 +57,29 @@ body {
     width: 30%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
+    /* Text mittig ausrichten */
     align-items: center;
     border-radius: 15px;
-    padding: 2%;
+    padding: 3%;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
     font-weight: bold;
     opacity: 0;
     height: 10%;
     transform: translateY(120%);
     transition: transform 2.5s ease-out, opacity 2.5s ease-out;
+    text-align: center;
 }
 
+/* Höhen für Podest */
 .first {
     background: linear-gradient(to bottom, #f1c40f, #f39c12);
-    height: 60%;
+    height: 55%;
 }
 
 .second {
     background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
-    height: 45%;
+    height: 40%;
 }
 
 .third {
@@ -77,9 +87,34 @@ body {
     height: 30%;
 }
 
+/* Animation */
 .fly-up {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Text auf den Balken */
+.player {
+    font-size: 2.5vw;
+    /* Größere Schrift für bessere Lesbarkeit */
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Name und Punkte mittig setzen */
+.player .name {
+    font-size: 2vw;
+    font-weight: bold;
+    margin-bottom: 0.3vw;
+}
+
+.player .points {
+    font-size: 1.8vw;
+    font-weight: 500;
 }
 
 /* Konfetti */
@@ -91,4 +126,31 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 1;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 600px) {
+    .trophy-header {
+        font-size: 6vw;
+    }
+
+    .podium-container {
+        height: 55%;
+    }
+
+    .place {
+        width: 30%;
+    }
+
+    .player {
+        font-size: 3.5vw;
+    }
+
+    .player .name {
+        font-size: 3vw;
+    }
+
+    .player .points {
+        font-size: 2.8vw;
+    }
 }
