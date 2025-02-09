@@ -32,6 +32,7 @@
     // URL-Parameter auslesen
     const urlParams = new URLSearchParams(window.location.search);
     const userID = urlParams.get('userID'); // ID des Benutzers aus der URL holen
+    const startName = urlParams.get('name'); //Startname
     let startTime; // Startzeitpunkt des Timers
     let elapsedTime; // Verstrichene Zeit in Sekunden
 
@@ -81,7 +82,7 @@
       }
     });
 
-    let selectedAnswer = "nurAlsSchranke";
+    let selectedAnswer = "nurAlsPlatzhalter";
     let previousSelectedButton = null;
 
     function selectAnswer(button, answer) {
@@ -105,12 +106,9 @@
       if (textAnswer) {
         selectedAnswer = textAnswer.value.trim(); // Eingabe aus Textfeld holen und speichern
       }
-      if (selectedAnswer != "nurAlsSchranke") {
-        elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-        socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
-      } else {
-        alert("Bitte gib eine Lösung ein.")
-      }
+      elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
+
     }
 
     socket.on("showPersonalRank", (data) => { // data = { userID, rank }
@@ -186,7 +184,6 @@
     window.onload = () => {
       socket.emit("requestUserList");
     };
-
   </script>
 </body>
 
