@@ -15,7 +15,7 @@
     <p id="personalRankMessage"></p>
   </div>
 
-  <!-- Platzhalter für die persönliche Platzierung -->
+  <!-- Platzhalter für die persönliche Platzierung bei Quizende-->
   <div id="personalRanking" class="personal-ranking"></div>
 
   <!-- Quiz-Container -->
@@ -152,6 +152,7 @@
     socket.on("reset", () => {
       document.body.style.backgroundColor = "white";
       document.getElementById("personalRankMessage").style.display = "none";
+      document.getElementById("personalRanking").style.display = "none";
       resetPage();
     });
 

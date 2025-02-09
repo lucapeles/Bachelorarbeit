@@ -3,24 +3,28 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lobby App</title>
-  <link rel="stylesheet" href="/css/indexStyles.css"> <!-- CSS einbinden -->
+  <link rel="stylesheet" href="/css/indexStyles.css"> <!-- CSS Datei einbinden -->
 </head>
 
 <body>
-  <h1>Willkommen, erstellen sie hier ein neues Spiel:</h1>
+  <div class="container">
+    <h1>Willkommen! Masterzugang:</h1>
 
-  <!-- Schaltfläche zum Erstellen eines Spiels -->
-  <form action="/login" method="POST">
-    <input type="password" name="password" placeholder="Masterpasswort eingeben" required>
-    <button type="submit">Bestätigen</button>
-  </form>
+    <!-- Master Login -->
+    <form action="/login" method="POST">
+      <input type="password" name="password" placeholder="Masterpasswort eingeben" required>
+      <button type="submit">Bestätigen</button>
+    </form>
 
+    <hr>
 
-  <!-- Eingabefeld zum Beitreten eines Spiels -->
-  <h2>Oder treten Sie bei:</h2>
-  <input type="text" id="userInputExisting" placeholder="Benutzername eingeben">
-  <button onclick="joinExistingLobby()">Beitreten</button>
+    <!-- Beitritt zu einem Spiel -->
+    <h2>Als Spieler beitreten:</h2>
+    <input type="text" id="userInputExisting" placeholder="Benutzername eingeben">
+    <button onclick="joinExistingLobby()">Beitreten</button>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -28,7 +32,7 @@
 
     // Lobby beitreten
     function joinExistingLobby() {
-      const userName = document.getElementById("userInputExisting").value.trim(); // Leerzeichen entfernen
+      const userName = document.getElementById("userInputExisting").value.trim();
       if (!userName) {
         alert("Bitte geben Sie einen Benutzernamen ein.");
         return;
@@ -37,13 +41,12 @@
         alert("Der Benutzername darf maximal 10 Zeichen lang sein.");
         return;
       }
-      socket.emit("getNameList", userName); // Überprüfung, ob Name bereits existiert
+      socket.emit("getNameList", userName);
     }
 
-
-    socket.on("NameList", (data) => { // data = { currentName, nameList }
+    socket.on("NameList", (data) => {
       let currentName = data[0];
-      let nameList = data[1].map(user => user.name); // Extrahiere die Namen aus der Liste
+      let nameList = data[1].map(user => user.name);
       if (!nameList.some(name => name.toLowerCase() === currentName.toLowerCase())) {
         socket.emit("joinLobby", currentName);
       } else {
@@ -51,7 +54,6 @@
       }
     });
 
-    // Event, das den generierten Lobby-Code anzeigt und zur Lobby-Seite weiterleitet
     socket.on("lobbyCreated", (userID, name) => {
       window.location.href = `/taskView.html?name=${encodeURIComponent(name)}&userID=${encodeURIComponent(userID)}`;
     });
