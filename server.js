@@ -1,13 +1,56 @@
 const express = require("express");
 const http = require("http");
 const socketIO = require("socket.io");
+const session = require("express-session");
+
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-app.use(express.static("public"));
+// Alle statischen Dateien außer master.html öffentlich machen
+app.use(express.static("public", {
+  setHeaders: (res, path) => {
+    if (path.endsWith("master.html")) {
+      res.status(403).send("Zugriff verweigert.");
+    }
+  }
+}));
 app.use("/tasks", express.static("tasks"));
+
+
+
+// Session-Middleware hinzufügen
+app.use(session({
+  secret: "meinGeheimesPasswort",  // Ändere dies zu einem sicheren Schlüssel
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Route für den Login
+app.post("/login", express.urlencoded({ extended: true }), (req, res) => {
+  const { password } = req.body;
+  if (password === "1006") {  // Setze dein Passwort hier
+    req.session.isAuthenticated = true;
+    res.redirect("/master.html");
+  } else {
+    res.send("Falsches Passwort!");
+  }
+});
+
+// Schutz der Master-Seite
+const path = require("path");
+
+// Schutz für die Master-Seite
+app.get("/master.html", (req, res) => {
+  if (req.session.isAuthenticated) {
+    res.sendFile(path.join(__dirname, "master.html"));
+  } else {
+    res.status(403).send("Zugriff verweigert. Bitte zuerst einloggen.");
+  }
+});
+
+
 
 
 const UserManager = require("./users/userManager");

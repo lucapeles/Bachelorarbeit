@@ -11,8 +11,11 @@
   <h1>Willkommen, erstellen sie hier ein neues Spiel:</h1>
 
   <!-- Schaltfläche zum Erstellen eines Spiels -->
-  <input type="password" id="userInput" placeholder="Masterpasswort eingeben">
-  <button onclick="createNewLobby()">Bestätigen</button>
+  <form action="/login" method="POST">
+    <input type="password" name="password" placeholder="Masterpasswort eingeben" required>
+    <button type="submit">Bestätigen</button>
+  </form>
+
 
   <!-- Eingabefeld zum Beitreten eines Spiels -->
   <h2>Oder treten Sie bei:</h2>
@@ -22,16 +25,6 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-
-    // Lobby erstellen
-    function createNewLobby() {
-      const password = document.getElementById("userInput").value;  // Benutzernamen vom Eingabefeld holen
-      if (password === "1") {
-        window.location.href = `/master.html`;  // Weiterleitung zur Master-Seite
-      } else {
-        alert("Bitte geben Sie das Passwort ein.");
-      }
-    }
 
     // Lobby beitreten
     function joinExistingLobby() {
