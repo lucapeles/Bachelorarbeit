@@ -41,7 +41,12 @@
       const quizTitle = document.getElementById("quizTitle");
       users.forEach(user => {
         if (user.userID == userID) {
-          quizTitle.textContent = `Informatik-Quiz (Name: ${user.name})`;
+          points = user.points;
+          if (user.name === startName) {
+            quizTitle.textContent = `Informatik-Quiz (Name: ${user.name})`;
+          } else {
+            window.location.href = `/taskView.html?name=${encodeURIComponent(user.name)}&userID=${encodeURIComponent(userID)}`;
+          }
         }
       });
     });
@@ -178,10 +183,11 @@
 
     // Benutzer beim Verlassen der Seite abmelden
     window.addEventListener("beforeunload", () => {
-      socket.emit("disconnectUser", userID);
+      socket.emit("disconnectUser", [userID, points]);
     });
 
     window.onload = () => {
+      socket.emit("userConnect", [userID, startName]); // data = { userID, name, points }
       socket.emit("requestUserList");
     };
   </script>

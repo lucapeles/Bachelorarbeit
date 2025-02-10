@@ -4,6 +4,7 @@ class UserManager {
   constructor() {
     this.users = [];
     this.nextUserID = 28472384593108; // Start-ID
+    this.variablePoints = 0;
   }
 
   // Einen neuen Benutzer hinzufügen & dessen ID zurückgeben
@@ -12,6 +13,14 @@ class UserManager {
     this.users.push(user);
     this.nextUserID += 2354341238; // Nächste ID vorbereiten
     return user.userID; // Benutzer-ID zurückgeben
+  }
+
+  //user war bereits registriert
+  addUserDouble(name, userID) {
+    console.log(this.variablePoints);
+    const user = new User(name, userID);
+    user.setPoints(this.variablePoints);
+    this.users.push(user);
   }
 
   // Benutzer anhand der ID suchen
@@ -56,12 +65,23 @@ class UserManager {
     return this.users.length;
   }
 
+  setVariablePoints(number) {
+    this.variablePoints = number;
+  }
+
   changeName(userID, newName) {
     const user = this.getUserByID(userID);
     if (user) {
       user.setName = newName;
     }
   }
+
+  lookUpUser(userID) {
+    const user = this.getUserByID(userID);
+    console.log("lookup: " + userID);
+    return user ? true : false; // Gibt true zurück, wenn der Benutzer existiert, sonst false
+  }
+
 }
 
 module.exports = UserManager;

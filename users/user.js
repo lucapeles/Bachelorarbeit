@@ -24,6 +24,10 @@ class User {
   get getPoints() {
     return this.points;
   }
+
+  setPoints(points) {
+    this.points = points;
+  }
 }
 
 module.exports = User;

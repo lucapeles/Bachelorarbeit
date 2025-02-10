@@ -76,9 +76,20 @@ io.on("connection", (socket) => {
   });
 
   // Benutzer beim Trennen der Verbindung entfernen
-  socket.on("disconnectUser", (userID) => {
+  socket.on("disconnectUser", (data) => {
+    let userID = data[0];
+    let points = data[1];
+    userManager.setVariablePoints(points);
     if (userID) {
       userManager.removeUserByID(userID);
+      updateUserList();
+    }
+  });
+
+  //Nutzer hinzufügen wegen load
+  socket.on("userConnect", (data) => {// data = { userID, name }
+    if (!userManager.lookUpUser(data[0])) { //User existiert nicht
+      userManager.addUserDouble(data[1], data[0]);
       updateUserList();
     }
   });
