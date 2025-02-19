@@ -69,10 +69,7 @@ class TaskManager {
     } else if (task.type === "text") {
       return answer.trim().toLowerCase() === task.correctAnswer?.trim().toLowerCase(); // Vergleich für Text
     } else if (task.type === "coding") {
-
-      //TODO
-
-      return false; // Noch nicht implementiert
+      return answer; //Code wird bereits auf Client getestet
     } else if (task.type === "output") { //output angeben
       return answer === task.correctAnswer;
     }

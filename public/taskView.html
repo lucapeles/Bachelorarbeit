@@ -4,27 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz</title>
-  <link rel="stylesheet" href="/css/taskViewStyles.css"> <!-- CSS einbinden -->
+  <link rel="stylesheet" href="/css/taskViewStyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
 </head>
 
 <body>
-
-  <!-- Fester Header für die Quiz-Überschrift -->
+  <!-- Fixierter Header -->
   <div id="headerContainer">
     <h1 id="quizTitle">INFORMATIK-QUIZ</h1>
     <p id="personalRankMessage"></p>
   </div>
 
-  <!-- Platzhalter für die persönliche Platzierung bei Quizende-->
-  <div id="personalRanking" class="personal-ranking"></div>
-
-  <!-- Quiz-Container -->
-  <div id="quizContainer">
-    <div id="answerOptions"></div>
-    <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
+  <!-- Hauptinhalt, der zwischen Header und Button liegt -->
+  <div id="mainContent">
+    <!-- Persönliches Ranking -->
+    <div id="personalRanking" class="personal-ranking"></div>
+    <!-- Code-Eingabe Container -->
+    <div id="editorContainer">
+      <textarea id="codeEditor"></textarea>
+    </div>
+    <!-- Quiz-Container -->
+    <div id="quizContainer">
+      <div id="answerOptions"></div>
+    </div>
   </div>
+  <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
 
-
+  <!-- CodeMirror JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
+  <!-- Javapoly.js 
+  <script src="https://www.javapoly.com/javapoly.js"></script>
+  -->
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
@@ -35,6 +47,19 @@
     const startName = urlParams.get('name'); //Startname
     let startTime; // Startzeitpunkt des Timers
     let elapsedTime; // Verstrichene Zeit in Sekunden
+
+    document.addEventListener("DOMContentLoaded", function () {
+      let textarea = document.getElementById("codeEditor");
+      if (textarea) {
+        window.editor = CodeMirror.fromTextArea(textarea, {
+          mode: "text/x-java",
+          theme: "dracula",
+          lineNumbers: true,
+          indentUnit: 4,
+          smartIndent: true
+        });
+      }
+    });
 
     //Anzeigen des Namens
     socket.on("updateUserList", (users) => {
@@ -58,6 +83,8 @@
       document.getElementById("quizContainer").style.display = "block"; // Container wieder sichtbar machen
       document.getElementById("submitButton").style.display = "block"; //submitButton wieder sichtbar machen
       document.getElementById("personalRankMessage").style.display = "none";
+      document.getElementById("editorContainer").style.display = "none"; // CodeMirror ausblenden
+
 
       const optionsContainer = document.getElementById("answerOptions");
       optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
@@ -74,11 +101,11 @@
           optionsContainer.appendChild(button);
         });
       } else if (task.type === "coding") {
-        const editorContainer = document.createElement("textarea");
-        editorContainer.id = "codeEditor";
-        editorContainer.classList.add("largeTextArea"); // CSS-Klasse zuweisen
-        editorContainer.value = task.template || "";   // Template-Inhalt einsetzen
-        optionsContainer.appendChild(editorContainer);
+        document.getElementById("quizContainer").style.display = "none"; // Container wieder sichtbar machen
+        document.getElementById("editorContainer").style.display = "block"; // CodeMirror anzeigen
+        editor.setValue(task.template || ""); // Template in CodeMirror laden
+        setTimeout(() => editor.refresh(), 100); // Stelle sicher, dass CodeMirror richtig lädt
+        window.currentTask = task; // Speichere die aktuelle Aufgabe
       } else if (task.type === "text" || task.type === "output") {
         const textArea = document.createElement("textarea");
         textArea.id = "textAnswer";
@@ -106,14 +133,21 @@
     function submitAnswer() {
       document.getElementById("submitButton").style.display = "none"; //submitButton ausblenden
       document.getElementById("quizContainer").style.display = "none"; // Antwortmöglichkeiten ausblenden
+      document.getElementById("editorContainer").style.display = "none";
       // Falls es sich um eine Text- oder Output-Aufgabe handelt:
       const textAnswer = document.getElementById("textAnswer");
+      elapsedTime = Math.floor((Date.now() - startTime) / 1000);
       if (textAnswer) {
         selectedAnswer = textAnswer.value.trim(); // Eingabe aus Textfeld holen und speichern
+      } else if (document.getElementById("editorContainer").style.display === "block") {
+        const userCode = editor.getValue(); // Code aus CodeMirror holen
+        const task = window.currentTask;
+        executeJavaCode(userCode, task.testCases, (success) => {
+          socket.emit("submitTask", [userID, success, elapsedTime]); // Nur `true` oder `false` senden
+        });
+        return;
       }
-      elapsedTime = Math.floor((Date.now() - startTime) / 1000);
       socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
-
     }
 
     socket.on("showPersonalRank", (data) => { // data = { userID, rank }
@@ -174,6 +208,7 @@
     function resetPage() {
       document.getElementById("quizContainer").style.display = "none";
       document.getElementById("submitButton").style.display = "none";
+      document.getElementById("editorContainer").style.display = "none";
       // Zustand zurücksetzen
       selectedAnswer = "nurAlsSchranke"; // Antwort zurücksetzen
       previousSelectedButton = null; // Button-Auswahl zurücksetzen

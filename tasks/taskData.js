@@ -156,6 +156,17 @@ const taskPool = [
       "Weder Compiler noch Interpreter überprüfen Syntaxfehler."
     ],
     correctAnswer: "Ein Compiler übersetzt das gesamte Programm vor der Ausführung in Maschinencode."
+  },
+  {
+    id: 10,
+    type: "coding",
+    description: "Schreibe eine Methode `solve`, die zwei Zahlen addiert.",
+    template: "public static int solve(int a, int b) {\n    return 0;\n}",
+    testCases: [
+      { input: "2,3", expectedOutput: "5" },
+      { input: "-1,4", expectedOutput: "3" },
+      { input: "10,15", expectedOutput: "25" }
+    ]
   }
 ];
 
