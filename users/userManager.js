@@ -78,7 +78,6 @@ class UserManager {
 
   lookUpUser(userID) {
     const user = this.getUserByID(userID);
-    console.log("lookup: " + userID);
     return user ? true : false; // Gibt true zurück, wenn der Benutzer existiert, sonst false
   }
 

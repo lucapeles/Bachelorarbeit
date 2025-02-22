@@ -34,9 +34,7 @@
   <!-- CodeMirror JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
-  <!-- Javapoly.js 
   <script src="https://www.javapoly.com/javapoly.js"></script>
-  -->
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
@@ -47,6 +45,8 @@
     const startName = urlParams.get('name'); //Startname
     let startTime; // Startzeitpunkt des Timers
     let elapsedTime; // Verstrichene Zeit in Sekunden
+    let isCodingTask = false;
+
 
     document.addEventListener("DOMContentLoaded", function () {
       let textarea = document.getElementById("codeEditor");
@@ -101,6 +101,7 @@
           optionsContainer.appendChild(button);
         });
       } else if (task.type === "coding") {
+        isCodingTask = true;
         document.getElementById("quizContainer").style.display = "none"; // Container wieder sichtbar machen
         document.getElementById("editorContainer").style.display = "block"; // CodeMirror anzeigen
         editor.setValue(task.template || ""); // Template in CodeMirror laden
@@ -130,7 +131,7 @@
       previousSelectedButton = button; // Speichere die aktuelle Auswahl
     }
 
-    function submitAnswer() {
+    async function submitAnswer() {
       document.getElementById("submitButton").style.display = "none"; //submitButton ausblenden
       document.getElementById("quizContainer").style.display = "none"; // Antwortmöglichkeiten ausblenden
       document.getElementById("editorContainer").style.display = "none";
@@ -139,15 +140,46 @@
       elapsedTime = Math.floor((Date.now() - startTime) / 1000);
       if (textAnswer) {
         selectedAnswer = textAnswer.value.trim(); // Eingabe aus Textfeld holen und speichern
-      } else if (document.getElementById("editorContainer").style.display === "block") {
+      } else if (isCodingTask) {
+        isCodingTask = false;
         const userCode = editor.getValue(); // Code aus CodeMirror holen
         const task = window.currentTask;
-        executeJavaCode(userCode, task.testCases, (success) => {
-          socket.emit("submitTask", [userID, success, elapsedTime]); // Nur `true` oder `false` senden
-        });
+        const success = await executeJavaCode(userCode, task.testCases);
+        socket.emit("test", success);
+        socket.emit("submitTask", [userID, success, elapsedTime]); // Nur `true` oder `false` senden
         return;
       }
       socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
+    }
+
+    async function executeJavaCode(userCode, testCases) {
+      try {
+        // Java-Code in eine vollständige Klasse einbetten
+        let javaCode = `
+          public class Main {
+          	public static void main(String[] args){
+              ${userCode}
+            }     
+          }
+        `;
+        socket.emit("test", javaCode);
+        // Java-Klasse ausführen und registrieren
+        await JavaPoly.eval(javaCode);
+        socket.emit("test", javaCode);
+        for (let testCase of testCases) {
+          let args = testCase.input.split(",").map(Number);
+          let expectedOutput = testCase.expectedOutput.trim();
+          // `solve(a, b)` in der `Main`-Klasse aufrufen
+          let result = await JavaPoly.type("Main").solve(...args);
+          socket.emit("test", result);
+          if (result.toString().trim() !== expectedOutput) {
+            return false; // Falls ein Test fehlschlägt
+          }
+        }
+        return true; // Alle Tests bestanden
+      } catch (error) {
+        return false;
+      }
     }
 
     socket.on("showPersonalRank", (data) => { // data = { userID, rank }
