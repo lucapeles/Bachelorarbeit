@@ -16,17 +16,21 @@
   "author": "Luca Peles",
   "license": "ISC",
   "dependencies": {
+    "@wasmer/wasi": "^1.2.2",
+    "codemirror": "^5.65.5",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.21.2",
+    "express-session": "^1.17.3",
     "morgan": "^1.10.0",
     "serve-static": "^1.15.0",
-    "socket.io": "^4.8.1",
-    "express-session": "^1.17.3",
-    "codemirror": "^5.65.5"
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "java-parser": "^2.3.3",
+    "nodemon": "^3.0.2",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
   },
   "engines": {
     "node": ">=18 <21"

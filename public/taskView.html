@@ -4,260 +4,39 @@
 <head>
   <meta charset="UTF-8">
   <title>Quiz</title>
+  <!-- CSS -->
   <link rel="stylesheet" href="/css/taskViewStyles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+
+  <!-- CodeMirror -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
 </head>
 
 <body>
-  <!-- Fixierter Header -->
+  <!-- Dein HTML-Inhalt -->
   <div id="headerContainer">
     <h1 id="quizTitle">INFORMATIK-QUIZ</h1>
     <p id="personalRankMessage"></p>
   </div>
-
-  <!-- Hauptinhalt, der zwischen Header und Button liegt -->
   <div id="mainContent">
-    <!-- Persönliches Ranking -->
     <div id="personalRanking" class="personal-ranking"></div>
-    <!-- Code-Eingabe Container -->
     <div id="editorContainer">
       <textarea id="codeEditor"></textarea>
     </div>
-    <!-- Quiz-Container -->
     <div id="quizContainer">
       <div id="answerOptions"></div>
     </div>
   </div>
-  <button id="submitButton" onclick="submitAnswer()">Antwort abschicken</button>
+  <!-- Button OHNE onclick -->
+  <button id="submitButton">Antwort abschicken</button>
 
-  <!-- CodeMirror JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
-  <script src="https://www.javapoly.com/javapoly.js"></script>
+  <!-- Socket.io vom Server (z. B. localhost:3000/socket.io/socket.io.js) -->
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
 
-    // URL-Parameter auslesen
-    const urlParams = new URLSearchParams(window.location.search);
-    const userID = urlParams.get('userID'); // ID des Benutzers aus der URL holen
-    const startName = urlParams.get('name'); //Startname
-    let startTime; // Startzeitpunkt des Timers
-    let elapsedTime; // Verstrichene Zeit in Sekunden
-    let isCodingTask = false;
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-      let textarea = document.getElementById("codeEditor");
-      if (textarea) {
-        window.editor = CodeMirror.fromTextArea(textarea, {
-          mode: "text/x-java",
-          theme: "dracula",
-          lineNumbers: true,
-          indentUnit: 4,
-          smartIndent: true
-        });
-      }
-    });
-
-    //Anzeigen des Namens
-    socket.on("updateUserList", (users) => {
-      const quizTitle = document.getElementById("quizTitle");
-      users.forEach(user => {
-        if (user.userID == userID) {
-          points = user.points;
-          if (user.name === startName) {
-            quizTitle.textContent = `Informatik-Quiz (Name: ${user.name})`;
-          } else {
-            window.location.href = `/taskView.html?name=${encodeURIComponent(user.name)}&userID=${encodeURIComponent(userID)}`;
-          }
-        }
-      });
-    });
-
-
-    // Neue Frage anzeigen
-    socket.on("newTask", (task) => {
-      document.body.style.backgroundColor = "white";
-      document.getElementById("quizContainer").style.display = "block"; // Container wieder sichtbar machen
-      document.getElementById("submitButton").style.display = "block"; //submitButton wieder sichtbar machen
-      document.getElementById("personalRankMessage").style.display = "none";
-      document.getElementById("editorContainer").style.display = "none"; // CodeMirror ausblenden
-
-
-      const optionsContainer = document.getElementById("answerOptions");
-      optionsContainer.innerHTML = ""; // Vorherige Antworten löschen
-
-      startTime = Date.now(); // Zeitstempel beim Start der Aufgabe
-      elapsedTime = 0; // Timer zurücksetzen
-
-      if (task.type === "multipleChoice") {
-        task.options.forEach((option) => {
-          const button = document.createElement("button");
-          button.textContent = option;
-          button.className = "optionButton";
-          button.onclick = () => selectAnswer(button, option);
-          optionsContainer.appendChild(button);
-        });
-      } else if (task.type === "coding") {
-        isCodingTask = true;
-        document.getElementById("quizContainer").style.display = "none"; // Container wieder sichtbar machen
-        document.getElementById("editorContainer").style.display = "block"; // CodeMirror anzeigen
-        editor.setValue(task.template || ""); // Template in CodeMirror laden
-        setTimeout(() => editor.refresh(), 100); // Stelle sicher, dass CodeMirror richtig lädt
-        window.currentTask = task; // Speichere die aktuelle Aufgabe
-      } else if (task.type === "text" || task.type === "output") {
-        const textArea = document.createElement("textarea");
-        textArea.id = "textAnswer";
-        textArea.classList.add("largeTextArea"); // CSS-Klasse zuweisen
-        optionsContainer.appendChild(textArea);
-      }
-    });
-
-    let selectedAnswer = "nurAlsPlatzhalter";
-    let previousSelectedButton = null;
-
-    function selectAnswer(button, answer) {
-      selectedAnswer = answer;
-
-      // Entferne die Markierung von der vorherigen Auswahl
-      if (previousSelectedButton) {
-        previousSelectedButton.classList.remove("selected");
-      }
-
-      // Markiere die aktuelle Auswahl
-      button.classList.add("selected");
-      previousSelectedButton = button; // Speichere die aktuelle Auswahl
-    }
-
-    async function submitAnswer() {
-      document.getElementById("submitButton").style.display = "none"; //submitButton ausblenden
-      document.getElementById("quizContainer").style.display = "none"; // Antwortmöglichkeiten ausblenden
-      document.getElementById("editorContainer").style.display = "none";
-      // Falls es sich um eine Text- oder Output-Aufgabe handelt:
-      const textAnswer = document.getElementById("textAnswer");
-      elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-      if (textAnswer) {
-        selectedAnswer = textAnswer.value.trim(); // Eingabe aus Textfeld holen und speichern
-      } else if (isCodingTask) {
-        isCodingTask = false;
-        const userCode = editor.getValue(); // Code aus CodeMirror holen
-        const task = window.currentTask;
-        const success = await executeJavaCode(userCode, task.testCases);
-        socket.emit("test", success);
-        socket.emit("submitTask", [userID, success, elapsedTime]); // Nur `true` oder `false` senden
-        return;
-      }
-      socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
-    }
-
-    async function executeJavaCode(userCode, testCases) {
-      try {
-        // Java-Code in eine vollständige Klasse einbetten
-        let javaCode = `
-          public class Main {
-          	public static void main(String[] args){
-              ${userCode}
-            }     
-          }
-        `;
-        socket.emit("test", javaCode);
-        // Java-Klasse ausführen und registrieren
-        await JavaPoly.eval(javaCode);
-        socket.emit("test", javaCode);
-        for (let testCase of testCases) {
-          let args = testCase.input.split(",").map(Number);
-          let expectedOutput = testCase.expectedOutput.trim();
-          // `solve(a, b)` in der `Main`-Klasse aufrufen
-          let result = await JavaPoly.type("Main").solve(...args);
-          socket.emit("test", result);
-          if (result.toString().trim() !== expectedOutput) {
-            return false; // Falls ein Test fehlschlägt
-          }
-        }
-        return true; // Alle Tests bestanden
-      } catch (error) {
-        return false;
-      }
-    }
-
-    socket.on("showPersonalRank", (data) => { // data = { userID, rank }
-      if (data[0] === userID) {
-        let rank = data[1];
-        const rankMessage = document.getElementById("personalRankMessage");
-        let rankText = "";
-
-        // Entferne vorherige Klassen (falls bereits gesetzt)
-        rankMessage.classList.remove("rank-1", "rank-2", "rank-3");
-
-        if (rank === 1) {
-          rankText = "🥇 Du warst der/die SCHNELLSTE mit korrekter Antwort!";
-          rankMessage.classList.add("rank-1");
-        } else if (rank === 2) {
-          rankText = "🥈 Du warst der/die ZWEITSCHNELLSTE mit korrekter Antwort!";
-          rankMessage.classList.add("rank-2");
-        } else if (rank === 3) {
-          rankText = "🥉 Du warst der/die DRITTSCHNELLSTE mit korrekter Antwort!";
-          rankMessage.classList.add("rank-3");
-        }
-
-        rankMessage.textContent = rankText;
-        rankMessage.style.display = "block"; // Sichtbar machen
-      }
-    });
-
-
-
-    socket.on("showTrueOrFalse", (userIDs) => {
-      if (userIDs.includes(userID)) {
-        document.body.style.backgroundColor = "lightgreen";
-      } else {
-        document.body.style.backgroundColor = "lightcoral";
-      }
-      resetPage();
-    });
-
-    socket.on("reset", () => {
-      document.body.style.backgroundColor = "white";
-      document.getElementById("personalRankMessage").style.display = "none";
-      document.getElementById("personalRanking").style.display = "none";
-      resetPage();
-    });
-
-    //Anzeige des persönlichen Rankings
-    socket.on("quizCompleted", (ranking) => {
-      const myRank = ranking.find(player => player.userID == userID);
-      if (myRank) {
-        setTimeout(() => {
-          let rankMessage = document.getElementById("personalRanking");
-          rankMessage.textContent = `Du hast Platz ${myRank.rank} erreicht! 🎉`;
-          rankMessage.style.display = "block";
-        }, 7000); // Zeigt das eigene Ranking nach der Siegerehrung
-      }
-    });
-
-    function resetPage() {
-      document.getElementById("quizContainer").style.display = "none";
-      document.getElementById("submitButton").style.display = "none";
-      document.getElementById("editorContainer").style.display = "none";
-      // Zustand zurücksetzen
-      selectedAnswer = "nurAlsSchranke"; // Antwort zurücksetzen
-      previousSelectedButton = null; // Button-Auswahl zurücksetzen
-      startTime = null; // Timer zurücksetzen
-      elapsedTime = 0; // Verstrichene Zeit zurücksetzen
-    }
-
-    // Benutzer beim Verlassen der Seite abmelden
-    window.addEventListener("beforeunload", () => {
-      socket.emit("disconnectUser", [userID, points]);
-    });
-
-    window.onload = () => {
-      socket.emit("userConnect", [userID, startName]); // data = { userID, name, points }
-      socket.emit("requestUserList");
-    };
-  </script>
+  <!-- Hier das fertige Webpack-Bundle einbinden -->
+  <script src="/dist/bundle.taskView.js"></script>
 </body>
 
 </html>
