@@ -161,18 +161,7 @@ const taskPool = [
     id: 17,
     type: "coding",
     description: "Schreibe eine Methode `solve`, die zwei Zahlen addiert.",
-    template: "public static int solve(int a, int b) {\n    return 0;\n}",
-    testCases: [
-      { input: "2,3", expectedOutput: "5" },
-      { input: "-1,4", expectedOutput: "3" },
-      { input: "10,15", expectedOutput: "25" }
-    ]
-  },
-  {
-    id: 18,
-    type: "coding",
-    description: "Schreibe eine Methode `solve`, die zwei Zahlen addiert.",
-    template: "System.out.println(\"Hello\");",
+    template: "//Schreibe hier deinen Code und bestätige mit dem Button\npublic static void solve(int a, int b){\n    return a+b;\n}",
     testCases: [
       { input: "2,3", expectedOutput: "5" },
       { input: "-1,4", expectedOutput: "3" },

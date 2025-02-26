@@ -11,6 +11,7 @@ let elapsedTime; // Verstrichene Zeit in Sekunden
 let isCodingTask = false;
 let points = 0;
 const { parse } = require("java-parser");
+const SolveMethodChecker = require("./visitors/solveMethodChecker.js");
 
 document.addEventListener("DOMContentLoaded", function () {
     let textarea = document.getElementById("codeEditor");
@@ -118,7 +119,7 @@ function submitAnswer() {
         isCodingTask = false;
         const userCode = editor.getValue(); // Code aus CodeMirror holen
         const task = window.currentTask;
-        const success = executeJavaCode(userCode, task.testCases);
+        const success = proofJavaCode(userCode);
         socket.emit("test", success);
         socket.emit("submitTask", [userID, success, elapsedTime]); // Nur `true` oder `false` senden
         return;
@@ -126,35 +127,51 @@ function submitAnswer() {
     socket.emit("submitTask", [userID, selectedAnswer, elapsedTime]);
 }
 
-function executeJavaCode(userCode, testCases) {
-    socket.emit("test", "geht in executeJava");
+function proofJavaCode(userCode) {
+    socket.emit("test", "Starte erweiterte Prüfung...");
+
     try {
-        // Fester Beispiel-Java-Code (Usercode wird hier vorerst ignoriert)
-        const sampleCode = `
-        public class HelloWorld {
-          public static void main(String[] args) {
-            System.out.println("Hello, World!");
-          }
+        // 1) Java-Code parsen
+        const cst = parse(userCode);
+
+        // 2) Visitor mit Socket erstellen
+        const SolveMethodChecker = require("./visitors/solveMethodChecker.js");
+        const checker = new SolveMethodChecker(socket);
+        checker.visit(cst);
+        socket.emit("test", "Prüfung des CST abgeschlossen.");
+
+        // 3) Einzelprüfungen:
+        if (!checker.foundSolveMethod) {
+            socket.emit("test", "Prüfung: Methode 'solve' wurde nicht gefunden.");
+            return false;
+        } else {
+            socket.emit("test", "Prüfung: Methode 'solve' existiert.");
         }
-      `;
 
-        // Parst den Beispiel-Code mit dem java-parser
-        socket.emit("test", sampleCode);
-        const cst = parse(sampleCode);
-        // Nur ein paar Infos aus dem CST:
-        const cstInfo = {
-            name: cst.name,
-            childrenKeys: Object.keys(cst.children || {})
-        };
-        socket.emit("test", cstInfo);
+        if (!checker.isPublicStaticVoid) {
+            socket.emit("test", "Prüfung: Die 'solve'-Methode hat ungültige Modifier oder einen ungültigen Rückgabetyp.");
+            return false;
+        } else {
+            socket.emit("test", "Prüfung: Modifier und Rückgabetyp der 'solve'-Methode sind korrekt.");
+        }
 
+        if (!checker.usesAddition) {
+            socket.emit("test", "Prüfung: In 'solve' wird keine Addition (+) verwendet.");
+            return false;
+        } else {
+            socket.emit("test", "Prüfung: In 'solve' wird Addition verwendet.");
+        }
+
+        socket.emit("test", "Alle Prüfungen erfolgreich: Aufgabe erfüllt!");
         return true;
     } catch (error) {
-        // Bei Fehlern wird die Fehlermeldung per socket.emit gesendet
-        socket.emit("test", "error: " + error);
+        socket.emit("test", "Fehler beim Parsen: " + error);
         return false;
     }
 }
+
+
+
 
 
 socket.on("showPersonalRank", (data) => { // data = { userID, rank }
