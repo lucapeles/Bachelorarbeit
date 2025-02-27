@@ -140,3 +140,40 @@ body {
     width: 100%;
     text-align: center;
 }
+
+/* Stil für den Beispielcode */
+#codeDisplay {
+    display: block;
+    background-color: #686868;
+    /* Heller grauer Hintergrund */
+    border: 1px solid #d1d1d1;
+    /* Dezente Umrandung */
+    padding: 15px;
+    margin-top: 25px;
+    /* Mehr Abstand nach oben zur Aufgabe */
+    margin-left: 0;
+    /* Links ausrichten */
+    font-family: "Courier New", monospace;
+    font-size: 16px;
+    white-space: pre-wrap;
+    /* Zeilenumbrüche beibehalten */
+    overflow-x: auto;
+    /* Falls nötig, horizontales Scrollen */
+    border-radius: 5px;
+    /* Abgerundete Ecken */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    /* Leichter Schatten für moderne Optik */
+    width: fit-content;
+    /* Breite auf den Inhalt anpassen */
+    max-width: 70%;
+    /* Maximal 70% der Breite nutzen */
+    text-align: left;
+    /* Text links ausrichten */
+}
+
+/* Falls du noch eine leichte Anpassung für den Text innerhalb des Codes möchtest */
+#codeDisplay code {
+    color: #333;
+    /* Dunklere Schrift */
+    font-weight: bold;
+}

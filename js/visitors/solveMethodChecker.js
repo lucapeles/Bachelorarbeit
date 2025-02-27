@@ -12,6 +12,25 @@ function getCircularReplacer() {
     };
 }
 
+function searchForInt(node) {
+    if (!node || typeof node !== "object") return false;
+    if (node.image && typeof node.image === "string" && node.image.toLowerCase() === "int") {
+        return true;
+    }
+    // Statt for...in iterieren wir über alle Werte
+    for (const val of Object.values(node)) {
+        if (Array.isArray(val)) {
+            for (const item of val) {
+                if (searchForInt(item)) return true;
+            }
+        } else if (typeof val === "object") {
+            if (searchForInt(val)) return true;
+        }
+    }
+    return false;
+}
+
+
 class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDefaults {
     constructor(socket) {
         super();
@@ -24,7 +43,7 @@ class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDe
 
     methodDeclaration(ctx) {
         // Ausgabe über console.log – du kannst alternativ auch this.socket.emit("test", ...) verwenden, wenn du es per Socket senden möchtest.
-        console.log("Entering methodDeclaration with ctx: " + JSON.stringify(ctx, getCircularReplacer(), 2));
+        console.log("Entering methodDeclaration with ctx");
 
         // Versuche, den Methodenheader zu finden
         if (ctx.methodHeader && ctx.methodHeader[0].children) {
@@ -89,15 +108,26 @@ class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDe
                 } else {
                     console.log("Primitive type is not int: " + JSON.stringify(primType, getCircularReplacer()));
                 }
+            } else if (resultChildren.unannType) {
+                console.log("Return type is wrapped in unannType, checking inner type recursively...");
+                const unannTypeNode = resultChildren.unannType[0];
+
+                if (searchForInt(unannTypeNode)) {
+                    console.log("Return type is int (found via recursive search in unannType)");
+                    returnValid = true;
+                } else {
+                    console.log("No 'int' token found in unannType (recursive search)");
+                }
             } else {
                 console.log("Unknown return type structure");
             }
             if (returnValid) {
-                this.isPublicStaticVoid = true; // Wir benennen die Variable hier "isPublicStaticVoid" – sie gilt jetzt als "valid" für void oder int
+                this.isPublicStaticVoid = true;
             }
         } else {
             console.log("No result found in methodHeader for return type");
         }
+
 
         // Body besuchen
         if (ctx.methodBody) {
@@ -116,20 +146,40 @@ class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDe
         }
     }
 
-    additiveExpression(ctx) {
-        // Debug: Ausgabe des gesamten Kontexts der additiveExpression
-        console.log("Entering additiveExpression: " + JSON.stringify(ctx, getCircularReplacer(), 2));
+    binaryExpression(ctx) {
+        // Logge den gesamten Knoten, um zu sehen, welche Felder vorhanden sind
+        console.log("Entering binaryExpression: " + JSON.stringify(ctx, getCircularReplacer(), 2));
 
-        // Prüfe, ob ein Plus-Operator vorhanden ist
-        if ((ctx.Add && ctx.Add.length > 0) || (ctx.Plus && ctx.Plus.length > 0)) {
-            this.usesAddition = true;
-            console.log("Addition operator detected.");
-        } else {
-            console.log("No addition operator found in this additiveExpression.");
+        // Prüfe, ob es ein Feld "BinaryOperator" gibt und iteriere über alle Operatoren
+        if (ctx.BinaryOperator && ctx.BinaryOperator.length > 0) {
+            for (const op of ctx.BinaryOperator) {
+                if (op.image === "+") {
+                    this.usesAddition = true;
+                    console.log("Addition operator detected in binaryExpression.");
+                    break;
+                }
+            }
         }
-        this.visitChildren(ctx);
+
+        // Weiter mit den Kindern
+        //this.visitChildren(ctx);
     }
 
+
+    /*visitChildren(ctx) {
+        for (const key in ctx) {
+            if (Object.prototype.hasOwnProperty.call(ctx, key)) {
+                const children = ctx[key];
+                if (Array.isArray(children)) {
+                    children.forEach(child => {
+                        if (typeof child === "object") {
+                            this.visit(child);
+                        }
+                    });
+                }
+            }
+        }
+    }*/
 }
 
 module.exports = SolveMethodChecker;

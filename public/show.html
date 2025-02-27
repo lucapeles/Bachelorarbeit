@@ -47,7 +47,7 @@
             timerReset();
 
             // Prüfen, ob es Code gibt
-            if (task.type === "output" || task.type === "coding") {
+            if (task.type === "output") {
                 // Code anzeigen und zentrierte Klasse entfernen
                 codeDisplay.style.display = "block";
                 codeDisplay.textContent = task.template;
