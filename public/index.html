@@ -10,20 +10,20 @@
 
 <body>
   <div class="container">
-    <h1>Willkommen! Masterzugang:</h1>
+    <h1>Willkommen! Als Spieler beitreten:</h1>
+
+    <!-- Beitritt zu einem Spiel -->
+    <input type="text" id="userInputExisting" placeholder="Benutzername eingeben">
+    <button onclick="joinExistingLobby()">Beitreten</button>
 
     <!-- Master Login -->
+    <h2>Masterzugang:</h2>
     <form action="/login" method="POST">
       <input type="password" name="password" placeholder="Masterpasswort eingeben" required>
       <button type="submit">Bestätigen</button>
     </form>
 
     <hr>
-
-    <!-- Beitritt zu einem Spiel -->
-    <h2>Als Spieler beitreten:</h2>
-    <input type="text" id="userInputExisting" placeholder="Benutzername eingeben">
-    <button onclick="joinExistingLobby()">Beitreten</button>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -50,7 +50,7 @@
       if (!nameList.some(name => name.toLowerCase() === currentName.toLowerCase())) {
         socket.emit("joinLobby", currentName);
       } else {
-        alert("Der Name existiert bereits!");
+        alert("Der Name wird bereits verwendet!");
       }
     });
 
