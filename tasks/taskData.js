@@ -7,17 +7,10 @@ const taskPool = [
     correctAnswer: "Berlin"
   },
   {
-    id: 2,
-    type: "coding",
-    description: "Schreibe eine Funktion, die zwei Zahlen addiert.",
-    template: "function add(a, b) {\n  // Dein Code hier\n}",
-    correctAnswer: "TODO"
-  },
-  {
     id: 3,
     type: "text",
-    description: "Erkläre in eigenen Worten, was ein Array ist.",
-    correctAnswer: "TODO" //muss Liste sein, welche Eingaben akzeptiere ich? Unterschiedliche Punkte?
+    description: "Nenne eine Datenstruktur in der mehrere Werte gespeichert werden können\nDie Antwort muss aus EINEM Wort bestehen",
+    correctAnswer: ["array", "liste", "list", "tupel", "set", "menge", "queue", "tree", "graph"] //muss Liste sein, welche Eingaben akzeptiere ich? Unterschiedliche Punkte?
   },
   {
     id: 4,
@@ -166,7 +159,8 @@ const taskPool = [
       { input: "2,3", expectedOutput: "5" },
       { input: "-1,4", expectedOutput: "3" },
       { input: "10,15", expectedOutput: "25" }
-    ]
+    ],
+    correctAnswer: "-"
   }
 ];
 

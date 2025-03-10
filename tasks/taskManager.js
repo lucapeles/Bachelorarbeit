@@ -67,7 +67,9 @@ class TaskManager {
     if (task.type === "multipleChoice") {
       return task.correctAnswer === answer; // Vergleich für Multiple-Choice
     } else if (task.type === "text") {
-      return answer.trim().toLowerCase() === task.correctAnswer?.trim().toLowerCase(); // Vergleich für Text
+      return task.correctAnswer
+        .map(a => a.trim().toLowerCase())
+        .some(a => a === answer.trim().toLowerCase());
     } else if (task.type === "coding") {
       return answer === true; //Code wird bereits auf Client getestet
     } else if (task.type === "output") { //output angeben
