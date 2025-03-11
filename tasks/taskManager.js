@@ -39,6 +39,11 @@ class TaskManager {
     return this.currentCorrectUsers.indexOf(userID) + 1; // Platzierung holen
   }
 
+  //Prozentual wie viele korrekte Antworten
+  getPercentCorrect() {
+    return ((this.currentCorrectUsers.length / this.userManager.getAllUsers().length) * 100);
+  }
+
 
   // Benutzer bearbeitet Aufgabe und gibt ab
   markTaskCompleted(userID, answer, time) {

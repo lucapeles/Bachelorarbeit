@@ -132,3 +132,19 @@ button:hover {
     color: #fff;
     font-weight: bold;
 }
+
+.accuracy-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-left: 20px;
+    gap: 10px;
+}
+
+.accuracy-list li {
+    background-color: #395b69;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}

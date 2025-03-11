@@ -9,7 +9,7 @@ const taskPool = [
   {
     id: 3,
     type: "text",
-    description: "Nenne eine Datenstruktur in der mehrere Werte gespeichert werden können\nDie Antwort muss aus EINEM Wort bestehen",
+    description: "Nenne eine Datenstruktur in der mehrere Werte gespeichert werden können",
     correctAnswer: ["array", "liste", "list", "tupel", "set", "menge", "queue", "tree", "graph"] //muss Liste sein, welche Eingaben akzeptiere ich? Unterschiedliche Punkte?
   },
   {

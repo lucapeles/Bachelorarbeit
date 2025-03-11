@@ -149,7 +149,9 @@ io.on("connection", (socket) => {
   });
 
   function taskFinished() {
-    io.emit("taskCompleted", [taskManager.getCurrentSolution(), true]); //an show senden
+    let percentage = Math.round(taskManager.getPercentCorrect());
+    io.emit("percentCorrect", percentage);
+    io.emit("taskCompleted", [taskManager.getCurrentSolution(), true, percentage]); //an show senden
     io.emit("showTrueOrFalse", taskManager.getCurrentCorrectUsers()); //for the Users
     io.emit("nextTaskButton");
     taskCompleted = true;

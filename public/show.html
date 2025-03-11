@@ -73,14 +73,15 @@
 
 
         // Korrekte Lösung anzeigen
-        socket.on("taskCompleted", (data) => { // data = { correctAnswer, submit = true }
+        socket.on("taskCompleted", (data) => { // data = { correctAnswer, submit = true, percentage }
             let correctAnswer = data[0];
+            let percentage = data[2];
             const questionTextContainer = document.querySelector(".questionText");
             const codeDisplay = document.getElementById("codeDisplay");
             questionTextContainer.classList.remove("code");
             questionTextContainer.style.backgroundColor = "#d4edda";
             codeDisplay.style.display = "none";
-            document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer}`;
+            document.getElementById("questionText").textContent = `Korrekte Antwort: ${correctAnswer} -- ${percentage}%`;
             if (data[1]) { //falls alle abgegeben haben, dann Timer zurücksetzen
                 timerReset();
             }

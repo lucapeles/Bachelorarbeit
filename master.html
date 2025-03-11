@@ -12,6 +12,7 @@
   <div class="header-container">
     <h1>Master</h1>
     <button id="showWindow" onclick="showShow()">Show</button>
+    <ul id="accuracyList" class="accuracy-list"></ul>
   </div>
 
   <div class="control-container">
@@ -175,6 +176,20 @@
         }
       });
     }
+
+
+    const accuracyList = document.getElementById("accuracyList");
+    let taskCounter = 1; // Zählt die Aufgaben mit Prozentzahl
+
+    // Empfangene Prozentzahl aktualisieren und zur Liste hinzufügen
+    socket.on("percentCorrect", (percentage) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = `${taskCounter}: ${Math.round(percentage)}%`;
+      accuracyList.appendChild(listItem);
+      taskCounter++;
+    });
+
+
   </script>
 </body>
 
