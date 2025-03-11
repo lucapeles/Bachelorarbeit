@@ -7,6 +7,13 @@ const taskPool = [
     correctAnswer: "Berlin"
   },
   {
+    id: 2,
+    type: "output",
+    description: "Was gibt diese Funktion zurück: ",
+    template: `int a = 4;\nint b = 5;\npublic static int foo(int a, int b) {\n    return a * b;\n}`,
+    correctAnswer: "20"
+  },
+  {
     id: 3,
     type: "text",
     description: "Nenne eine Datenstruktur in der mehrere Werte gespeichert werden können",

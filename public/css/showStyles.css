@@ -141,39 +141,39 @@ body {
     text-align: center;
 }
 
-/* Stil für den Beispielcode */
+/* Code-Anzeige optimieren */
 #codeDisplay {
-    display: block;
-    background-color: #686868;
-    /* Heller grauer Hintergrund */
-    border: 1px solid #d1d1d1;
-    /* Dezente Umrandung */
-    padding: 15px;
-    margin-top: 25px;
-    /* Mehr Abstand nach oben zur Aufgabe */
-    margin-left: 0;
-    /* Links ausrichten */
+    display: none;
+    background-color: #2d2d2d;
+    /* Dunklerer Hintergrund für besseren Kontrast */
+    color: #ffffff;
+    /* Weiße Schrift für gute Lesbarkeit */
+    border: 1px solid #555;
+    /* Leicht sichtbare Umrandung */
+    padding: 20px;
+    /* Mehr Innenabstand für bessere Lesbarkeit */
+    margin-top: 30px;
+    /* Genügend Abstand zur Frage */
     font-family: "Courier New", monospace;
-    font-size: 16px;
+    font-size: 20px;
+    /* Größere Schrift für bessere Lesbarkeit */
+    line-height: 1.5;
+    /* Mehr Zeilenabstand für bessere Struktur */
     white-space: pre-wrap;
-    /* Zeilenumbrüche beibehalten */
     overflow-x: auto;
-    /* Falls nötig, horizontales Scrollen */
-    border-radius: 5px;
-    /* Abgerundete Ecken */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    /* Leichter Schatten für moderne Optik */
-    width: fit-content;
-    /* Breite auf den Inhalt anpassen */
-    max-width: 70%;
-    /* Maximal 70% der Breite nutzen */
+    border-radius: 10px;
+    /* Leicht abgerundete Ecken für modernes Design */
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+    /* Vergrößerte Breite, aber nicht zu breit */
     text-align: left;
-    /* Text links ausrichten */
+
+    /* Zentriert auf der rechten Seite */
+    margin-left: 5%;
 }
 
-/* Falls du noch eine leichte Anpassung für den Text innerhalb des Codes möchtest */
+
+/* Falls nötig, Code weiter einrücken */
 #codeDisplay code {
-    color: #333;
-    /* Dunklere Schrift */
-    font-weight: bold;
+    padding-left: 10px;
 }
