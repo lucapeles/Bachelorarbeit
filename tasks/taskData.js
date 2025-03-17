@@ -2,9 +2,9 @@ const taskPool = [
   {
     id: 1,
     type: "multipleChoice",
-    description: "Was ist die Hauptstadt von Deutschland?",
-    options: ["Berlin", "München", "Hamburg", "Köln"],
-    correctAnswer: "Berlin"
+    description: "Wofür steht die Abkürzung www?",
+    options: ["web world wide", "web wide world", "world wide web", "world wide wave"],
+    correctAnswer: "world wide web"
   },
   {
     id: 2,
@@ -22,32 +22,31 @@ const taskPool = [
   {
     id: 4,
     type: "output",
-    description: "Welche Ausgabe erzeugt dieser Code:",
+    description: "Welche Ausgabe erzeugt dieser Python-Code:",
     template: `def generateOutput():\n    return "aaa"\n\noutput = generateOutput()\nprint(output)`,
     correctAnswer: "aaa"
   },
   {
     id: 5,
     type: "multipleChoice",
-    description: "Was ist die Hauptstadt von Baden-Württemberg?",
-    options: ["Berlin", "München", "Stuttgart", "Köln"],
-    correctAnswer: "Stuttgart"
+    description: "Wofür steht die Abkürzung CPU?",
+    options: ["Central Processor United", "Core Plugin Utilizer", "Cinetic Progress User", "Central Processing Unit"],
+    correctAnswer: "Central Processing Unit"
   },
   {
     id: 6,
     type: "multipleChoice",
-    description: "Was ist die Hauptstadt von Frankreich?",
-    options: ["Berlin", "Paris", "Stuttgart", "Köln"],
-    correctAnswer: "Paris"
+    description: "Wie viele Bits sind ein Byte?",
+    options: ["2", "4", "8", "16"],
+    correctAnswer: "8"
   },
 
   // Neue Multiple-Choice-Aufgaben für Informatik Oberstufe am technischen Gymnasium in BW
   {
     id: 7,
-    type: "multipleChoice",
-    description: "Welche der folgenden Datenstrukturen ist LIFO (Last In First Out)?",
-    options: ["Queue", "Stack", "Array", "Liste"],
-    correctAnswer: "Stack"
+    type: "text",
+    description: "Wie lautet die Dezimalzahl 9 in Binärschreibweise?",
+    correctAnswer: ["01001", "1001", "001001", "0001001", "00001001"]
   },
   {
     id: 8,
@@ -161,11 +160,23 @@ const taskPool = [
     id: 17,
     type: "coding",
     description: "Schreibe eine Methode `solve`, die zwei Zahlen addiert.",
-    template: "//Schreibe hier deinen Code und bestätige mit dem Button\npublic static int solve(int a, int b){\n    return a + b;\n}",
+    template: "//Achte auf korrekte Syntax!",
     testCases: [
       { input: "2,3", expectedOutput: "5" },
       { input: "-1,4", expectedOutput: "3" },
       { input: "10,15", expectedOutput: "25" }
+    ],
+    correctAnswer: "-"
+  },
+  {
+    id: 18,
+    type: "coding",
+    description: "Schreibe eine Methode `solve`, die zwei Zahlen vergleicht und die Größere zurückgibt.",
+    template: "//Achte auf korrekte Syntax!",
+    testCases: [
+      { input: "2,3", expectedOutput: "3" },
+      { input: "-1,4", expectedOutput: "4" },
+      { input: "10,15", expectedOutput: "15" }
     ],
     correctAnswer: "-"
   }
