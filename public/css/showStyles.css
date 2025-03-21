@@ -160,14 +160,13 @@ body {
     line-height: 1.5;
     /* Mehr Zeilenabstand für bessere Struktur */
     white-space: pre-wrap;
-    overflow-x: auto;
     border-radius: 10px;
     /* Leicht abgerundete Ecken für modernes Design */
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
     max-width: 90%;
     /* Vergrößerte Breite, aber nicht zu breit */
     text-align: left;
-
+    width: 70%;
     /* Zentriert auf der rechten Seite */
     margin-left: 5%;
 }

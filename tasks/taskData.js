@@ -49,7 +49,7 @@ const taskPool = [
   {
     id: 8,
     type: "coding",
-    description: "Schreibe eine Methode `solve`, die zwei Zahlen addiert.",
+    description: "Schreibe eine Methode `sum`, die zwei Ganze Zahlen addiert.",
     template: "//Achte auf korrekte Syntax!",
     testCases: [
       { input: "2,3", expectedOutput: "5" },
@@ -61,7 +61,7 @@ const taskPool = [
   {
     id: 9,
     type: "coding",
-    description: "Schreibe eine Methode `solve`, die zwei Zahlen vergleicht und die Größere zurückgibt.",
+    description: "Schreibe eine Methode `compare`, die zwei Ganze Zahlen vergleicht und die Größere zurückgibt.",
     template: "//Achte auf korrekte Syntax!",
     testCases: [
       { input: "2,3", expectedOutput: "3" },
@@ -147,8 +147,8 @@ const taskPool = [
     id: 21,
     type: "output",
     description: "Was muss anstelle von `___` stehen, damit der Code `Summe: 10` ausgibt?",
-    template: `int sum = 0;\nfor (int i = 1; i <= 4; i++) {\n    ___ = sum + i;\n}\nSystem.out.println("Summe: " + sum);`,
-    correctAnswer: "sum"
+    template: `int sum = 0;\nfor (int i = 1; i <= ___; i++) {\n    sum = sum + i;\n}\nSystem.out.println("Summe: " + sum);`,
+    correctAnswer: "4"
   },
   {
     id: 22,

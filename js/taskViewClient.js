@@ -141,25 +141,25 @@ function proofJavaCode(userCode) {
         socket.emit("test", "Prüfung des CST abgeschlossen.");
 
         // 3) Einzelprüfungen:
-        if (!checker.foundSolveMethod) {
-            socket.emit("test", "Prüfung: Methode 'solve' wurde nicht gefunden.");
+        if (!checker.foundSumMethod && !checker.foundCompareMethod) {
+            socket.emit("test", "Prüfung: Methode 'sum' oder 'compare' wurde nicht gefunden.");
             return false;
         } else {
-            socket.emit("test", "Prüfung: Methode 'solve' existiert.");
+            socket.emit("test", "Prüfung: Methode 'sum' existiert.");
         }
 
         if (!checker.isPublicStaticVoid) {
-            socket.emit("test", "Prüfung: Die 'solve'-Methode hat ungültige Modifier oder einen ungültigen Rückgabetyp.");
+            socket.emit("test", "Prüfung: Die 'sum'-Methode hat ungültige Modifier oder einen ungültigen Rückgabetyp.");
             return false;
         } else {
-            socket.emit("test", "Prüfung: Modifier und Rückgabetyp der 'solve'-Methode sind korrekt.");
+            socket.emit("test", "Prüfung: Modifier und Rückgabetyp der 'sum'-Methode sind korrekt.");
         }
-
-        if (!checker.usesAddition) {
-            socket.emit("test", "Prüfung: In 'solve' wird keine Addition (+) verwendet.");
+        // Je nach Aufgabe unterschiedliche Operator-Prüfung:
+        if (!checker.usesAddition && !checker.usesComparison) {
+            socket.emit("test", "Prüfung: In 'sum'/'compare' wird keine Addition (+) / Vergleich verwendet.");
             return false;
         } else {
-            socket.emit("test", "Prüfung: In 'solve' wird Addition verwendet.");
+            socket.emit("test", "Prüfung: In 'sum'/'compare' wird Addition/Vergleich verwendet.");
         }
 
         socket.emit("test", "Alle Prüfungen erfolgreich: Aufgabe erfüllt!");

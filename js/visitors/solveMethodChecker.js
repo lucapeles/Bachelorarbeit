@@ -35,8 +35,10 @@ class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDe
     constructor(socket) {
         super();
         this.socket = socket; // socket wird gespeichert, falls du Debug-Ausgaben auch via socket senden willst
-        this.foundSolveMethod = false;
+        this.foundSumMethod = false;
+        this.foundCompareMethod = false;
         this.usesAddition = false;
+        this.usesComparison = false;
         this.isPublicStaticVoid = false;
         this.validateVisitor();
     }
@@ -68,11 +70,17 @@ class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDe
                 console.log("Method name not found in headerChildren");
             }
 
-            if (methodName && methodName.toLowerCase() === "solve") {
-                this.foundSolveMethod = true;
-                console.log("Method 'solve' found!");
+            if (methodName && methodName.toLowerCase() === "sum") {
+                this.foundSumMethod = true;
+                console.log("Method 'sum' found!");
             } else {
-                console.log("Method 'solve' not found. Found method name: " + methodName);
+                console.log("Method 'sum' not found. Found method name: " + methodName);
+            }
+            if (methodName && methodName.toLowerCase() === "compare") {
+                this.foundCompareMethod = true;
+                console.log("Method 'compare' found!");
+            } else {
+                console.log("Method 'compare' not found. Found method name: " + methodName);
             }
         } else {
             console.log("No methodHeader or children found in ctx");
@@ -159,27 +167,15 @@ class SolveMethodChecker extends require("java-parser").BaseJavaCstVisitorWithDe
                     break;
                 }
             }
-        }
-
-        // Weiter mit den Kindern
-        //this.visitChildren(ctx);
-    }
-
-
-    /*visitChildren(ctx) {
-        for (const key in ctx) {
-            if (Object.prototype.hasOwnProperty.call(ctx, key)) {
-                const children = ctx[key];
-                if (Array.isArray(children)) {
-                    children.forEach(child => {
-                        if (typeof child === "object") {
-                            this.visit(child);
-                        }
-                    });
+            for (const op of ctx.BinaryOperator) {
+                if (op.image === ">" || op.image === "<" || op.image === ">=" || op.image === "<=") {
+                    this.usesComparison = true;
+                    console.log("Comparison operator detected.");
+                    break;
                 }
             }
         }
-    }*/
+    }
 }
 
 module.exports = SolveMethodChecker;
