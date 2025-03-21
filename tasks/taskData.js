@@ -40,8 +40,6 @@ const taskPool = [
     options: ["2", "4", "8", "16"],
     correctAnswer: "8"
   },
-
-  // Neue Multiple-Choice-Aufgaben für Informatik Oberstufe am technischen Gymnasium in BW
   {
     id: 7,
     type: "text",
@@ -50,114 +48,6 @@ const taskPool = [
   },
   {
     id: 8,
-    type: "multipleChoice",
-    description: "Welche Aussage beschreibt am besten die lineare Suche?",
-    options: [
-      "Jedes Element wird nacheinander mit dem Suchbegriff verglichen",
-      "Das Array wird in der Mitte geteilt, um die Suche zu beschleunigen",
-      "Die Suche beginnt beim letzten Element und geht rückwärts",
-      "Es werden Hash-Tabellen eingesetzt, um die Elemente schneller zu finden"
-    ],
-    correctAnswer: "Jedes Element wird nacheinander mit dem Suchbegriff verglichen"
-  },
-  {
-    id: 9,
-    type: "multipleChoice",
-    description: "Was ist das Hauptziel der Kapselung (Encapsulation) in der objektorientierten Programmierung?",
-    options: [
-      "Wiederverwendung von Code durch Vererbung",
-      "Verbergen der Implementierungsdetails und Schutz der Daten",
-      "Mehrfache Vererbung ermöglichen",
-      "Verbesserung der Ausführungszeit"
-    ],
-    correctAnswer: "Verbergen der Implementierungsdetails und Schutz der Daten"
-  },
-  {
-    id: 10,
-    type: "multipleChoice",
-    description: "Welche der folgenden Aussagen über Primzahlen in der Kryptografie ist korrekt?",
-    options: [
-      "Primzahlen sind beliebige Zahlen, die nur durch 1 und sich selbst teilbar sind.",
-      "Primzahlen werden häufig zur Erzeugung von Schlüsselpaaren in asymmetrischen Verschlüsselungsverfahren genutzt.",
-      "Primzahlen sind im Kontext der Kryptografie nicht relevant.",
-      "Primzahlen werden nur im Zusammenhang mit Hash-Funktionen verwendet."
-    ],
-    correctAnswer: "Primzahlen werden häufig zur Erzeugung von Schlüsselpaaren in asymmetrischen Verschlüsselungsverfahren genutzt."
-  },
-  {
-    id: 11,
-    type: "multipleChoice",
-    description: "Welches Prinzip beschreibt den Umgang mit sensiblen Daten in Client-Server-Anwendungen am besten?",
-    options: [
-      "Least Privilege (Minimale Rechtevergabe)",
-      "Big Data-Analyse",
-      "Garbage Collection",
-      "Syntax-Highlighting"
-    ],
-    correctAnswer: "Least Privilege (Minimale Rechtevergabe)"
-  },
-  {
-    id: 12,
-    type: "multipleChoice",
-    description: "Welche Schicht des OSI-Modells ist für die Wegwahl (Routing) im Netzwerk zuständig?",
-    options: [
-      "Sitzungsschicht (Session Layer)",
-      "Vermittlungsschicht (Network Layer)",
-      "Transportschicht (Transport Layer)",
-      "Bitübertragungsschicht (Physical Layer)"
-    ],
-    correctAnswer: "Vermittlungsschicht (Network Layer)"
-  },
-  {
-    id: 13,
-    type: "multipleChoice",
-    description: "Welche Aussage zum Bubble Sort Algorithmus ist korrekt?",
-    options: [
-      "Er hat eine durchschnittliche Laufzeit von O(n log n).",
-      "Er hat eine durchschnittliche Laufzeit von O(n).",
-      "Er hat eine durchschnittliche Laufzeit von O(n²).",
-      "Er mischt die Elemente zufällig."
-    ],
-    correctAnswer: "Er hat eine durchschnittliche Laufzeit von O(n²)."
-  },
-  {
-    id: 14,
-    type: "multipleChoice",
-    description: "Was beschreibt das EVA-Prinzip in der Informatik?",
-    options: [
-      "Entscheiden, Verarbeiten, Ausgeben",
-      "Eingabe, Verarbeitung, Ausgabe",
-      "Erfassen, Verteilen, Ablegen",
-      "Elektronische Verwaltung und Analyse"
-    ],
-    correctAnswer: "Eingabe, Verarbeitung, Ausgabe"
-  },
-  {
-    id: 15,
-    type: "multipleChoice",
-    description: "Welche Aussage über ein Binärbaum-Durchlaufverfahren (Tree Traversal) ist korrekt?",
-    options: [
-      "Beim Preorder wird zuerst der rechte Teilbaum durchlaufen, dann der linke.",
-      "Beim Inorder wird zuerst der Knoten selbst verarbeitet, dann der linke Teilbaum.",
-      "Beim Postorder wird zuerst der linke Teilbaum durchlaufen, dann der rechte und dann der Knoten.",
-      "Beim Inorder wird zuerst der linke Teilbaum durchlaufen, dann der rechte und dann der Knoten."
-    ],
-    correctAnswer: "Beim Postorder wird zuerst der linke Teilbaum durchlaufen, dann der rechte und dann der Knoten."
-  },
-  {
-    id: 16,
-    type: "multipleChoice",
-    description: "Welche der folgenden Aussagen über Compiler und Interpreter ist richtig?",
-    options: [
-      "Ein Compiler führt den Code Zeile für Zeile zur Laufzeit aus.",
-      "Ein Interpreter übersetzt das gesamte Programm in eine ausführbare Datei.",
-      "Ein Compiler übersetzt das gesamte Programm vor der Ausführung in Maschinencode.",
-      "Weder Compiler noch Interpreter überprüfen Syntaxfehler."
-    ],
-    correctAnswer: "Ein Compiler übersetzt das gesamte Programm vor der Ausführung in Maschinencode."
-  },
-  {
-    id: 17,
     type: "coding",
     description: "Schreibe eine Methode `solve`, die zwei Zahlen addiert.",
     template: "//Achte auf korrekte Syntax!",
@@ -169,7 +59,7 @@ const taskPool = [
     correctAnswer: "-"
   },
   {
-    id: 18,
+    id: 9,
     type: "coding",
     description: "Schreibe eine Methode `solve`, die zwei Zahlen vergleicht und die Größere zurückgibt.",
     template: "//Achte auf korrekte Syntax!",
@@ -179,7 +69,96 @@ const taskPool = [
       { input: "10,15", expectedOutput: "15" }
     ],
     correctAnswer: "-"
+  },
+  {
+    id: 10,
+    type: "multipleChoice",
+    description: "Welcher Datentyp ist in Java für Ganzzahlen am besten geeignet?",
+    options: ["double", "int", "boolean", "String"],
+    correctAnswer: "int"
+  },
+  {
+    id: 11,
+    type: "multipleChoice",
+    description: "Welche Schleife wird mindestens einmal ausgeführt, auch wenn die Bedingung nicht erfüllt ist?",
+    options: ["for", "while", "do-while", "foreach"],
+    correctAnswer: "do-while"
+  },
+  {
+    id: 12,
+    type: "output",
+    description: "Welche Ausgabe erzeugt dieser Java-Code?",
+    template: `int x = 3;\nint y = 7;\nif (x > y) {\n    System.out.println(x + y);\n} else {\n    System.out.println(y - x)\n}`,
+    correctAnswer: "4"
+  },
+  {
+    id: 13,
+    type: "output",
+    description: "Welche Ausgabe erzeugt dieser Java-Code?",
+    template: `int sum = 0;\nfor (int i = 2; i <= 5; i += 2) {\n    sum += i;\n}\nSystem.out.println("Summe: " + sum);`,
+    correctAnswer: "Summe: 6"
+  },
+  {
+    id: 14,
+    type: "text",
+    description: "Wie nennt man in Java eine Methode, die nichts zurückgibt?",
+    correctAnswer: ["void", "void methode", "void-methode"]
+  },
+  {
+    id: 15,
+    type: "text",
+    description: "Wie nennt man in der Informatik eine Wiederholung von Anweisungen?",
+    correctAnswer: ["schleife", "loop", "wiederholung"]
+  },
+  {
+    id: 16,
+    type: "multipleChoice",
+    description: "Was ist der richtige Vergleichsoperator für Gleichheit in Java?",
+    options: ["=", "==", "===", "!="],
+    correctAnswer: "=="
+  },
+  {
+    id: 17,
+    type: "output",
+    description: "Was gibt dieser Code aus?",
+    template: `String name = "Max";\nSystem.out.println("Hallo " + name + "!");`,
+    correctAnswer: "Hallo Max!"
+  },
+  {
+    id: 18,
+    type: "multipleChoice",
+    description: "Was ist KEIN gültiger primitiver Datentyp in Java?",
+    options: ["boolean", "char", "String", "double"],
+    correctAnswer: "String"
+  },
+  {
+    id: 19,
+    type: "text",
+    description: "Nenne einen logischen Operator in Java.",
+    correctAnswer: ["&&", "||", "!"]
+  },
+  {
+    id: 20,
+    type: "text",
+    description: "Wie nennt man einen Fehler im Code?",
+    correctAnswer: ["bug", "fehler", "syntaxfehler", "logikfehler"]
+  },
+  {
+    id: 21,
+    type: "output",
+    description: "Was muss anstelle von `___` stehen, damit der Code `Summe: 10` ausgibt?",
+    template: `int sum = 0;\nfor (int i = 1; i <= 4; i++) {\n    ___ = sum + i;\n}\nSystem.out.println("Summe: " + sum);`,
+    correctAnswer: "sum"
+  },
+  {
+    id: 22,
+    type: "output",
+    description: "Was muss anstelle von `___` stehen, damit der Code `13` ausgibt?",
+    template: `int[] zahlen = {1, 3, 9};\nint summe = 0;\nfor (int i = 0; i < zahlen.length; i++) {\n    summe += ___;\n}\nSystem.out.println(summe);`,
+    correctAnswer: "zahlen[i]"
   }
+
+
 ];
 
 module.exports = taskPool; // Für den Server verfügbar machen

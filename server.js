@@ -122,8 +122,10 @@ io.on("connection", (socket) => {
   //Korrigieren , speichern & prüfen ob alle fertig sind
   socket.on("submitTask", (data) => { // data = { userID, selectedAnwser, time }
     taskCompleted = false;
+    let missingSolution = true;
     if (taskManager.markTaskCompleted(data[0], data[1], data[2])) {
       taskFinished();
+      missingSolution = false;
     }
     updateUserList(); //Master aktualisieren mit neuer Punktzahl & Show aktualisieren
 
@@ -136,7 +138,7 @@ io.on("connection", (socket) => {
       io.emit("showPersonalRank", [data[0], rank]); // An den Spieler senden
     }
 
-    if (taskManager.getTime()) {
+    if (taskManager.getTime() && missingSolution) {
       io.emit("timeLeft", taskManager.getTime());
       taskManager.resetTime();
     }
