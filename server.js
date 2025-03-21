@@ -158,7 +158,7 @@ io.on("connection", (socket) => {
     io.emit("nextTaskButton");
     taskCompleted = true;
     if (taskManager.isThereATaskLeft()) {
-      io.emit("nextTaskCountdown", 6); // Starte den Countdown (6 Sekunden)
+      io.emit("nextTaskCountdown", 10); // Starte den Countdown (6 Sekunden)
     } else {
       startNextTask();
     }
@@ -174,7 +174,9 @@ io.on("connection", (socket) => {
     if (nextTask) {
       io.emit("newTask", nextTask); // Nächste Aufgabe an alle Clients senden
     } else {
-      io.emit("quizCompleted", userManager.getRanking()); // Falls keine weiteren Aufgaben mehr da sind
+      setTimeout(() => {
+        io.emit("quizCompleted", userManager.getRanking()); // Nach 5 Sekunden quizCompleted senden
+      }, 5000);
     }
   }
 
