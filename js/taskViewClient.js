@@ -43,7 +43,7 @@ socket.on("updateUserList", (users) => {
         if (user.userID == userID) {
             points = user.points;
             if (user.name === startName) {
-                quizTitle.textContent = `Informatik-Quiz (Name: ${user.name})`;
+                quizTitle.textContent = `InformaQuiz (Name: ${user.name})`;
             } else {
                 window.location.href = `/taskView.html?name=${encodeURIComponent(user.name)}&userID=${encodeURIComponent(userID)}`;
             }
