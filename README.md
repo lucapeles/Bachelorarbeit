@@ -11,7 +11,7 @@
 ---
 
 ## **Einleitung**
-Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermöglicht, Aufgaben zu verwalten, anzuzeigen und automatisiert korriegieren zu lassen. Es verwendet Node.js für das Backend und eine Kombination aus HTML, CSS und JavaScript für das Frontend.
+Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermöglicht, Aufgaben zu verwalten, anzuzeigen und automatisiert korriegieren zu lassen. Es verwendet Node.js für das Backend und eine Kombination aus HTML, CSS und JavaScript für das Frontend und wurde im Rahmen einer Bachelorarbeit entwickelt.
 
 ## **Installation**
 1. **Repository klonen**:
@@ -28,7 +28,7 @@ Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermög
 ## **Verwendung**
 1. Anwendung im Browser öffnen unter `http://localhost:3000/`.
 2. Master: Anmelden mit Passwort und Show öffnen (für alle Spieler sichtbar machen).
-3. Spieler: Anmelden mit Name und auf SPielbeginn warten.
+3. Spieler: Anmelden mit Name und auf Spielbeginn warten.
 4. Master: Aufgaben auswählen und Quiz starten drücken.
 
 ## **Technologien**
