@@ -16,7 +16,7 @@ Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermög
 ## **Installation**
 1. **Repository klonen**:
    git clone <REPOSITORY_URL>
-   cd task-management
+   cd Bachelorarbeit
 
 2. **Abhängigkeiten installieren**:
    npm install
