@@ -16,7 +16,7 @@ Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermög
 ## **Installation**
 1. **Repository klonen**:
    git clone <REPOSITORY_URL>
-   cd Bachelorarbeit
+   (falls noch nicht im Ordner:) cd Bachelorarbeit
 
 2. **Abhängigkeiten installieren**:
    npm install
@@ -40,4 +40,4 @@ Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermög
 - [Luca Peles]
 
 ## **Lizenz**
-Dieses Projekt ist unter der MIT-Lizenz lizenziert.
+Dieses Projekt ist unter der GPL-3.0-Lizenz lizenziert.
