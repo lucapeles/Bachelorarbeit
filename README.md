@@ -12,6 +12,7 @@
 
 ## **Einleitung**
 Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermöglicht, Aufgaben zu verwalten, anzuzeigen und automatisiert korriegieren zu lassen. Es verwendet Node.js für das Backend und eine Kombination aus HTML, CSS und JavaScript für das Frontend und wurde im Rahmen einer Bachelorarbeit entwickelt.
+Es ist ein gamifiziertes Informatik-Quiz, das für den Einsatz im Unterricht entwickelt wurde.
 
 ## **Installation**
 1. **Repository klonen**:
@@ -27,7 +28,7 @@ Dieses Projekt ist ein einfaches Task-Management-System, das es Benutzern ermög
 
 ## **Verwendung**
 1. Anwendung im Browser öffnen unter `http://localhost:3000/`.
-2. Master: Anmelden mit Passwort und Show öffnen (für alle Spieler sichtbar machen).
+2. Master: Anmelden mit Passwort 1006 und Show öffnen (für alle Spieler sichtbar machen).
 3. Spieler: Anmelden mit Name und auf Spielbeginn warten.
 4. Master: Aufgaben auswählen und Quiz starten drücken.
 
